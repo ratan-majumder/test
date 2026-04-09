@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSC Test Paper - Ratan Majumder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --pink-dark: #ff4d94;
+            --pink-light: #ffb3d1;
+            --bg: #fff0f6;
+            --card-bg: #ffffff;
+            --text: #333;
+        }
+
+        body.dark-mode {
+            --bg: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text: #f0f0f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        /* --- Improved Splash Screen --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff85b2 0%, #ff4d94 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .splash-pic-container {
+            position: relative;
+            margin-bottom: 25px;
+            animation: zoomIn 0.8s;
+        }
+
+        .splash-pic {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 6px solid rgba(255, 255, 255, 0.8);
+            object-fit: cover;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .splash-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #fff;
+            color: var(--pink-dark);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #splash-text {
+            font-size: 3rem;
+            color: white;
+            font-weight: 800;
+            text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .click-hint {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 30px;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            animation: pulse 2s infinite;
+        }
+
+        /* --- Main Content --- */
+        #main-content {
+            display: none;
+            height: 100vh;
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 50px 20px 40px;
+            text-align: center;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .header-pic {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 4px solid var(--pink-dark);
+            padding: 4px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .greeting {
+            color: var(--pink-dark);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .controls {
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 100;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 50px;
+            border-radius: 30px;
+            border: 2px solid var(--pink-light);
+            outline: none;
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 18px;
+            color: var(--pink-dark);
+            font-size: 1.2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .tab {
+            padding: 10px 25px;
+            background: var(--card-bg);
+            border-radius: 30px;
+            white-space: nowrap;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: 2px solid var(--pink-light);
+            cursor: pointer;
+            color: var(--text);
+            transition: 0.3s;
+        }
+
+        .tab.active {
+            background: var(--pink-dark);
+            color: white;
+            border-color: var(--pink-dark);
+        }
+
+        .container {
+            padding: 15px;
+        }
+
+        .subject-card {
+            background: var(--card-bg);
+            border-radius: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 1px solid rgba(255, 77, 148, 0.1);
+        }
+
+        .subject-header {
+            background: linear-gradient(45deg, #ff4d94, #ff85b2);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+        }
+
+        .pdf-link {
+            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: var(--text);
+            border-bottom: 1px solid rgba(255, 77, 148, 0.05);
+            transition: 0.3s;
+        }
+
+        .pdf-link:hover {
+            background: rgba(255, 77, 148, 0.05);
+        }
+
+        .pdf-link span {
+            font-weight: 600;
+        }
+
+        .pdf-link i {
+            color: #ff4d94;
+            font-size: 1.3rem;
+        }
+
+        /* Floating Buttons */
+        .fab-group {
+            position: fixed;
+            bottom: 25px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .fab:active {
+            transform: scale(0.9);
+        }
+
+        .dark-toggle {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: var(--pink-dark);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 101;
+        }
+
+        /* Developer Card Fixes */
+        .dev-card {
+            padding: 30px;
+            text-align: center;
+            background: var(--card-bg);
+            border-radius: 25px;
+            border: 3px dashed var(--pink-dark);
+            margin-top: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            font-size: 35px;
+            transition: 0.3s;
+        }
+
+        .social-icons .fb {
+            color: #1877f2;
+        }
+
+        .social-icons .wp {
+            color: #25d366;
+        }
+    </style>
+</head>
+
+<body>
+
+    <audio id="bg-sound" src="test.mp3" preload="auto"></audio>
+
+    <div id="splash-screen" onclick="startApp()">
+        <div class="splash-pic-container">
+            <img src="ratan.jpg" onerror="this.src='https://i.pravatar.cc/150?u=ratan'" alt="Ratan" class="splash-pic">
+            <div class="splash-badge"><i class="fas fa-graduation-cap"></i></div>
+        </div>
+        <div id="splash-text" class="animate__animated animate__fadeInDown">TEST PAPER</div>
+        <div class="click-hint">Click to Enter ✨</div>
+    </div>
+
+    <div id="main-content">
+        <div class="dark-toggle" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></div>
+
+        <header>
+            <img src="ratan.jpg" onerror="this.src='https://i.pravatar.cc/150?u=ratan'" alt="Ratan" class="header-pic">
+            <div class="greeting" id="greetText">Hello, Ratan Majumder</div>
+            <h2 style="font-size: 1.8rem; letter-spacing: 1px;">Repository</h2>
+        </header>
+
+        <div class="controls">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search Chapter or Subject..." onkeyup="searchLinks()">
+            </div>
+            <div class="tabs">
+                <div class="tab active" onclick="filterTab('all', this)">All Subjects</div>
+                <div class="tab" onclick="filterTab('math', this)">Mathematics</div>
+                <div class="tab" onclick="filterTab('science', this)">Science</div>
+                <div class="tab" onclick="filterTab('arts', this)">Bangla/Eng/ICT</div>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="subject-card filter-math animate__animated animate__fadeIn">
+                <div class="subject-header"><i class="fas fa-calculator"></i> উচ্চতর গণিত ২য় পত্র</div>
+                <a href="https://drive.google.com/file/d/11YmFZZg71zEdxWZMpcobawgCsziqcOMI/view" class="pdf-link"
+                    target="_blank"><span>জটিল সংখ্যা</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1YhW47GkSz13kQ4wS7BQAMMmDHRxVPrBV/view" class="pdf-link"
+                    target="_blank"><span>বহুপদী ও বহুপদী সমীকরণ</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1BJFq4xPv36l0Se6s0VaZQ0MSknYwFUS-/view" class="pdf-link"
+                    target="_blank"><span>বিপরীত ত্রিকোণমিতি</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1LZEoe6fX-plHgUoEymA02_KvB8Ph-4DR/view" class="pdf-link"
+                    target="_blank"><span>কনিক, স্থিতিবিদ্যা ও গতি</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1LVOQvdLWBEsSAw_F5scFlepelo6SSI_l/view" class="pdf-link"
+                    target="_blank"><span>টেস্ট ও বোর্ড MCQ</span> <i class="fas fa-file-pdf"></i></a>
+            </div>
+
+            <div class="subject-card filter-math animate__animated animate__fadeIn">
+                <div class="subject-header"><i class="fas fa-square-root-alt"></i> উচ্চতর গণিত ১ম পত্র</div>
+                <a href="https://drive.google.com/file/d/1WB_SRb3yzMvTnmgiaLaMDClgDt8dV46u/view" class="pdf-link"
+                    target="_blank"><span>ম্যাট্রিক্স ও নির্ণায়ক</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1BdMn3TkHbm1ORMF_xYZK4hGPkSZi1bYS/view" class="pdf-link"
+                    target="_blank"><span>সরলরেখা</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1y96oDiqt8-itLj8Jm-9uJMlx7hqqarsN/view" class="pdf-link"
+                    target="_blank"><span>বৃত্ত</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1FCSJgtwzu6D0xFWj3OW_2CSzFWillghU/view" class="pdf-link"
+                    target="_blank"><span>সংযুক্ত কোণের ত্রিকোণমিতি</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1Z-UeAWGSvPtzEwqvpx4NH2jkywhGfFHV/view" class="pdf-link"
+                    target="_blank"><span>অন্তরীকরণ</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1lbIykzf3QJ7wcABdaXxdvSAWkL-saONV/view" class="pdf-link"
+                    target="_blank"><span>যোগজীকরণ</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1XqaqdcD15D0NHUFN_3AqB3wBZRO--5Zb/view" class="pdf-link"
+                    target="_blank"><span>বোর্ড ও টেস্ট MCQ</span> <i class="fas fa-file-pdf"></i></a>
+            </div>
+
+            <div class="subject-card filter-science animate__animated animate__fadeIn">
+                <div class="subject-header"><i class="fas fa-dna"></i> জীববিজ্ঞান ২য় পত্র</div>
+                <a href="https://drive.google.com/file/d/1INcrJZSrSvTJEBnYr6si1wWNVBKWr8bC/view" class="pdf-link"
+                    target="_blank"><span>প্রাণির বিভিন্নতা ও শ্রেণিবিন্যাস</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/158ysS0TrcAj0H-2i9htVjvZWXmUNwJeN/view" class="pdf-link"
+                    target="_blank"><span>প্রাণির পরিচিতি</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1OB7Vjld0EY_kL5KJxRv9ngn-iS9yVnML/view" class="pdf-link"
+                    target="_blank"><span>পরিপাক ও শোষণ</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1fwGTNYkrYDi-8nUVzKrbefBpUer2uwvh/view" class="pdf-link"
+                    target="_blank"><span>রক্ত ও সঞ্চালন</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1jXmLb1tLakQ94FgWN9lDYEciorHGvhHt/view" class="pdf-link"
+                    target="_blank"><span>শ্বসন ও শ্বাসক্রিয়া</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1mjjQrzv92PCJ7uQKPiO4sI0_uW9MiXny/view" class="pdf-link"
+                    target="_blank"><span>চলন ও অঙ্গসঞ্চালনা</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1JWDhyiH-gOPqB1BzvWGTSQFhzkCx8HyH/view" class="pdf-link"
+                    target="_blank"><span>জিনতত্ত্ব ও বিবর্তন</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1LjLkrZX41SwfbIcEckKRTba2hh6xGS9K/view" class="pdf-link"
+                    target="_blank"><span>টেস্ট ও বোর্ড এমসিকিউ</span> <i class="fas fa-file-pdf"></i></a>
+            </div>
+
+            <div class="subject-card filter-science animate__animated animate__fadeIn">
+                <div class="subject-header"><i class="fas fa-seedling"></i> জীববিজ্ঞান ১ম পত্র</div>
+                <a href="https://drive.google.com/file/d/115T1herQfMuVUEsYv62fCAz5Ese66yAY/view" class="pdf-link"
+                    target="_blank"><span>কোষ ও এর গঠন</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1khiGvxMxWKaZ6JlJWkUtK5f8oTXVD318/view" class="pdf-link"
+                    target="_blank"><span>কোষ বিভাজন ও অণুজীব</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1nlPBpVpUwEnEsXyiTvx6IX3Ffu5JJZo0/view" class="pdf-link"
+                    target="_blank"><span>নগ্নবীজী ও টিস্যুতন্ত্র</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1WP_BoRqqz-XIJVvYVi3q0x6baPv9sqqw/view" class="pdf-link"
+                    target="_blank"><span>উদ্ভিদ শারীরতত্ত্ব ও জীবপ্রযুক্তি</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/125ojE7k3B5W-RHg7dm2DEKnf_e-upjDU/view" class="pdf-link"
+                    target="_blank"><span>বোর্ড ও টেস্ট MCQ</span> <i class="fas fa-file-pdf"></i></a>
+            </div>
+
+            <div class="subject-card filter-science animate__animated animate__fadeIn">
+                <div class="subject-header"><i class="fas fa-vial"></i> রসায়ন (১ম ও ২য় পত্র)</div>
+                <a href="https://drive.google.com/file/d/1kk1uUaCP0-2MpLucVPntInScMwfSyF0h/view" class="pdf-link"
+                    target="_blank"><span>পরিবেশ রসায়ন</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1rRDni0a9BYTq87KDbzHP-LrUva87FkNr/view" class="pdf-link"
+                    target="_blank"><span>জৈব রসায়ন</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1LRedTlBKOLyTJ4WDNr4_453SU7VWUPuv/view" class="pdf-link"
+                    target="_blank"><span>পরিমাণগত ও তড়িৎ রসায়ন</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1bcc7T7UZhSi1HkVgXXx6W_YG3rdWOikF/view" class="pdf-link"
+                    target="_blank"><span>গুণগত রসায়ন</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1gl4AaB_Jr-AyCGdho9PlKCt_BiYwwLRI/view" class="pdf-link"
+                    target="_blank"><span>মৌলের পর্যায়বৃত্ত ধর্ম</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1zSxKIok3uPZuoh8SoQ-k_UlMRLkLdX_0/view" class="pdf-link"
+                    target="_blank"><span>রাসায়নিক পরিবর্তন ও কর্মমুখী</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1UcLwAnHvjOBZsI0aFUle2NvQgfcaK4H8/view" class="pdf-link"
+                    target="_blank"><span>টেস্ট পেপার MCQ</span> <i class="fas fa-file-pdf"></i></a>
+            </div>
+
+            <div class="subject-card filter-science animate__animated animate__fadeIn">
+                <div class="subject-header"><i class="fas fa-atom"></i> পদার্থবিজ্ঞান (১ম ও ২য় পত্র)</div>
+                <a href="https://drive.google.com/file/d/1XZKSggo0Ff88w0V9AED9A8IYU2UDHcQ6/view" class="pdf-link"
+                    target="_blank"><span>২য় পত্র: ১, ২, ৩ অধ্যায়</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1LPBHymicHEL6BPcepHGlOwtkuJxUzl02/view" class="pdf-link"
+                    target="_blank"><span>২য় পত্র: ৭, ৮, ৯, ১০ অধ্যায়</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1u7SZRxM23DIhavL5VTAGnQEVYCym-WM9/view" class="pdf-link"
+                    target="_blank"><span>২য় পত্র: বোর্ড ও টেস্ট MCQ</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/10qTDJeiwMxsqSsUeL3mQk_c7IiRwaQN8/view" class="pdf-link"
+                    target="_blank"><span>১ম পত্র: ১, ২ অধ্যায়</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1h60S2tokQbjJY4QO0n9wFcOZucz29faC/view" class="pdf-link"
+                    target="_blank"><span>১ম পত্র: ৪, ৫ অধ্যায়</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1CPmPICjca1Pau2aS_s12Ay7NdTERST9K/view" class="pdf-link"
+                    target="_blank"><span>১ম পত্র: ৬, ৭ অধ্যায়</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1Hf_SRuJ3tdCFLx-2WPySN5NVvpOFkb0u/view" class="pdf-link"
+                    target="_blank"><span>১ম পত্র: ৮, ১০ অধ্যায়</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1nWFX4YC84v4dnEFchNm_iYANPlGmLriK/view" class="pdf-link"
+                    target="_blank"><span>১ম পত্র: টেস্ট MCQ</span> <i class="fas fa-file-pdf"></i></a>
+            </div>
+
+            <div class="subject-card filter-arts animate__animated animate__fadeIn">
+                <div class="subject-header"><i class="fas fa-laptop-code"></i> আইসিটি ও ইংরেজি</div>
+                <a href="https://drive.google.com/file/d/1AsEj_eRjSwqGwZeNshT5rYkqTLsMI4lF/view" class="pdf-link"
+                    target="_blank"><span>আইসিটি: ১, ৩, ৪ অধ্যায়</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1Qk-VOArWWCD8FyZjrYrGobEvPuhNscV-" class="pdf-link"
+                    target="_blank"><span>আইসিটি: ২, ৫ অধ্যায়</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1ae_xV3lHowATiTVP8N7L9aE9WAasDGKI/view" class="pdf-link"
+                    target="_blank"><span>আইসিটি MCQ</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/drive/folders/1LofqsjgZRtpNlrRtvR8NNglMegVp4ouI" class="pdf-link"
+                    target="_blank"><span>ইংরেজি ১ম পত্র (Folder)</span> <i class="fas fa-folder-open"></i></a>
+                <a href="https://drive.google.com/drive/folders/1N1thN0LUWqobLXx9fptMwVgTXzoZFwLR" class="pdf-link"
+                    target="_blank"><span>ইংরেজি ২য় পত্র (Folder)</span> <i class="fas fa-folder-open"></i></a>
+            </div>
+
+            <div class="subject-card filter-arts animate__animated animate__fadeIn">
+                <div class="subject-header"><i class="fas fa-pen-nib"></i> বাংলা ১ম ও ২য় পত্র</div>
+                <a href="https://drive.google.com/file/d/1V-qmOjzq9w8FKMUIoMFrMRsgootIVyEJ/view" class="pdf-link"
+                    target="_blank"><span>বাংলা ১ম: গদ্য</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1Aw7JW1JWwns_34mVRd3MSPr1TO6Jyyo8/view" class="pdf-link"
+                    target="_blank"><span>বাংলা ১ম: কবিতা</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1xE0CKqmxSk44qgT5ED1cJ5NjExMnHCXI/view" class="pdf-link"
+                    target="_blank"><span>বাংলা ১ম: নাটক</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1Kzzrm5gPSSy40pOb_s-2sL5CpNaH9vzT/view" class="pdf-link"
+                    target="_blank"><span>বাংলা ১ম: উপন্যাস</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1Rtxym7QXb-YZQYwYtSNh4uCzBaqUzE8T/view" class="pdf-link"
+                    target="_blank"><span>বাংলা ১ম: MCQ</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/17VwbHpTCSsEbsqVgq945zEBiZ7PN9p9F/view" class="pdf-link"
+                    target="_blank"><span>বাংলা ২য়: উচ্চারণ</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1ISKoRGxFHHXDrfPJ7vUAp8OIwxjh_kn_" class="pdf-link"
+                    target="_blank"><span>বাংলা ২য়: বানান</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1mnb9lxCHM499F3ISZ7RMAqqUIsXnyrjY/view" class="pdf-link"
+                    target="_blank"><span>উপসর্গ ও সমাস</span> <i class="fas fa-file-pdf"></i></a>
+                <a href="https://drive.google.com/file/d/1AbaYkMmakQ4xF967C9JRAab98UonLYep/view" class="pdf-link"
+                    target="_blank"><span>প্রবন্ধ রচনা</span> <i class="fas fa-file-pdf"></i></a>
+            </div>
+
+            <div class="dev-card">
+                <h3 style="color:var(--pink-dark)">Developed by Ratan Majumder</h3>
+                <p style="font-size: 0.9rem; font-weight: 600;">HSC Special Digital Repository</p>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/profile.php?id=61552305287329" class="fb" target="_blank"><i
+                            class="fab fa-facebook"></i></a>
+                    <a href="https://wa.me/8801609166109" class="wp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="fab-group">
+            <a href="https://wa.me/8801609166109" class="fab" style="background:#25d366"><i
+                    class="fab fa-whatsapp"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61552305287329" class="fab" style="background:#1877f2"><i
+                    class="fab fa-facebook-f"></i></a>
+        </div>
+
+    </div>
+
+    <script>
+        function startApp() {
+            const audio = document.getElementById('bg-sound');
+            audio.play().catch(e => console.log("Audio play blocked"));
+
+            document.getElementById('splash-screen').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            document.body.style.overflow = 'auto';
+
+            const hr = new Date().getHours();
+            let greet = hr < 12 ? "Good Morning" : hr < 18 ? "Good Afternoon" : "Good Evening";
+            document.getElementById('greetText').innerText = greet + ", Ratan Majumder";
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.dark-toggle i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        }
+
+        function searchLinks() {
+            let input = document.getElementById('searchInput').value.toUpperCase();
+            let sections = document.querySelectorAll('.subject-card');
+
+            sections.forEach(sec => {
+                let links = sec.querySelectorAll('.pdf-link');
+                let hasMatch = false;
+
+                links.forEach(l => {
+                    let txt = l.querySelector('span').innerText;
+                    if (txt.toUpperCase().includes(input)) {
+                        l.style.display = "flex";
+                        hasMatch = true;
+                    } else {
+                        l.style.display = "none";
+                    }
+                });
+
+                if (sec.classList.contains('animate__animated')) {
+                    sec.style.display = hasMatch ? "block" : "none";
+                }
+            });
+        }
+
+        function filterTab(cat, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+
+            document.querySelectorAll('.subject-card').forEach(card => {
+                if (cat === 'all') card.style.display = "block";
+                else if (card.classList.contains('filter-' + cat)) card.style.display = "block";
+                else card.style.display = "none";
+            });
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ratan's Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --pink: #ff4d94;
+            --dark: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            margin: 0;
+        }
+
+        .hero-mini {
+            background: var(--pink);
+            height: 150px;
+            border-radius: 0 0 50px 50px;
+        }
+
+        .profile-area {
+            text-align: center;
+            margin-top: -75px;
+            padding: 20px;
+        }
+
+        .profile-area img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid var(--dark);
+            object-fit: cover;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .skill-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .skill-box {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid #334155;
+            text-align: center;
+        }
+
+        .skill-box i {
+            font-size: 2rem;
+            color: var(--pink);
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero-mini"></div>
+    <div class="profile-area">
+        <img src="ratan.jpg" onerror="this.src='https://i.ibb.co/vzYm8mN/ratan.jpg'">
+        <h1 style="margin-top:15px;">Ratan Majumder</h1>
+        <p style="opacity: 0.8;">Full-Stack Digital Artist</p>
+    </div>
+
+    <div class="content">
+        <h2>আমার দক্ষতা (Skills)</h2>
+        <div class="skill-grid">
+            <div class="skill-box"><i class="fas fa-code"></i>
+                <h4>Web Developer</h4>
+            </div>
+            <div class="skill-box"><i class="fas fa-microphone"></i>
+                <h4>Voice Artist</h4>
+            </div>
+            <div class="skill-box"><i class="fas fa-video"></i>
+                <h4>Video Editor</h4>
+            </div>
+            <div class="skill-box"><i class="fas fa-paint-brush"></i>
+                <h4>Designer</h4>
+            </div>
+        </div>
+
+        <h2 style="margin-top: 40px;">যোগাযোগ</h2>
+        <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+            <a href="https://wa.me/8801609166109" style="color:#25d366; font-size: 2.5rem;"><i
+                    class="fab fa-whatsapp"></i></a>
+            <a href="https://facebook.com/your-profile" style="color:#1877f2; font-size: 2.5rem;"><i
+                    class="fab fa-facebook"></i></a>
+        </div>
+    </div>
+</body>
+
+</html>
