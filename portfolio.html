@@ -4,42 +4,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratan's Portfolio</title>
+    <title>Ratan's Portfolio | Master</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --pink: #ff4d94;
-            --dark: #0f172a;
-            --card: #1e293b;
+            --dark: #020617;
+            --card: rgba(255, 255, 255, 0.03);
             --text: #f8fafc;
+            --glow: 0 0 15px rgba(255, 77, 148, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Hind Siliguri', sans-serif;
             background: var(--dark);
+            background: radial-gradient(circle at top right, rgba(255, 77, 148, 0.1), transparent), #020617;
             color: var(--text);
-            margin: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .hero-mini {
-            background: var(--pink);
-            height: 150px;
-            border-radius: 0 0 50px 50px;
+            background: linear-gradient(45deg, var(--pink), #ff1e75);
+            height: 180px;
+            border-radius: 0 0 80px 80px;
+            box-shadow: 0 10px 30px rgba(255, 77, 148, 0.3);
         }
 
         .profile-area {
             text-align: center;
-            margin-top: -75px;
+            margin-top: -90px;
             padding: 20px;
         }
 
         .profile-area img {
-            width: 150px;
-            height: 150px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
-            border: 5px solid var(--dark);
+            border: 6px solid var(--dark);
             object-fit: cover;
+            box-shadow: 0 0 25px var(--pink);
+            transition: 0.4s;
+        }
+
+        .profile-area img:hover {
+            transform: scale(1.05);
         }
 
         .content {
@@ -48,61 +64,148 @@
             padding: 20px;
         }
 
+        h2 {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 1.8rem;
+            color: var(--pink);
+            text-shadow: var(--glow);
+        }
+
+        /* Skill Grid with Glow */
         .skill-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 15px;
             margin-top: 20px;
         }
 
         .skill-box {
             background: var(--card);
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px solid #334155;
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        .skill-box:hover {
+            border-color: var(--pink);
+            transform: translateY(-8px);
+            box-shadow: var(--glow);
+            background: rgba(255, 77, 148, 0.05);
         }
 
         .skill-box i {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: var(--pink);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 5px var(--pink));
+        }
+
+        /* Banner Style */
+        .contact-banner {
+            background: rgba(255, 77, 148, 0.1);
+            border: 1px solid var(--pink);
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 30px;
+            backdrop-filter: blur(5px);
+        }
+
+        .contact-banner p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .social-links a {
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        /* Animation */
+        .animate-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="hero-mini"></div>
-    <div class="profile-area">
+
+    <div class="profile-area animate-up">
         <img src="ratan.jpg" onerror="this.src='https://i.ibb.co/vzYm8mN/ratan.jpg'">
-        <h1 style="margin-top:15px;">Ratan Majumder</h1>
-        <p style="opacity: 0.8;">Full-Stack Digital Artist</p>
+        <h1 style="margin-top:15px; font-weight:700; letter-spacing:1px;">Ratan Majumder</h1>
+        <p style="opacity: 0.9; color: var(--pink); font-weight: bold;">Full-Stack Digital Artist & Web Expert</p>
     </div>
 
-    <div class="content">
+    <div class="content animate-up">
         <h2>আমার দক্ষতা (Skills)</h2>
         <div class="skill-grid">
-            <div class="skill-box"><i class="fas fa-code"></i>
+            <div class="skill-box">
+                <i class="fas fa-code"></i>
                 <h4>Web Developer</h4>
             </div>
-            <div class="skill-box"><i class="fas fa-microphone"></i>
-                <h4>Voice Artist</h4>
+            <div class="skill-box">
+                <i class="fas fa-microphone-alt"></i>
+                <h4>Voice Over Artist</h4>
             </div>
-            <div class="skill-box"><i class="fas fa-video"></i>
+            <div class="skill-box">
+                <i class="fas fa-video"></i>
                 <h4>Video Editor</h4>
             </div>
-            <div class="skill-box"><i class="fas fa-paint-brush"></i>
-                <h4>Designer</h4>
+            <div class="skill-box">
+                <i class="fas fa-paint-brush"></i>
+                <h4>Graphic Designer</h4>
+            </div>
+            <div class="skill-box">
+                <i class="fas fa-gamepad"></i>
+                <h4>Professional Gamer</h4>
             </div>
         </div>
 
-        <h2 style="margin-top: 40px;">যোগাযোগ</h2>
-        <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
-            <a href="https://wa.me/8801609166109" style="color:#25d366; font-size: 2.5rem;"><i
-                    class="fab fa-whatsapp"></i></a>
-            <a href="https://facebook.com/your-profile" style="color:#1877f2; font-size: 2.5rem;"><i
-                    class="fab fa-facebook"></i></a>
+        <div class="contact-banner">
+            <p>যে কোনো ধরনের প্রফেশনাল ওয়েবসাইট বানাতে আজই যোগাযোগ করুন</p>
+            <div class="social-links">
+                <a href="https://wa.me/8801609166109" style="color:#25d366; font-size: 2.8rem;">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://facebook.com/your-profile" style="color:#1877f2; font-size: 2.8rem;">
+                    <i class="fab fa-facebook"></i>
+                </a>
+            </div>
         </div>
+
+        <p style="text-align: center; margin-top: 40px; opacity: 0.5; font-size: 12px;">
+            © 2026 Ratan Bro | All Rights Reserved
+        </p>
     </div>
 </body>
 
