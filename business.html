@@ -10,60 +10,174 @@
     <style>
         :root {
             --pink: #ff4d94;
-            --dark: #0f172a;
-            --card: #1e293b;
+            --pink-glow: rgba(255, 77, 148, 0.4);
+            --dark: #020617;
+            --card: rgba(255, 255, 255, 0.03);
             --text: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Hind Siliguri', sans-serif;
             background: var(--dark);
+            background: radial-gradient(circle at bottom left, rgba(255, 77, 148, 0.15), transparent), #020617;
             color: var(--text);
-            padding: 20px;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
+            padding: 20px;
         }
 
+        /* Header Section */
         header {
             text-align: center;
-            padding: 40px 0;
+            padding: 60px 0 40px;
+            position: relative;
         }
 
+        .header-icon {
+            font-size: 4.5rem;
+            color: var(--pink);
+            filter: drop-shadow(0 0 15px var(--pink));
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        /* Business Cards */
         .biz-card {
             background: var(--card);
-            padding: 25px;
-            border-radius: 20px;
-            border-left: 5px solid var(--pink);
-            margin-bottom: 20px;
+            padding: 30px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            margin-bottom: 25px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .biz-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--pink);
+            box-shadow: 0 0 15px var(--pink);
+        }
+
+        .biz-card:hover {
+            transform: scale(1.02);
+            border-color: var(--pink);
+            background: rgba(255, 77, 148, 0.05);
         }
 
         h2 {
             color: var(--pink);
             margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
         }
 
         p {
-            line-height: 1.8;
-            opacity: 0.9;
+            font-size: 1.05rem;
+            opacity: 0.85;
+            text-align: justify;
+        }
+
+        /* Steps Section */
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .step-num {
+            background: var(--pink);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+            box-shadow: 0 0 10px var(--pink-glow);
+        }
+
+        /* Call to Action */
+        .cta-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(255, 77, 148, 0.1), transparent);
+            border-radius: 30px;
+            border: 1px dashed var(--pink);
+            margin-top: 40px;
         }
 
         .btn-join {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             background: var(--pink);
             color: white;
-            padding: 12px 30px;
+            padding: 15px 35px;
             border-radius: 50px;
             text-decoration: none;
-            font-weight: bold;
-            margin-top: 20px;
-            transition: 0.3s;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 25px var(--pink-glow);
+            transition: 0.4s;
+            margin-top: 15px;
         }
 
         .btn-join:hover {
-            transform: scale(1.05);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px var(--pink);
+            letter-spacing: 0.5px;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 50px;
+            opacity: 0.4;
+            font-size: 0.8rem;
         }
     </style>
 </head>
@@ -71,30 +185,50 @@
 <body>
     <div class="container">
         <header>
-            <i class="fas fa-hand-holding-usd" style="font-size: 4rem; color: var(--pink);"></i>
-            <h1 style="margin-top: 20px;">অনলাইন ইনকাম ও ড্রপশিপিং</h1>
+            <div class="header-icon"><i class="fas fa-rocket"></i></div>
+            <h1>ইনভেস্টমেন্ট ছাড়া ইনকাম</h1>
+            <p style="color: var(--pink); font-weight: 600;">আমাদের ড্রপশিপিং টিমে আপনাকে স্বাগতম</p>
         </header>
 
         <div class="biz-card">
-            <h2>ড্রপশিপিং কি?</h2>
-            <p>সহজ কথায়, ড্রপশিপিং হলো অন্যের প্রোডাক্ট নিজের মাধ্যমে সেল করা। এখানে আপনার কোনো দোকান বা স্টক রাখার
-                দরকার নেই। আমাদের কাছে থাকা হাজারো প্রিমিয়াম প্রোডাক্ট আপনি আপনার ফেসবুক বা অনলাইনে মার্কেটিং করবেন,
-                অর্ডার আসলে আমাদের জানাবেন। আমরা কাস্টমারের কাছে প্রোডাক্ট পৌঁছে দেব, আর আপনি আপনার প্রফিট পেয়ে যাবেন।
-            </p>
+            <h2><i class="fas fa-question-circle"></i> ড্রপশিপিং কী?</h2>
+            <p>সহজ কথায়, ড্রপশিপিং হলো একটি আধুনিক বিজনেস মডেল যেখানে আপনার নিজস্ব কোনো প্রোডাক্ট স্টক রাখার প্রয়োজন
+                নেই। আমাদের স্টকে থাকা শত শত প্রিমিয়াম প্রোডাক্ট আপনি অনলাইনে মার্কেটিং করবেন। কাস্টমার যখন অর্ডার
+                করবে, আমরা আপনার নামেই প্রোডাক্টটি ডেলিভারি দেব। কাস্টমারের থেকে পেমেন্ট পাওয়ার পর আপনার নির্ধারিত
+                লভ্যাংশ সরাসরি আপনার কাছে পৌঁছে যাবে।</p>
         </div>
 
         <div class="biz-card">
-            <h2>কেন আমাদের সাথে কাজ করবেন?</h2>
-            <p>১. কোনো পুঁজি বা ইনভেস্টমেন্ট লাগে না।<br>
-                ২. প্রোডাক্ট সোর্সিং এবং ডেলিভারি আমাদের দায়িত্ব।<br>
-                ৩. ঘরে বসে মোবাইল দিয়েই কাজ করা যায়।<br>
-                ৪. ছাত্র-ছাত্রীদের জন্য পার্ট-টাইম ইনকামের সেরা সুযোগ।</p>
+            <h2><i class="fas fa-check-double"></i> কেন আমাদের বেছে নেবেন?</h2>
+            <div class="step-item">
+                <div class="step-num">১</div>
+                <p><strong>জিরো ইনভেস্টমেন্ট:</strong> এক টাকাও পুঁজি না দিয়ে ব্যবসা শুরু করার সুযোগ।</p>
+            </div>
+            <div class="step-item">
+                <div class="step-num">২</div>
+                <p><strong>ডেলিভারি সাপোর্ট:</strong> সারা বাংলাদেশে ক্যাশ অন ডেলিভারি সুবিধা আমরাই দেব।</p>
+            </div>
+            <div class="step-item">
+                <div class="step-num">৩</div>
+                <p><strong>প্রশিক্ষণ:</strong> কীভাবে প্রোডাক্ট সেল করবেন তার সম্পূর্ণ গাইডলাইন পাবেন।</p>
+            </div>
+            <div class="step-item">
+                <div class="step-num">৪</div>
+                <p><strong>বিকাশ পেমেন্ট:</strong> আপনার প্রফিট সরাসরি বিকাশ বা নগদে তুলে নিতে পারবেন।</p>
+            </div>
         </div>
 
-        <div class="biz-card" style="text-align: center;">
-            <h2>আজই শুরু করুন!</h2>
-            <p>আমাদের ড্রপশিপিং টিমে যুক্ত হতে নিচের বাটনে ক্লিক করুন।</p>
-            <a href="https://wa.me/8801609166109" class="btn-join">WhatsApp-এ যোগাযোগ করুন</a>
+        <div class="cta-section">
+            <h2 style="justify-content: center;">আজই টিম মেম্বার হোন!</h2>
+            <p>ছাত্র-ছাত্রী বা বেকারদের জন্য ঘরে বসে মোবাইল দিয়ে ইনকামের সেরা সুযোগ। আমাদের সাথে সরাসরি কাজ করতে চাইলে
+                নিচের বাটনে ক্লিক করুন।</p>
+            <a href="https://wa.me/8801609166109" class="btn-join">
+                <i class="fab fa-whatsapp"></i> WhatsApp-এ জয়েন করুন
+            </a>
+        </div>
+
+        <div class="footer-text">
+            © 2026 Ratan Bro E-commerce Solutions | Bangladesh
         </div>
     </div>
 </body>
