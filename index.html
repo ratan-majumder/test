@@ -18,7 +18,17 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
-        body { background: var(--bg-dark); color: white; min-height: 100vh; overflow-x: hidden; touch-action: manipulation; }
+        
+        /* SCROLL FIX: touch-action auto and overflow-y auto for mobile scrolling */
+        body { 
+            background: var(--bg-dark); 
+            color: white; 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+            overflow-y: auto; 
+            touch-action: auto; 
+            -webkit-overflow-scrolling: touch;
+        }
 
         /* --- BACKGROUND MESH --- */
         .login-bg-mesh { position: fixed; inset: 0; z-index: -2; background: linear-gradient(45deg, #020617, #1a0821, #020617); background-size: 400% 400%; animation: meshMove 12s ease infinite; }
@@ -29,12 +39,16 @@
         @keyframes particleFade { to { transform: translateY(15px) scale(0); opacity: 0; } }
 
         /* --- HEADER RAIN --- */
-        .header-love-wrap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; border-radius: 40px; }
-        .header-heart { position: absolute; color: var(--pink-main); animation: hRain linear forwards; opacity: 0; }
-        @keyframes hRain { 0% { transform: translateY(-50px) rotate(0deg); opacity: 0; } 20% { opacity: 0.8; } 100% { transform: translateY(350px) rotate(360deg); opacity: 0; } }
+        .header-love-wrap { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; border-radius: 40px; }
+        .header-heart { position: absolute; color: var(--pink-main); font-size: 14px; top: -20px; animation: hRain linear forwards; opacity: 0; }
+        @keyframes hRain { 
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; } 
+            20% { opacity: 0.8; } 
+            100% { transform: translateY(300px) rotate(360deg); opacity: 0; } 
+        }
 
         /* --- UI ELEMENTS --- */
-        .main-header { margin: 20px; padding: 50px 20px; border-radius: 40px; background: linear-gradient(135deg, rgba(255, 77, 148, 0.1), rgba(255, 255, 255, 0.05)); border: 1px solid rgba(255, 120, 180, 0.2); backdrop-filter: blur(20px); text-align: center; position: relative; }
+        .main-header { margin: 20px; padding: 50px 20px; border-radius: 40px; background: linear-gradient(135deg, rgba(255, 77, 148, 0.1), rgba(255, 255, 255, 0.05)); border: 1px solid rgba(255, 120, 180, 0.2); backdrop-filter: blur(20px); text-align: center; position: relative; overflow: hidden; }
         .user-name-glow { font-size: 30px; font-weight: 900; background: linear-gradient(90deg, #fff, var(--pink-main), #fff); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; }
         @keyframes shine { to { background-position: 200% center; } }
         
@@ -51,7 +65,8 @@
 
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 20px; }
         .social-btn { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; color: white; font-size: 18px; }
-
+        
+        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
         .result-card { background: #000; border: 2px solid var(--pink-main); padding: 25px; border-radius: 35px; width: 100%; max-width: 350px; text-align: center; position: relative; }
     </style>
 </head>
@@ -97,12 +112,12 @@
                 <img src="ratan.jpg" class="hd-avatar" style="width:100px; height:100px; border:3px solid var(--pink-main);">
                 <img id="u-photo" src="" class="hd-avatar" style="width:80px; height:80px; border:3px solid white; margin-left:-25px; z-index:6;">
             </div>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; z-index: 5;">
                 <i class="fas fa-heart" style="color:var(--pink-main); animation:heartBeat 1.2s infinite;"></i>
                 <span id="u-name" class="user-name-glow">...</span>
                 <i class="fas fa-heart" style="color:var(--pink-main); animation:heartBeat 1.2s infinite;"></i>
             </div>
-            <p id="u-wish" style="margin-top: 10px; font-size: 14px; color: #ccc;">লোড হচ্ছে...</p>
+            <p id="u-wish" style="margin-top: 10px; font-size: 14px; color: #ccc; position: relative; z-index: 5;">লোড হচ্ছে...</p>
         </header>
 
         <main class="grid-layout">
@@ -163,9 +178,9 @@
         const provider = new GoogleAuthProvider();
         const AI_API = "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";
 
-        let userPhotoHD = '';
         let currentMsg = null;
 
+        // --- TRAIL LOGIC (Mouse & Phone Combined) ---
         const createTrail = (x, y) => {
             const p = document.createElement('i');
             p.className = 'fas fa-heart trail-particle';
@@ -173,35 +188,33 @@
             document.body.appendChild(p);
             setTimeout(() => p.remove(), 800);
         };
+
         window.addEventListener('mousemove', (e) => createTrail(e.clientX, e.clientY));
+        
+        // Touch move trail with passive scroll compatibility
+        window.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            createTrail(touch.clientX, touch.clientY);
+        }, { passive: true });
 
         window.login = () => signInWithPopup(auth, provider);
         window.logout = () => signOut(auth).then(() => location.reload());
 
-        // MAIN AUTH LOGIC
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                userPhotoHD = user.photoURL.replace('s96-c', 's400-c');
                 document.getElementById('u-name').innerText = user.displayName;
-                document.getElementById('u-photo').src = userPhotoHD;
+                document.getElementById('u-photo').src = user.photoURL.replace('s96-c', 's400-c');
                 document.getElementById('login-screen').style.display = 'none';
-                
-                // Show the "Enter Dashboard" Popup to bypass Autoplay block
                 document.getElementById('audio-gate-modal').style.display = 'flex';
-                
                 setBDWish(user.displayName);
                 startRain();
             }
         });
 
-        // Function triggered when "Enter Dashboard" is clicked
         window.enterDashboard = () => {
             document.getElementById('audio-gate-modal').style.display = 'none';
             document.getElementById('dashboard-ui').style.display = 'block';
-            
-            // Play Welcome Sound
-            const audio = document.getElementById('snd-open');
-            audio.play().catch(e => console.log("Audio play failed:", e));
+            document.getElementById('snd-open').play().catch(e => console.log("Audio play failed"));
         };
 
         function setBDWish(name) {
@@ -216,9 +229,11 @@
                 const h = document.createElement('i');
                 h.className = 'fas fa-heart header-heart';
                 h.style.left = Math.random() * 100 + '%';
+                h.style.fontSize = (Math.random() * 10 + 8) + 'px';
+                h.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 wrap.appendChild(h);
                 setTimeout(() => h.remove(), 4000);
-            }, 600);
+            }, 300);
         }
 
         window.askAI = async () => {
@@ -255,6 +270,20 @@
                 document.getElementById('alert-dot').style.display = 'none';
             }
         };
+
+        window.createPortfolio = () => {
+            const name = document.getElementById('p-name').value;
+            const title = document.getElementById('p-title').value;
+            if(!name || !title) return alert("দয়া করে নাম ও টাইটেল দিন");
+            document.getElementById('p-result-area').innerHTML = `
+                <div class="result-card">
+                    <h3 style="color:var(--pink-main)">${name}</h3>
+                    <p>${title}</p>
+                    <button class="btn-premium" style="margin-top:15px" onclick="document.getElementById('portfolio-modal').style.display='none'">বন্ধ করুন</button>
+                </div>`;
+            document.getElementById('p-maker-modal').style.display = 'none';
+            document.getElementById('portfolio-modal').style.display = 'flex';
+        }
     </script>
 </body>
 </html>
