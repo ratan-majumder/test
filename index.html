@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ratan Bro | VIP Portal Final V3</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         :root {
             --pink-main: #ff4d94;
@@ -17,7 +17,12 @@
             --glass: rgba(255, 255, 255, 0.08);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
 
         body {
             background: var(--bg-dark);
@@ -26,134 +31,248 @@
             overflow-x: hidden;
         }
 
-        /* --- DYNAMIC LOGIN BACKGROUND --- */
+        /* --- BACKGROUND MESH --- */
         .login-bg-mesh {
-            position: fixed; inset: 0; z-index: -1;
+            position: fixed;
+            inset: 0;
+            z-index: -1;
             background: linear-gradient(45deg, #020617, #1a0821, #020617);
             background-size: 400% 400%;
             animation: meshMove 12s ease infinite;
         }
+
         @keyframes meshMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* --- HEADER SPECIFIC LOVE RAIN --- */
+        /* --- BIGGER LOVE RAIN --- */
         .header-love-wrap {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 1; overflow: hidden; border-radius: 40px;
-        }
-        .header-heart {
-            position: absolute; color: var(--pink-main); font-size: 12px;
-            animation: hRain linear forwards; opacity: 0;
-        }
-        @keyframes hRain {
-            0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.7; }
-            100% { transform: translateY(250px) rotate(360deg); opacity: 0; }
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+            border-radius: 40px;
         }
 
-        /* --- LOGIN CARD STYLES --- */
+        .header-heart {
+            position: absolute;
+            color: var(--pink-main);
+            animation: hRain linear forwards;
+            opacity: 0;
+        }
+
+        @keyframes hRain {
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(350px) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- LOGIN CARD --- */
         .login-box {
-            background: var(--glass); padding: 50px 30px; border-radius: 50px;
-            border: 1px solid rgba(255, 77, 148, 0.3); text-align: center;
-            width: 90%; max-width: 400px; backdrop-filter: blur(20px);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.7); position: relative;
+            background: var(--glass);
+            padding: 50px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 77, 148, 0.3);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+            position: relative;
         }
 
         .avatar-container {
-            position: relative; width: 140px; height: 140px; margin: 0 auto 30px;
-            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
         .spinning-ring {
-            position: absolute; width: 100%; height: 100%;
-            border-radius: 50%; border: 3px solid transparent;
-            border-top: 3px solid var(--pink-main); border-bottom: 3px solid var(--pink-main);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--pink-main);
+            border-bottom: 3px solid var(--pink-main);
             animation: ringRotate 4s linear infinite;
         }
+
         @keyframes ringRotate { to { transform: rotate(360deg); } }
 
-        /* Stable Pic Fix */
-        .stable-img { 
-            width: 115px; height: 115px; border-radius: 50%; 
-            object-fit: cover; aspect-ratio: 1/1; 
-            z-index: 5; border: 3px solid rgba(255,255,255,0.1); 
+        .stable-img {
+            width: 115px; height: 115px;
+            border-radius: 50%;
+            object-fit: cover;
+            z-index: 5;
+            border: 3px solid rgba(255,255,255,0.1);
         }
 
         .btn-premium {
             background: linear-gradient(90deg, var(--pink-main), #cc0052);
-            color: white; border: none; padding: 18px; border-radius: 50px;
-            font-weight: 700; width: 100%; cursor: pointer; transition: 0.3s;
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 50px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.3s;
             box-shadow: 0 10px 25px rgba(255, 77, 148, 0.3);
         }
-        .btn-premium:hover { transform: scale(1.03); box-shadow: 0 15px 35px rgba(255, 77, 148, 0.5); }
 
-        /* --- DASHBOARD HEADER (BLUR PINK) --- */
+        .btn-premium:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 35px rgba(255, 77, 148, 0.5);
+        }
+
+        /* --- DASHBOARD HEADER --- */
         .main-header {
-            margin: 20px; padding: 60px 20px; border-radius: 40px;
-            /* Added Blur Pink Background */
-            background: radial-gradient(circle, rgba(255, 77, 148, 0.4) 0%, rgba(255, 77, 148, 0.1) 70%, transparent 100%);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 77, 148, 0.3);
-            text-align: center; position: relative; overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            margin: 20px;
+            padding: 65px 20px;
+            border-radius: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255, 77, 148, 0.16), rgba(255, 255, 255, 0.05), rgba(255, 77, 148, 0.10));
+            border: 1px solid rgba(255, 120, 180, 0.26);
+            backdrop-filter: blur(26px);
+            box-shadow: 0 0 35px rgba(255, 77, 148, 0.10), 0 20px 60px rgba(0,0,0,0.35);
         }
+
+        .name-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .side-heart {
+            color: var(--pink-main);
+            font-size: 20px;
+            animation: heartBeat 1.2s infinite ease-in-out;
+            filter: drop-shadow(0 0 8px var(--pink-glow));
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
         .user-name-glow {
-            font-size: 32px; font-weight: 900; letter-spacing: 2px;
+            font-size: 32px;
+            font-weight: 900;
             background: linear-gradient(90deg, #fff, var(--pink-main), #fff);
-            background-size: 200% auto; -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent; animation: shine 3s linear infinite;
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
         }
+
         @keyframes shine { to { background-position: 200% center; } }
 
-        /* --- VISITOR & TOP BAR --- */
-        .top-nav { display: flex; justify-content: flex-end; align-items: center; padding: 15px 25px; gap: 12px; }
-        .eye-counter {
-            background: rgba(255, 77, 148, 0.1); border: 1px solid var(--pink-main);
-            color: var(--pink-main); padding: 5px 15px; border-radius: 50px;
-            font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px;
+        .dashboard-photo-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 10;
         }
 
-        /* --- CARDS & MOBILE AUTO-BARI --- */
+        .owner-photo {
+            width: 118px; height: 118px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--pink-main);
+            box-shadow: 0 0 30px rgba(255, 77, 148, 0.45);
+        }
+
+        .user-photo {
+            width: 98px; height: 98px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            margin-left: -35px;
+            z-index: 2;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+        }
+
+        /* --- CARDS WITH AUTO-BARI & HOVER ANIMATION --- */
         .grid-layout {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
-            padding: 0 20px 40px; max-width: 600px; margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 0 20px 40px;
+            max-width: 600px;
+            margin: 0 auto;
         }
+
         .nav-card {
-            background: var(--glass); border-radius: 35px; padding: 35px 20px;
-            text-align: center; text-decoration: none; color: white;
-            border: 1px solid rgba(255, 255, 255, 0.05); position: relative;
-            overflow: hidden; animation: autoBari 4s infinite ease-in-out;
+            background: var(--glass);
+            border-radius: 35px;
+            padding: 35px 20px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            animation: autoBari 4s infinite ease-in-out; /* Auto Pink Glow */
         }
+
+        /* Hover Animation: Scale up */
+        .nav-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--pink-main);
+            box-shadow: 0 15px 30px rgba(255, 77, 148, 0.25);
+        }
+
+        /* Shine effect on Hover */
+        .nav-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.6s;
+            transform: skewX(-20deg);
+        }
+        .nav-card:hover::after { left: 150%; }
+
+        /* Auto Bari Animation */
         @keyframes autoBari {
             0%, 100% { border-color: rgba(255,255,255,0.05); box-shadow: none; }
             50% { border-color: var(--pink-main); box-shadow: 0 0 15px rgba(255, 77, 148, 0.2); }
         }
-        .nav-card::after {
-            content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 77, 148, 0.15), transparent);
-            transition: 0.8s; transform: skewX(-20deg);
-        }
-        .nav-card:hover::after { left: 150%; }
-        .nav-card i { font-size: 2.8rem; color: var(--pink-main); margin-bottom: 12px; filter: drop-shadow(0 0 8px var(--pink-glow)); }
-        .nav-card p { font-weight: 700; font-size: 16px; }
 
-        .wide-card { grid-column: span 2; display: flex; justify-content: center; gap: 15px; padding: 25px; }
+        .nav-card i { font-size: 2.8rem; color: var(--pink-main); margin-bottom: 12px; }
+        .wide-card { grid-column: span 2; display: flex; justify-content: center; gap: 15px; }
 
-        /* --- AI CHAT --- */
-        .ai-section { max-width: 500px; margin: 0 auto 50px; padding: 0 20px; }
+        /* --- MODAL & CHAT --- */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 10000; }
         .chat-ui { background: rgba(0,0,0,0.6); border-radius: 35px; border: 1px solid rgba(255,77,148,0.2); padding: 25px; }
-        #chat-content { height: 140px; overflow-y: auto; color: #ccc; font-size: 14px; margin-bottom: 15px; }
+        #chat-content { height: 140px; overflow-y: auto; margin-bottom: 15px; }
         .chat-input-row { display: flex; gap: 10px; }
         .chat-input-row input { flex: 1; background: #0d1117; border: 1px solid #333; color: white; padding: 12px 20px; border-radius: 50px; outline: none; }
-
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 10000; }
     </style>
 </head>
 
 <body>
     <div class="login-bg-mesh"></div>
+
     <audio id="snd-open" src="open.mp3"></audio>
     <audio id="snd-notif" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
 
@@ -163,64 +282,49 @@
                 <div class="spinning-ring"></div>
                 <img src="ratan.jpg" class="stable-img">
             </div>
-            <h2 style="letter-spacing: 2px; margin-bottom: 5px;">RATAN BRO</h2>
+            <h2>RATAN BRO</h2>
             <p style="color: #666; font-size: 13px; margin-bottom: 30px;">SECURE DASHBOARD ACCESS</p>
             <button class="btn-premium" onclick="login()">LOGIN WITH GOOGLE</button>
         </div>
     </div>
 
     <div id="dashboard-ui" style="display: none;">
-        <div class="top-nav">
-            <div class="eye-counter">
+        <div style="display: flex; justify-content: flex-end; padding: 15px 25px; gap: 12px;">
+            <div style="background: rgba(255, 77, 148, 0.1); border: 1px solid var(--pink-main); color: var(--pink-main); padding: 5px 15px; border-radius: 50px; font-size: 13px; font-weight: 700;">
                 <i class="fas fa-eye"></i> <span id="v-count">200</span>
             </div>
-            <button onclick="logout()" style="background: none; border: 1px solid #333; color: #555; padding: 6px 15px; border-radius: 50px; cursor: pointer; font-size: 12px;">Sign Out</button>
+            <button onclick="logout()" style="background: none; border: 1px solid #333; color: #555; padding: 6px 15px; border-radius: 50px; cursor: pointer;">Sign Out</button>
         </div>
 
         <header class="main-header">
             <div id="header-rain" class="header-love-wrap"></div>
-            
-            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 25px; position: relative; z-index: 10;">
-                <img src="ratan.jpg" style="width: 115px; height: 115px; border-radius: 50%; border: 4px solid var(--pink-main); box-shadow: 0 0 30px var(--pink-glow); object-fit: cover; aspect-ratio: 1/1;">
-                <img id="u-photo" src="" style="width: 95px; height: 95px; border-radius: 50%; border: 4px solid #fff; margin-left: -35px; background: #000; object-fit: cover; aspect-ratio: 1/1;">
+            <div class="dashboard-photo-wrap">
+                <img src="ratan.jpg" class="owner-photo">
+                <img id="u-photo" src="" class="user-photo">
             </div>
-            <span id="u-name" class="user-name-glow">...</span>
-            <p style="margin-top: 15px; color: #eee; font-size: 11px;"><i class="fas fa-fingerprint" style="color: var(--pink-main);"></i> SESSION ENCRYPTED</p>
+            <div class="name-container">
+                <i class="fas fa-heart side-heart"></i>
+                <span id="u-name" class="user-name-glow">...</span>
+                <i class="fas fa-heart side-heart"></i>
+            </div>
         </header>
 
         <main class="grid-layout">
             <div class="nav-card" onclick="openNotice()">
-                <div id="alert-dot" style="position:absolute; top:15px; right:15px; width:12px; height:12px; background:red; border-radius:50%; box-shadow:0 0 10px red; display:none;"></div>
-                <i class="fas fa-bell"></i>
-                <p>Notification</p>
+                <div id="alert-dot" style="position:absolute; top:15px; right:15px; width:12px; height:12px; background:red; border-radius:50%; display:none;"></div>
+                <i class="fas fa-bell"></i><p>Notification</p>
             </div>
-
-            <a href="testpaper.html" class="nav-card">
-                <i class="fas fa-file-pdf"></i>
-                <p>Test Papers</p>
-            </a>
-
-            <a href="business.html" class="nav-card">
-                <i class="fas fa-briefcase"></i>
-                <p>Business</p>
-            </a>
-
-            <a href="portfolio.html" class="nav-card">
-                <i class="fas fa-user-circle"></i>
-                <p>Portfolio</p>
-            </a>
-
-            <a href="https://numberlookup.pro.bd/" target="_blank" class="nav-card wide-card">
-                <i class="fas fa-shield-virus"></i>
-                <p>Advanced Identity Lookup</p>
-            </a>
+            <a href="testpaper.html" class="nav-card"><i class="fas fa-file-pdf"></i><p>Test Papers</p></a>
+            <a href="business.html" class="nav-card"><i class="fas fa-briefcase"></i><p>Business</p></a>
+            <a href="portfolio.html" class="nav-card"><i class="fas fa-user-circle"></i><p>Portfolio</p></a>
+            <a href="https://numberlookup.pro.bd/" target="_blank" class="nav-card wide-card"><i class="fas fa-shield-virus"></i><p>Advanced Identity Lookup</p></a>
         </main>
 
-        <section class="ai-section">
+        <section style="max-width:500px; margin:0 auto 50px; padding:0 20px;">
             <div class="chat-ui">
-                <div id="chat-content"><b>AI Assistant:</b> পোর্টালে স্বাগতম। আপনি কি কোনো সাহায্য চান?</div>
+                <div id="chat-content"><b>AI Assistant:</b> পোর্টালে স্বাগতম।</div>
                 <div class="chat-input-row">
-                    <input type="text" id="ai-msg" placeholder="Type your query...">
+                    <input type="text" id="ai-msg" placeholder="Type here...">
                     <button onclick="askAI()" class="btn-premium" style="width: auto; padding: 10px 20px;">SEND</button>
                 </div>
             </div>
@@ -228,10 +332,9 @@
     </div>
 
     <div id="notice-modal" class="modal">
-        <div class="login-box" style="border-color: #fff3;">
-            <i class="fas fa-envelope-open" style="font-size: 3rem; color: var(--pink-main); margin-bottom: 20px;"></i>
-            <h3>ADMIN MESSAGE</h3>
-            <p id="notice-body" style="margin: 20px 0; color: #ccc; line-height: 1.6;"></p>
+        <div class="login-box">
+            <i class="fas fa-envelope-open" style="font-size: 3rem; color: var(--pink-main);"></i>
+            <p id="notice-body" style="margin: 20px 0; color: #ccc;"></p>
             <button class="btn-premium" onclick="closeNotice()">GOT IT</button>
         </div>
     </div>
@@ -264,18 +367,11 @@
                 const heart = document.createElement('i');
                 heart.className = 'fas fa-heart header-heart';
                 heart.style.left = Math.random() * 100 + '%';
-                heart.style.fontSize = (Math.random() * 6 + 8) + 'px';
-                heart.style.animationDuration = (Math.random() * 1 + 2) + 's';
+                heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 hWrap.appendChild(heart);
-                setTimeout(() => heart.remove(), 3000);
+                setTimeout(() => heart.remove(), 4000);
             }, 500);
-        }
-
-        function updateCounter() {
-            let count = localStorage.getItem('ratan_v_count') || 200;
-            count = parseInt(count) + 1;
-            localStorage.setItem('ratan_v_count', count);
-            document.getElementById('v-count').innerText = count;
         }
 
         window.login = () => signInWithPopup(auth, provider);
@@ -287,16 +383,8 @@
                 document.getElementById('u-photo').src = user.photoURL;
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('dashboard-ui').style.display = 'block';
-                document.getElementById('snd-open').play();
-                
-                updateCounter();
                 startHeaderRain();
-
-                const path = user.email.replace(/\./g, '_');
-                await setDoc(doc(db, "users", path), {
-                    last_seen: new Date().toLocaleString(),
-                    name: user.displayName
-                }, { merge: true });
+                try { document.getElementById('snd-open').play(); } catch(e){}
             } else {
                 document.getElementById('login-screen').style.display = 'flex';
                 document.getElementById('dashboard-ui').style.display = 'none';
@@ -328,7 +416,7 @@
                 currentMsg = snap.data();
                 if (currentMsg.hasNew) {
                     document.getElementById('alert-dot').style.display = 'block';
-                    document.getElementById('snd-notif').play();
+                    try { document.getElementById('snd-notif').play(); } catch(e){}
                 }
             }
         });
@@ -340,7 +428,8 @@
                 document.getElementById('alert-dot').style.display = 'none';
             }
         };
-        window.closeNotice = () => document.getElementById('notice-modal').style.display = 'none';
+
+        window.closeNotice = () => { document.getElementById('notice-modal').style.display = 'none'; };
     </script>
 </body>
 </html>
