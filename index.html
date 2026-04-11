@@ -39,12 +39,11 @@
         @keyframes shine { to { background-position: 200% center; } }
         
         .grid-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 20px 30px; max-width: 600px; margin: 0 auto; }
-        .nav-card { background: var(--glass); border-radius: 30px; padding: 25px 15px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255, 255, 255, 0.05); animation: autoBari 4s infinite; transition: 0.3s; position: relative; }
+        .nav-card { background: var(--glass); border-radius: 30px; padding: 25px 15px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255, 255, 255, 0.05); animation: autoBari 4s infinite; transition: 0.3s; position: relative; cursor: pointer; }
         .nav-card:active { transform: scale(0.95); }
         @keyframes autoBari { 0%, 100% { border-color: rgba(255,255,255,0.05); } 50% { border-color: var(--pink-main); } }
         .nav-card i { font-size: 2.2rem; color: var(--pink-main); margin-bottom: 8px; }
 
-        /* --- HD IMAGE FIX --- */
         .hd-avatar { object-fit: cover; border-radius: 50%; display: block; image-rendering: -webkit-optimize-contrast; }
 
         .btn-premium { background: linear-gradient(90deg, var(--pink-main), #cc0052); color: white; border: none; padding: 12px 20px; border-radius: 50px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.3s; }
@@ -60,8 +59,7 @@
 <body>
     <div class="login-bg-mesh"></div>
 
-    <audio id="snd-open" src="open.mp3"></audio>
-    <audio id="snd-notif" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+    <audio id="snd-open" src="open.mp3" preload="auto"></audio>
 
     <div id="login-screen" class="modal" style="display: flex;">
         <div style="text-align: center; background: var(--glass); padding: 40px; border-radius: 40px; border: 1px solid var(--pink-main);">
@@ -69,6 +67,15 @@
             <h2>RATAN BRO</h2>
             <p style="color:#555; font-size:12px; margin-bottom:20px;">VIP PORTAL LOGIN</p>
             <button class="btn-premium" onclick="login()">LOGIN WITH GOOGLE</button>
+        </div>
+    </div>
+
+    <div id="audio-gate-modal" class="modal">
+        <div style="text-align: center; background: var(--glass); padding: 30px; border-radius: 40px; border: 1px solid var(--pink-main); max-width: 320px;">
+            <i class="fas fa-unlock-alt" style="font-size: 2.5rem; color: var(--pink-main); margin-bottom: 15px;"></i>
+            <h3 style="margin-bottom: 10px;">স্বাগতম বস্!</h3>
+            <p style="font-size: 14px; color: #ccc; margin-bottom: 25px;">ড্যাশবোর্ড আনলক করতে নিচের বাটনে ক্লিক করুন।</p>
+            <button class="btn-premium" onclick="enterDashboard()">ENTER DASHBOARD</button>
         </div>
     </div>
 
@@ -103,15 +110,9 @@
                 <div id="alert-dot" style="position:absolute; top:12px; right:12px; width:8px; height:8px; background:red; border-radius:50%; display:none; box-shadow: 0 0 10px red;"></div>
                 <i class="fas fa-bullhorn"></i><p>নোটিশ বোর্ড</p>
             </div>
-            <a href="portfolio.html" class="nav-card">
-                <i class="fas fa-user-tie"></i><p>আমার ডিটেইলস</p>
-            </a>
-            <a href="business.html" class="nav-card">
-                <i class="fas fa-shopping-bag"></i><p>বিজনেসের খবর</p>
-            </a>
-            <div class="nav-card" onclick="document.getElementById('p-maker-modal').style.display='flex'">
-                <i class="fas fa-magic"></i><p>পোর্টফোলিও মেকার</p>
-            </div>
+            <a href="portfolio.html" class="nav-card"><i class="fas fa-user-tie"></i><p>আমার ডিটেইলস</p></a>
+            <a href="business.html" class="nav-card"><i class="fas fa-shopping-bag"></i><p>বিজনেসের খবর</p></a>
+            <div class="nav-card" onclick="document.getElementById('p-maker-modal').style.display='flex'"><i class="fas fa-magic"></i><p>পোর্টফোলিও মেকার</p></div>
             <a href="testpaper.html" class="nav-card"><i class="fas fa-graduation-cap"></i><p>নোটস / ফাইল</p></a>
             <a href="https://numberlookup.pro.bd/" target="_blank" class="nav-card"><i class="fas fa-search"></i><p>নম্বর ডিটেইলস</p></a>
         </main>
@@ -131,18 +132,16 @@
         <div style="background: #000; width: 100%; max-width: 380px; padding: 30px; border-radius: 35px; border: 1px solid var(--pink-main); text-align: center;">
             <h3 style="color: var(--pink-main); margin-bottom: 20px;">মেক পোর্টফোলিও</h3>
             <input type="text" id="p-name" placeholder="আপনার পূর্ণ নাম" class="p-input">
-            <input type="text" id="p-title" placeholder="টাইটেল (যেমন: স্টুডেন্ট)" class="p-input">
+            <input type="text" id="p-title" placeholder="টাইটেল" class="p-input">
             <input type="text" id="p-phone" placeholder="ফোন নম্বর" class="p-input">
-            <input type="text" id="p-fb" placeholder="ফেসবুক আইডি লিঙ্ক" class="p-input">
-            <input type="text" id="p-wa" placeholder="হোয়াটসঅ্যাপ নম্বর" class="p-input">
+            <input type="text" id="p-fb" placeholder="ফেসবুক লিঙ্ক" class="p-input">
+            <input type="text" id="p-wa" placeholder="হোয়াটসঅ্যাপ" class="p-input">
             <button class="btn-premium" onclick="createPortfolio()">জেনারেট করুন</button>
-            <button onclick="document.getElementById('p-maker-modal').style.display='none'" style="margin-top:15px; background:none; border:none; color:#555; cursor:pointer;">বন্ধ করুন</button>
+            <button onclick="document.getElementById('p-maker-modal').style.display='none'" style="margin-top:15px; background:none; border:none; color:#555;">বন্ধ করুন</button>
         </div>
     </div>
 
-    <div id="portfolio-modal" class="modal">
-        <div id="p-result-area"></div>
-    </div>
+    <div id="portfolio-modal" class="modal"><div id="p-result-area"></div></div>
 
     <div id="notice-modal" class="modal">
         <div style="background: #000; padding: 30px; border-radius: 35px; border: 1px solid var(--pink-main); text-align: center; max-width: 350px;">
@@ -169,69 +168,47 @@
 
         const createTrail = (x, y) => {
             const p = document.createElement('i');
-            p.className = Math.random() > 0.5 ? 'fas fa-heart trail-particle' : 'fas fa-star trail-particle';
+            p.className = 'fas fa-heart trail-particle';
             p.style.left = x + 'px'; p.style.top = y + 'px';
-            p.style.fontSize = (Math.random() * 10 + 5) + 'px';
             document.body.appendChild(p);
             setTimeout(() => p.remove(), 800);
         };
         window.addEventListener('mousemove', (e) => createTrail(e.clientX, e.clientY));
-        window.addEventListener('touchmove', (e) => createTrail(e.touches[0].clientX, e.touches[0].clientY));
-
-        function setBDWish(name) {
-            const hour = new Date().getHours();
-            let msg = "";
-            if(hour >= 5 && hour < 10) msg = `🌞 শুভ সকাল, ${name}! ফ্রেশ হয়ে এক কাপ গরম চা খাওয়া যাক।`;
-            else if(hour >= 10 && hour < 12) msg = `🍳 কিরে ${name}, সকালের নাস্তা কি হয়েছে? নাকি এখনো না খেয়ে আছিস?`;
-            else if(hour >= 12 && hour < 16) msg = `☀️ শুভ দুপুর, ${name}! রোদের যা অবস্থা, বেশি করে পানি খাস।`;
-            else if(hour >= 16 && hour < 19) msg = `🌇 শুভ বিকেল, ${name}! একটু বাইরে গিয়ে হাওয়া খেয়ে আয়।`;
-            else if(hour >= 19 && hour < 23) msg = `🌙 শুভ সন্ধ্যা, ${name}! কি খবর? দিনকাল কেমন যাচ্ছে?`;
-            else msg = `😴 অনেক রাত হলো ${name}, মোবাইল রেখে এবার ঘুমানো দরকার!`;
-            document.getElementById('u-wish').innerText = msg;
-        }
-
-        window.createPortfolio = () => {
-            const name = document.getElementById('p-name').value;
-            const title = document.getElementById('p-title').value;
-            const phone = document.getElementById('p-phone').value;
-            const fb = document.getElementById('p-fb').value;
-            const wa = document.getElementById('p-wa').value;
-            if(!name || !title) return alert("নাম আর টাইটেল দিন!");
-
-            const result = document.getElementById('p-result-area');
-            result.innerHTML = `
-                <div class="result-card">
-                    <button onclick="document.getElementById('portfolio-modal').style.display='none'" style="position:absolute; top:15px; right:15px; color:#555; background:none; border:none; font-size:22px;">&times;</button>
-                    <img src="${userPhotoHD}" class="hd-avatar" style="width:80px; height:80px; border:2px solid var(--pink-main); margin: 0 auto 10px;">
-                    <h3>${name}</h3>
-                    <p style="color:var(--pink-main); font-size:13px; margin-bottom:15px;">${title}</p>
-                    <div style="display:flex; flex-direction:column; gap:8px;">
-                        <div style="background:#111; padding:10px; border-radius:15px; font-size:12px;"><i class="fas fa-phone"></i> ${phone || 'N/A'}</div>
-                        <a href="${fb}" target="_blank" style="background:#111; padding:10px; border-radius:15px; font-size:12px; color:white; text-decoration:none;"><i class="fab fa-facebook" style="color:#1877f2"></i> Facebook</a>
-                        <a href="https://wa.me/${wa}" target="_blank" style="background:#111; padding:10px; border-radius:15px; font-size:12px; color:white; text-decoration:none;"><i class="fab fa-whatsapp" style="color:#25d366"></i> WhatsApp</a>
-                    </div>
-                </div>
-            `;
-            document.getElementById('p-maker-modal').style.display = 'none';
-            document.getElementById('portfolio-modal').style.display = 'flex';
-        };
 
         window.login = () => signInWithPopup(auth, provider);
         window.logout = () => signOut(auth).then(() => location.reload());
 
+        // MAIN AUTH LOGIC
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // HD IMAGE LOGIC: Change s96-c to s400-c
                 userPhotoHD = user.photoURL.replace('s96-c', 's400-c');
                 document.getElementById('u-name').innerText = user.displayName;
                 document.getElementById('u-photo').src = userPhotoHD;
                 document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('dashboard-ui').style.display = 'block';
+                
+                // Show the "Enter Dashboard" Popup to bypass Autoplay block
+                document.getElementById('audio-gate-modal').style.display = 'flex';
+                
                 setBDWish(user.displayName);
                 startRain();
-                try{ document.getElementById('snd-open').play(); } catch(e){}
             }
         });
+
+        // Function triggered when "Enter Dashboard" is clicked
+        window.enterDashboard = () => {
+            document.getElementById('audio-gate-modal').style.display = 'none';
+            document.getElementById('dashboard-ui').style.display = 'block';
+            
+            // Play Welcome Sound
+            const audio = document.getElementById('snd-open');
+            audio.play().catch(e => console.log("Audio play failed:", e));
+        };
+
+        function setBDWish(name) {
+            const hour = new Date().getHours();
+            let msg = (hour < 12) ? "শুভ সকাল" : (hour < 17) ? "শুভ দুপুর" : "শুভ সন্ধ্যা";
+            document.getElementById('u-wish').innerText = `${msg}, ${name}! কি খবর?`;
+        }
 
         function startRain() {
             const wrap = document.getElementById('header-rain');
@@ -239,8 +216,6 @@
                 const h = document.createElement('i');
                 h.className = 'fas fa-heart header-heart';
                 h.style.left = Math.random() * 100 + '%';
-                h.style.fontSize = (Math.random()*15 + 15) + 'px';
-                h.style.animationDuration = (Math.random()*2 + 2) + 's';
                 wrap.appendChild(h);
                 setTimeout(() => h.remove(), 4000);
             }, 600);
@@ -261,7 +236,7 @@
                 });
                 const d = await r.json();
                 log.innerHTML += `<div style="margin-bottom:10px;"><b>AI:</b> ${d.choices[0].message.content}</div>`;
-            } catch(e){ log.innerHTML += `<div style="color:red;">API Error!</div>`; }
+            } catch(e){ log.innerHTML += `<div style="color:red;">Error!</div>`; }
             inp.value = "";
             log.scrollTop = log.scrollHeight;
         };
