@@ -109,6 +109,7 @@
       border: 1px solid rgba(233,30,140,0.3);
       border-radius: 18px; overflow: hidden;
       animation: glowPulse 3s ease-in-out infinite;
+      margin-bottom: 20px;
     }
     @keyframes glowPulse {
       0%, 100% { box-shadow: 0 0 12px rgba(233,30,140,0.15); }
@@ -151,6 +152,68 @@
       text-align: center; color: #ff6b6b; font-size: 15px;
     }
     .error-icon { font-size: 28px; margin-bottom: 8px; }
+
+    /* Contact card */
+    .contact-card {
+      background: linear-gradient(135deg, rgba(233,30,140,0.12), rgba(156,39,176,0.1));
+      border: 1px solid rgba(233,30,140,0.35);
+      border-radius: 18px;
+      padding: 22px 22px 18px;
+      text-align: center;
+    }
+    .contact-card .star-line {
+      font-size: 13px;
+      color: #e91e8c;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    .contact-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .contact-card p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+    .contact-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .btn-wp {
+      display: flex; align-items: center; gap: 8px;
+      background: #25d366;
+      border: none; border-radius: 12px;
+      color: #fff; font-size: 14px; font-weight: 700;
+      font-family: inherit;
+      padding: 12px 20px; cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.1s;
+      flex: 1; justify-content: center;
+    }
+    .btn-wp:hover { opacity: 0.88; }
+    .btn-wp:active { transform: scale(0.96); }
+    .btn-fb {
+      display: flex; align-items: center; gap: 8px;
+      background: #1877f2;
+      border: none; border-radius: 12px;
+      color: #fff; font-size: 14px; font-weight: 700;
+      font-family: inherit;
+      padding: 12px 20px; cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.1s;
+      flex: 1; justify-content: center;
+    }
+    .btn-fb:hover { opacity: 0.88; }
+    .btn-fb:active { transform: scale(0.96); }
+
+    /* WhatsApp SVG icon */
+    .wp-icon { width: 18px; height: 18px; flex-shrink: 0; }
+    .fb-icon { width: 18px; height: 18px; flex-shrink: 0; }
   </style>
 </head>
 <body>
@@ -176,11 +239,15 @@
       <button class="search-btn" id="searchBtn" onclick="doLookup()">&#128269; খুঁজুন</button>
     </div>
   </div>
+
   <div id="output"></div>
 </div>
 
 <script>
   const API_KEY = 'pk_live_e2c95734ad987494bd12a10bc32122f8198d1101';
+  const WP_NUMBER = '8801609166109';
+  const FB_URL = 'https://www.facebook.com/profile.php?id=61552305287329';
+  const WP_MSG = 'আমি আপনার ওয়েবসাইট থেকে এসেছি। আমি একটি ওয়েবসাইট বানাতে চাই।';
 
   const container = document.getElementById('heartsContainer');
   for (let i = 0; i < 18; i++) {
@@ -200,6 +267,30 @@
   function getInitials(name) {
     if (!name) return '?';
     return name.trim().split(/\s+/).map(w => w[0].toUpperCase()).slice(0,2).join('');
+  }
+
+  function getContactCard() {
+    const wpLink = `https://wa.me/${WP_NUMBER}?text=${encodeURIComponent(WP_MSG)}`;
+    return `
+      <div class="contact-card">
+        <div class="star-line">✦ ✦ ✦</div>
+        <h3>&#127881; যেকোনো ধরনের ওয়েবসাইট বানাতে যোগাযোগ করুন</h3>
+        <p>Professional website, portfolio, business site<br>সব ধরনের কাজ করা হয়</p>
+        <div class="contact-btns">
+          <a class="btn-wp" href="${wpLink}" target="_blank">
+            <svg class="wp-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            WhatsApp
+          </a>
+          <a class="btn-fb" href="${FB_URL}" target="_blank">
+            <svg class="fb-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+            Facebook
+          </a>
+        </div>
+      </div>`;
   }
 
   async function doLookup() {
@@ -253,13 +344,19 @@
                   <span class="info-val">${esc(v)}</span>
                 </div>`).join('')}
             </div>
-          </div>`;
+          </div>
+          ${getContactCard()}`;
+
       } else {
         const msg = json.message || json.error || 'কোনো তথ্য পাওয়া যায়নি';
-        output.innerHTML = `<div class="error-card"><div class="error-icon">&#128581;</div>${esc(msg)}</div>`;
+        output.innerHTML = `
+          <div class="error-card"><div class="error-icon">&#128581;</div>${esc(msg)}</div>
+          ${getContactCard()}`;
       }
     } catch(e) {
-      output.innerHTML = `<div class="error-card"><div class="error-icon">&#9888;</div>API connect হচ্ছে না।<br><small style="opacity:0.6">CORS issue — PHP hosting লাগবে</small></div>`;
+      output.innerHTML = `
+        <div class="error-card"><div class="error-icon">&#9888;</div>API connect হচ্ছে না।<br><small style="opacity:0.6">CORS issue — PHP hosting লাগবে</small></div>
+        ${getContactCard()}`;
     }
     btn.disabled = false;
   }
