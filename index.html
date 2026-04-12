@@ -1,289 +1,664 @@
 <!DOCTYPE html>
 <html lang="bn">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ratan Bro | Ultimate VIP Portal</title>
-
+    <title>Red Pen | Ultimate VIP Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
-        :root {
-            --pink-main: #ff4d94;
-            --pink-glow: rgba(255, 77, 148, 0.6);
-            --bg-dark: #020617;
-            --glass: rgba(255, 255, 255, 0.08);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
-        
-        /* SCROLL FIX: touch-action auto and overflow-y auto for mobile scrolling */
-        body { 
-            background: var(--bg-dark); 
-            color: white; 
-            min-height: 100vh; 
-            overflow-x: hidden; 
-            overflow-y: auto; 
-            touch-action: auto; 
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* --- BACKGROUND MESH --- */
-        .login-bg-mesh { position: fixed; inset: 0; z-index: -2; background: linear-gradient(45deg, #020617, #1a0821, #020617); background-size: 400% 400%; animation: meshMove 12s ease infinite; }
-        @keyframes meshMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-        /* --- MOUSE & TOUCH TRAIL --- */
-        .trail-particle { position: fixed; pointer-events: none; z-index: 10001; color: var(--pink-main); filter: drop-shadow(0 0 5px var(--pink-glow)); animation: particleFade 0.8s forwards ease-out; }
-        @keyframes particleFade { to { transform: translateY(15px) scale(0); opacity: 0; } }
-
-        /* --- HEADER RAIN --- */
-        .header-love-wrap { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; border-radius: 40px; }
-        .header-heart { position: absolute; color: var(--pink-main); font-size: 14px; top: -20px; animation: hRain linear forwards; opacity: 0; }
-        @keyframes hRain { 
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; } 
-            20% { opacity: 0.8; } 
-            100% { transform: translateY(300px) rotate(360deg); opacity: 0; } 
-        }
-
-        /* --- UI ELEMENTS --- */
-        .main-header { margin: 20px; padding: 50px 20px; border-radius: 40px; background: linear-gradient(135deg, rgba(255, 77, 148, 0.1), rgba(255, 255, 255, 0.05)); border: 1px solid rgba(255, 120, 180, 0.2); backdrop-filter: blur(20px); text-align: center; position: relative; overflow: hidden; }
-        .user-name-glow { font-size: 30px; font-weight: 900; background: linear-gradient(90deg, #fff, var(--pink-main), #fff); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; }
-        @keyframes shine { to { background-position: 200% center; } }
-        
-        .grid-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 20px 30px; max-width: 600px; margin: 0 auto; }
-        .nav-card { background: var(--glass); border-radius: 30px; padding: 25px 15px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255, 255, 255, 0.05); animation: autoBari 4s infinite; transition: 0.3s; position: relative; cursor: pointer; }
-        .nav-card:active { transform: scale(0.95); }
-        @keyframes autoBari { 0%, 100% { border-color: rgba(255,255,255,0.05); } 50% { border-color: var(--pink-main); } }
-        .nav-card i { font-size: 2.2rem; color: var(--pink-main); margin-bottom: 8px; }
-
-        .hd-avatar { object-fit: cover; border-radius: 50%; display: block; image-rendering: -webkit-optimize-contrast; }
-
-        .btn-premium { background: linear-gradient(90deg, var(--pink-main), #cc0052); color: white; border: none; padding: 12px 20px; border-radius: 50px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.3s; }
-        .p-input { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 12px 20px; border-radius: 50px; outline: none; margin-bottom: 10px; }
-
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 20px; }
-        .social-btn { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; color: white; font-size: 18px; }
-        
-        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        .result-card { background: #000; border: 2px solid var(--pink-main); padding: 25px; border-radius: 35px; width: 100%; max-width: 350px; text-align: center; position: relative; }
+        :root{--pink:#ff4d94;--bg:#020617;--card:rgba(255,255,255,0.06);--text:#ffffff;--text2:#aaaaaa;--border:rgba(255,120,180,0.18);--surface:rgba(0,0,0,0.45);--input-bg:rgba(0,0,0,0.6);--modal-bg:rgba(0,0,0,0.96);}
+        body.light{--bg:#f0f4ff;--card:rgba(255,255,255,0.92);--text:#1a1a2e;--text2:#555577;--border:rgba(255,77,148,0.25);--surface:rgba(255,255,255,0.9);--input-bg:rgba(240,240,255,0.9);--modal-bg:rgba(240,244,255,0.97);}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Hind Siliguri',sans-serif;}
+        body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;touch-action:auto;-webkit-overflow-scrolling:touch;transition:background .4s,color .4s;}
+        #splash{position:fixed;inset:0;z-index:99999;background:#020617;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:splashOut .5s 2.8s forwards;}
+        @keyframes splashOut{to{opacity:0;pointer-events:none;visibility:hidden;}}
+        .splash-logo{width:110px;height:110px;border-radius:50%;border:3px solid var(--pink);object-fit:cover;animation:popIn .7s cubic-bezier(.34,1.56,.64,1) forwards;opacity:0;}
+        @keyframes popIn{from{transform:scale(.3);opacity:0;}to{transform:scale(1);opacity:1;}}
+        .splash-name{margin-top:16px;font-size:26px;font-weight:700;background:linear-gradient(90deg,#fff,var(--pink),#fff);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shine 2s linear infinite,fadeUp .5s .4s forwards;opacity:0;}
+        @keyframes fadeUp{from{transform:translateY(12px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+        @keyframes shine{to{background-position:200% center;}}
+        .splash-dots{display:flex;gap:8px;margin-top:22px;}
+        .splash-dots span{width:8px;height:8px;border-radius:50%;background:var(--pink);animation:dotP 1.2s infinite;}
+        .splash-dots span:nth-child(2){animation-delay:.2s;}.splash-dots span:nth-child(3){animation-delay:.4s;}
+        @keyframes dotP{0%,100%{transform:scale(1);opacity:.4;}50%{transform:scale(1.5);opacity:1;}}
+        .bg-mesh{position:fixed;inset:0;z-index:-2;background:linear-gradient(45deg,#020617,#1a0821,#020617);background-size:400% 400%;animation:meshMove 12s ease infinite;}
+        body.light .bg-mesh{background:linear-gradient(45deg,#e8f0ff,#fde8f0,#e8f0ff);background-size:400% 400%;}
+        @keyframes meshMove{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+        .trail{position:fixed;pointer-events:none;z-index:10001;color:var(--pink);font-size:12px;animation:trailFade .8s forwards;}
+        @keyframes trailFade{to{transform:translateY(15px) scale(0);opacity:0;}}
+        .topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;position:sticky;top:0;z-index:1000;background:rgba(2,6,23,.75);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,77,148,.12);}
+        body.light .topbar{background:rgba(240,244,255,.88);}
+        .soc-btn{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;color:#fff;font-size:15px;transition:transform .2s;}
+        .soc-btn:active{transform:scale(.88);}
+        .topbar-r{display:flex;align-items:center;gap:9px;}
+        .v-cnt{color:var(--pink);font-weight:700;font-size:13px;display:flex;align-items:center;gap:4px;}
+        .theme-btn{width:44px;height:24px;border-radius:50px;background:rgba(255,77,148,.25);border:1px solid var(--pink);cursor:pointer;position:relative;display:flex;align-items:center;padding:3px;}
+        .theme-ball{width:18px;height:18px;border-radius:50%;background:var(--pink);position:absolute;left:3px;transition:transform .3s;font-size:10px;display:flex;align-items:center;justify-content:center;}
+        body.light .theme-ball{transform:translateX(20px);}
+        .so-btn{color:#777;background:none;border:1px solid #444;padding:4px 11px;border-radius:50px;font-size:11px;cursor:pointer;transition:.2s;}
+        body.light .so-btn{border-color:#ccc;color:#888;}
+        .ticker{background:linear-gradient(90deg,rgba(255,77,148,.12),rgba(255,77,148,.04));border-bottom:1px solid rgba(255,77,148,.15);padding:7px 0;overflow:hidden;display:none;}
+        .ticker-wrap{display:flex;animation:tick 22s linear infinite;white-space:nowrap;}
+        .ticker-wrap span{font-size:13px;color:var(--pink);padding:0 40px;}
+        @keyframes tick{from{transform:translateX(100vw);}to{transform:translateX(-100%);}}
+        .main-hdr{margin:18px;padding:45px 20px;border-radius:40px;background:linear-gradient(135deg,rgba(255,77,148,.1),rgba(255,255,255,.04));border:1px solid var(--border);backdrop-filter:blur(20px);text-align:center;position:relative;overflow:hidden;}
+        .name-glow{font-size:28px;font-weight:900;background:linear-gradient(90deg,var(--text),var(--pink),var(--text));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shine 3s linear infinite;}
+        .hdr-rain{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;border-radius:40px;}
+        .rain-h{position:absolute;color:var(--pink);font-size:14px;top:-20px;animation:hRain linear forwards;opacity:0;}
+        @keyframes hRain{0%{transform:translateY(0) rotate(0deg);opacity:0;}20%{opacity:.8;}100%{transform:translateY(300px) rotate(360deg);opacity:0;}}
+        @keyframes hBeat{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
+        .avatar{object-fit:cover;border-radius:50%;display:block;}
+        .sec-label{text-align:center;font-size:12px;font-weight:600;color:var(--pink);margin:12px 20px 10px;letter-spacing:1.5px;text-transform:uppercase;opacity:.75;}
+        .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;padding:0 18px 16px;max-width:600px;margin:0 auto;}
+        .nav-card{background:var(--card);border-radius:28px;padding:22px 12px;text-align:center;text-decoration:none;color:var(--text);border:1px solid rgba(255,255,255,.05);animation:cardPulse 4s infinite;transition:.25s;position:relative;cursor:pointer;display:block;}
+        .nav-card:active{transform:scale(.94);}
+        @keyframes cardPulse{0%,100%{border-color:rgba(255,255,255,.05);}50%{border-color:var(--pink);}}
+        .nav-card i{font-size:2rem;color:var(--pink);margin-bottom:7px;display:block;}
+        .nav-card p{font-size:13px;line-height:1.4;}
+        .hot-tag{background:var(--pink);color:#fff;font-size:10px;padding:1px 6px;border-radius:20px;margin-left:4px;vertical-align:middle;}
+        .new-tag{background:linear-gradient(90deg,#7c3aed,var(--pink));color:#fff;font-size:10px;padding:1px 6px;border-radius:20px;margin-left:4px;vertical-align:middle;}
+        .alert-dot{position:absolute;top:11px;right:11px;width:8px;height:8px;background:red;border-radius:50%;display:none;box-shadow:0 0 8px red;}
+        .modal{position:fixed;inset:0;background:var(--modal-bg);display:none;align-items:center;justify-content:center;z-index:10000;padding:18px;overflow-y:auto;}
+        .mbox{background:var(--surface);padding:28px;border-radius:32px;border:1px solid var(--pink);width:100%;max-width:400px;text-align:center;max-height:90vh;overflow-y:auto;}
+        .mbox h3{color:var(--pink);margin-bottom:16px;font-size:18px;}
+        .btn{background:linear-gradient(90deg,var(--pink),#cc0052);color:#fff;border:none;padding:12px 20px;border-radius:50px;font-weight:700;cursor:pointer;width:100%;transition:.25s;font-family:'Hind Siliguri',sans-serif;font-size:14px;}
+        .btn:active{transform:scale(.97);}
+        .btn-ghost{margin-top:10px;background:none;border:none;color:#777;font-size:13px;cursor:pointer;font-family:'Hind Siliguri',sans-serif;width:100%;}
+        .inp{width:100%;background:var(--input-bg);border:1px solid #333;color:var(--text);padding:11px 18px;border-radius:50px;outline:none;margin-bottom:10px;font-family:'Hind Siliguri',sans-serif;font-size:14px;transition:border .2s;}
+        body.light .inp{border-color:#ddd;}.inp:focus{border-color:var(--pink);}
+        textarea.inp{border-radius:18px;resize:none;}
+        .chat-wrap{max-width:500px;margin:0 auto 16px;padding:0 18px;}
+        .chat-box{background:var(--surface);padding:18px;border-radius:28px;border:1px solid rgba(255,77,148,.1);}
+        #chat-log{height:160px;overflow-y:auto;font-size:13px;margin-bottom:10px;scrollbar-width:thin;scrollbar-color:var(--pink) transparent;}
+        #chat-log::-webkit-scrollbar{width:3px;}
+        #chat-log::-webkit-scrollbar-thumb{background:var(--pink);border-radius:10px;}
+        .chat-row{display:flex;gap:8px;}
+        .ai-inp{flex:1;background:var(--input-bg);border:1px solid #333;color:var(--text);padding:10px 15px;border-radius:50px;outline:none;font-size:13px;font-family:'Hind Siliguri',sans-serif;transition:border .2s;}
+        .ai-inp:focus{border-color:var(--pink);}
+        .typing{display:none;padding:4px 0;}
+        .typing span{display:inline-block;width:6px;height:6px;background:var(--pink);border-radius:50%;margin:0 2px;animation:typB 1s infinite;}
+        .typing span:nth-child(2){animation-delay:.15s;}.typing span:nth-child(3){animation-delay:.3s;}
+        @keyframes typB{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-6px);}}
+        .q-opt{width:100%;padding:11px 16px;margin-bottom:8px;border-radius:50px;border:1px solid rgba(255,77,148,.3);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;font-size:14px;font-family:'Hind Siliguri',sans-serif;transition:.18s;text-align:left;}
+        .q-opt:hover{background:rgba(255,77,148,.15);border-color:var(--pink);}
+        .q-opt.ok{background:rgba(0,200,100,.18);border-color:#00c864;color:#00c864;}
+        .q-opt.no{background:rgba(255,50,50,.18);border-color:#ff3232;color:#ff3232;}
+        .q-prog{height:4px;border-radius:10px;background:rgba(255,77,148,.15);margin-bottom:14px;}
+        .q-prog-f{height:100%;border-radius:10px;background:var(--pink);transition:width .4s;}
+        .score-box{display:inline-block;padding:8px 20px;border-radius:50px;background:rgba(255,77,148,.18);border:1px solid var(--pink);color:var(--pink);font-weight:700;font-size:20px;margin:10px 0;}
+        .tool-result{background:var(--input-bg);border:1px solid var(--border);border-radius:18px;padding:14px;margin-top:12px;font-size:13px;text-align:left;word-break:break-all;line-height:1.7;color:var(--text);}
+        .strength-bar{height:8px;border-radius:10px;background:#222;margin:10px 0;overflow:hidden;}
+        .strength-fill{height:100%;border-radius:10px;transition:width .4s,background .4s;}
+        .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0;}
+        .stat-box{background:rgba(255,77,148,.08);border:1px solid rgba(255,77,148,.2);border-radius:16px;padding:12px 8px;text-align:center;}
+        .stat-num{font-size:22px;font-weight:700;color:var(--pink);}
+        .stat-lbl{font-size:11px;color:var(--text2);margin-top:2px;}
+        .lb-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:14px;margin-bottom:7px;background:rgba(255,77,148,.05);border:1px solid rgba(255,77,148,.1);}
+        .lb-nm{flex:1;font-size:14px;margin-left:8px;color:var(--text);}
+        .lb-sc{color:var(--pink);font-weight:700;font-size:14px;}
+        #scr-top{position:fixed;bottom:22px;right:18px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--pink),#cc0052);color:#fff;border:none;font-size:17px;cursor:pointer;z-index:9000;display:none;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(255,77,148,.4);}
+        #notice-img{max-width:100%;border-radius:14px;margin:10px 0;display:none;}
+        .port-card{background:var(--surface);border:2px solid var(--pink);padding:24px;border-radius:32px;width:100%;max-width:340px;text-align:center;}
+        #qr-output{margin:14px auto 0;display:flex;justify-content:center;}
+        #qr-output canvas,#qr-output img{border-radius:12px;border:3px solid var(--pink);}
+        /* CALCULATOR */
+        .calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;}
+        .calc-btn{padding:14px 0;border-radius:16px;border:none;font-size:16px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',sans-serif;transition:.18s;}
+        .calc-btn:active{transform:scale(.92);}
+        .calc-num{background:rgba(255,255,255,.08);color:var(--text);}
+        .calc-op{background:rgba(255,77,148,.2);color:var(--pink);}
+        .calc-eq{background:linear-gradient(90deg,var(--pink),#cc0052);color:#fff;grid-column:span 2;}
+        .calc-clr{background:rgba(255,50,50,.18);color:#ff5555;}
+        .calc-disp{background:var(--input-bg);border:1px solid var(--border);border-radius:16px;padding:14px 18px;font-size:22px;font-weight:700;text-align:right;color:var(--text);min-height:56px;margin-bottom:4px;word-break:break-all;}
+        /* NOTE */
+        #note-area{width:100%;min-height:180px;background:var(--input-bg);border:1px solid var(--border);color:var(--text);padding:14px;border-radius:18px;outline:none;font-size:14px;font-family:'Hind Siliguri',sans-serif;resize:vertical;line-height:1.7;}
+        #note-area:focus{border-color:var(--pink);}
+        .note-toolbar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+        .note-tbtn{padding:6px 14px;border-radius:50px;border:1px solid rgba(255,77,148,.3);background:transparent;color:var(--text2);font-size:12px;cursor:pointer;font-family:'Hind Siliguri',sans-serif;transition:.18s;}
+        .note-tbtn:hover{background:rgba(255,77,148,.15);border-color:var(--pink);color:var(--pink);}
+        /* NEWS */
+        .news-card{background:rgba(255,77,148,.05);border:1px solid rgba(255,77,148,.15);border-radius:18px;padding:14px 16px;margin-bottom:10px;text-align:left;cursor:pointer;transition:.2s;}
+        .news-card:hover{border-color:var(--pink);background:rgba(255,77,148,.1);}
+        .news-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:6px;}
+        .news-meta{font-size:11px;color:var(--text2);display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+        .news-tag{background:rgba(255,77,148,.2);color:var(--pink);padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;}
+        /* TRENDING */
+        .trend-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;margin-bottom:8px;background:rgba(255,77,148,.04);border:1px solid rgba(255,77,148,.1);transition:.2s;}
+        .trend-item:hover{border-color:var(--pink);}
+        .trend-num{font-size:20px;font-weight:900;color:var(--pink);min-width:28px;}
+        .trend-info{flex:1;}
+        .trend-topic{font-size:13px;font-weight:600;color:var(--text);}
+        .trend-count{font-size:11px;color:var(--text2);margin-top:2px;}
+        /* FACT */
+        .fact-card{background:linear-gradient(135deg,rgba(255,77,148,.1),rgba(255,77,148,.03));border:1px solid var(--border);border-radius:22px;padding:24px;margin:12px 0;min-height:120px;display:flex;align-items:center;justify-content:center;text-align:center;transition:.3s;}
+        .fact-text{font-size:15px;line-height:1.7;color:var(--text);}
+        .conv-select{width:100%;background:var(--input-bg);border:1px solid #333;color:var(--text);padding:10px 14px;border-radius:50px;outline:none;font-family:'Hind Siliguri',sans-serif;font-size:14px;margin-bottom:10px;}
+        @media(max-width:400px){.grid{gap:10px;padding:0 14px 14px;}.nav-card{padding:18px 10px;}.nav-card i{font-size:1.7rem;}}
     </style>
 </head>
-
 <body>
-    <div class="login-bg-mesh"></div>
+<div class="bg-mesh"></div>
 
-    <audio id="snd-open" src="open.mp3" preload="auto"></audio>
+<div id="splash">
+    <img src="ratan.jpg" class="splash-logo avatar" alt="Red Pen">
+    <div class="splash-name">❤ Red Pen ❤</div>
+    <div class="splash-dots"><span></span><span></span><span></span></div>
+</div>
 
-    <div id="login-screen" class="modal" style="display: flex;">
-        <div style="text-align: center; background: var(--glass); padding: 40px; border-radius: 40px; border: 1px solid var(--pink-main);">
-            <img src="ratan.jpg" class="hd-avatar" style="width:100px; height:100px; border:3px solid var(--pink-main); margin: 0 auto 15px;">
-            <h2>RATAN BRO</h2>
-            <p style="color:#555; font-size:12px; margin-bottom:20px;">VIP PORTAL LOGIN</p>
-            <button class="btn-premium" onclick="login()">LOGIN WITH GOOGLE</button>
+<audio id="snd" src="open.mp3" preload="auto"></audio>
+
+<!-- LOGIN -->
+<div id="login-screen" class="modal" style="display:flex;">
+    <div class="mbox">
+        <img src="ratan.jpg" class="avatar" style="width:95px;height:95px;border:3px solid var(--pink);margin:0 auto 14px;">
+        <h2 style="color:var(--text);margin-bottom:4px;">RED PEN</h2>
+        <p style="color:#555;font-size:12px;margin-bottom:20px;">VIP PORTAL LOGIN</p>
+        <button class="btn" onclick="login()"><i class="fab fa-google" style="margin-right:8px;"></i>LOGIN WITH GOOGLE</button>
+    </div>
+</div>
+
+<!-- GATE -->
+<div id="gate-modal" class="modal">
+    <div class="mbox">
+        <i class="fas fa-unlock-alt" style="font-size:2.4rem;color:var(--pink);margin-bottom:14px;"></i>
+        <h3>স্বাগতম বস্!</h3>
+        <p style="font-size:14px;color:var(--text2);margin-bottom:22px;">ড্যাশবোর্ড আনলক করতে ক্লিক করুন।</p>
+        <button class="btn" onclick="enterDash()">ENTER DASHBOARD ✨</button>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dash" style="display:none;">
+    <div class="topbar">
+        <div style="display:flex;gap:9px;align-items:center;">
+            <a href="https://www.facebook.com/profile.php?id=61552305287329" class="soc-btn" style="background:#1877f2;"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://wa.me/8801609160109" class="soc-btn" style="background:#25d366;"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="topbar-r">
+            <div class="v-cnt"><i class="fas fa-eye"></i><span id="v-count">0</span></div>
+            <div class="theme-btn" onclick="toggleTheme()"><div class="theme-ball" id="t-ball">🌙</div></div>
+            <button onclick="logout()" class="so-btn">Sign Out</button>
         </div>
     </div>
 
-    <div id="audio-gate-modal" class="modal">
-        <div style="text-align: center; background: var(--glass); padding: 30px; border-radius: 40px; border: 1px solid var(--pink-main); max-width: 320px;">
-            <i class="fas fa-unlock-alt" style="font-size: 2.5rem; color: var(--pink-main); margin-bottom: 15px;"></i>
-            <h3 style="margin-bottom: 10px;">স্বাগতম বস্!</h3>
-            <p style="font-size: 14px; color: #ccc; margin-bottom: 25px;">ড্যাশবোর্ড আনলক করতে নিচের বাটনে ক্লিক করুন।</p>
-            <button class="btn-premium" onclick="enterDashboard()">ENTER DASHBOARD</button>
+    <div class="ticker" id="ticker"><div class="ticker-wrap"><span id="ticker-txt">লোড হচ্ছে...</span></div></div>
+
+    <header class="main-hdr">
+        <div class="hdr-rain" id="hdr-rain"></div>
+        <div style="display:flex;justify-content:center;align-items:center;margin-bottom:14px;position:relative;z-index:5;">
+            <img src="ratan.jpg" class="avatar" style="width:95px;height:95px;border:3px solid var(--pink);">
+            <img id="u-photo" src="" class="avatar" style="width:75px;height:75px;border:3px solid white;margin-left:-22px;z-index:6;">
         </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;position:relative;z-index:5;">
+            <i class="fas fa-heart" style="color:var(--pink);animation:hBeat 1.2s infinite;"></i>
+            <span id="u-name" class="name-glow">...</span>
+            <i class="fas fa-heart" style="color:var(--pink);animation:hBeat 1.2s infinite;"></i>
+        </div>
+        <p id="u-wish" style="margin-top:10px;font-size:14px;color:var(--text2);position:relative;z-index:5;">লোড হচ্ছে...</p>
+    </header>
+
+    <div class="sec-label">📋 মেনু</div>
+    <main class="grid">
+        <div class="nav-card" onclick="openNotice()"><div class="alert-dot" id="alert-dot"></div><i class="fas fa-bullhorn"></i><p>নোটিশ বোর্ড</p></div>
+        <a href="portfolio.html" class="nav-card"><i class="fas fa-user-tie"></i><p>আমার ডিটেইলস</p></a>
+        <a href="business.html" class="nav-card"><i class="fas fa-shopping-bag"></i><p>বিজনেসের খবর</p></a>
+        <div class="nav-card" onclick="show('p-modal')"><i class="fas fa-magic"></i><p>পোর্টফোলিও মেকার</p></div>
+        <a href="testpaper.html" class="nav-card"><i class="fas fa-graduation-cap"></i><p>নোটস / ফাইল</p></a>
+        <a href="number.html" class="nav-card"><i class="fas fa-search"></i><p>নম্বর ডিটেইলস<span class="hot-tag">hot</span></p></a>
+        <div class="nav-card" onclick="openQuiz()"><i class="fas fa-brain"></i><p>Daily Quiz<span class="new-tag">AI</span></p></div>
+        <div class="nav-card" onclick="show('lb-modal');loadLB()"><i class="fas fa-trophy"></i><p>Leaderboard</p></div>
+    </main>
+
+    <div class="sec-label">🔐 টুলস</div>
+    <div class="grid">
+        <div class="nav-card" onclick="show('ip-modal')"><i class="fas fa-globe"></i><p>IP Tracker</p></div>
+        <div class="nav-card" onclick="show('pass-modal')"><i class="fas fa-lock"></i><p>Password Checker</p></div>
+        <div class="nav-card" onclick="show('qr-modal')"><i class="fas fa-qrcode"></i><p>QR Generator</p></div>
+        <div class="nav-card" onclick="show('type-modal')"><i class="fas fa-keyboard"></i><p>Typing Speed</p></div>
+        <div class="nav-card" onclick="show('calc-modal')"><i class="fas fa-calculator"></i><p>Calculator</p></div>
+        <div class="nav-card" onclick="show('note-modal');loadNote()"><i class="fas fa-sticky-note"></i><p>Sticky Note</p></div>
     </div>
 
-    <div id="dashboard-ui" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;">
-            <div style="display: flex; gap: 10px;">
-                <a href="https://www.facebook.com/profile.php?id=61552305287329" class="social-btn" style="background: #1877f2;"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://wa.me/8801609160109" class="social-btn" style="background: #25d366;"><i class="fab fa-whatsapp"></i></a>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="color: var(--pink-main); font-weight: 700; font-size: 13px;"><i class="fas fa-eye"></i> <span id="v-count">200</span></div>
-                <button onclick="logout()" style="color:#666; background:none; border:1px solid #333; padding:4px 12px; border-radius:50px; font-size:11px;">Sign Out</button>
-            </div>
-        </div>
-
-        <header class="main-header">
-            <div id="header-rain" class="header-love-wrap"></div>
-            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px; position: relative; z-index: 5;">
-                <img src="ratan.jpg" class="hd-avatar" style="width:100px; height:100px; border:3px solid var(--pink-main);">
-                <img id="u-photo" src="" class="hd-avatar" style="width:80px; height:80px; border:3px solid white; margin-left:-25px; z-index:6;">
-            </div>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; z-index: 5;">
-                <i class="fas fa-heart" style="color:var(--pink-main); animation:heartBeat 1.2s infinite;"></i>
-                <span id="u-name" class="user-name-glow">...</span>
-                <i class="fas fa-heart" style="color:var(--pink-main); animation:heartBeat 1.2s infinite;"></i>
-            </div>
-            <p id="u-wish" style="margin-top: 10px; font-size: 14px; color: #ccc; position: relative; z-index: 5;">লোড হচ্ছে...</p>
-        </header>
-
-        <main class="grid-layout">
-            <div class="nav-card" onclick="openNotice()">
-                <div id="alert-dot" style="position:absolute; top:12px; right:12px; width:8px; height:8px; background:red; border-radius:50%; display:none; box-shadow: 0 0 10px red;"></div>
-                <i class="fas fa-bullhorn"></i><p>নোটিশ বোর্ড</p>
-            </div>
-            <a href="portfolio.html" class="nav-card"><i class="fas fa-user-tie"></i><p>আমার ডিটেইলস</p></a>
-            <a href="business.html" class="nav-card"><i class="fas fa-shopping-bag"></i><p>বিজনেসের খবর</p></a>
-            <div class="nav-card" onclick="document.getElementById('p-maker-modal').style.display='flex'"><i class="fas fa-magic"></i><p>পোর্টফোলিও মেকার</p></div>
-            <a href="testpaper.html" class="nav-card"><i class="fas fa-graduation-cap"></i><p>নোটস / ফাইল</p></a>
-            <a href="number.html" target="_self" class="nav-card"><i class="fas fa-search"></i><p>নম্বর ডিটেইলস (hot)</p></a>
-        </main>
-
-        <section style="max-width: 500px; margin: 0 auto 50px; padding: 0 20px;">
-            <div style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 30px; border: 1px solid rgba(255,77,148,0.1);">
-                <div id="chat-content" style="height: 100px; overflow-y: auto; font-size: 13px; margin-bottom: 10px;"></div>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="ai-msg" placeholder="AI কে কিছু জিজ্ঞেস করো..." style="flex:1; background:#000; border:1px solid #333; color:#fff; padding:10px 15px; border-radius:50px; outline:none; font-size:13px;">
-                    <button onclick="askAI()" class="btn-premium" style="width:auto; padding:0 15px;">পাঠাও</button>
-                </div>
-            </div>
-        </section>
+    <div class="sec-label">🚀 নতুন ফিচার</div>
+    <div class="grid">
+        <div class="nav-card" onclick="show('news-modal');loadNews()"><i class="fas fa-skull-crossbones"></i><p>Hacker News<span class="new-tag">live</span></p></div>
+        <div class="nav-card" onclick="show('trend-modal');loadTrending()"><i class="fas fa-fire"></i><p>BD Trending<span class="new-tag">hot</span></p></div>
+        <div class="nav-card" onclick="show('fact-modal');loadFact()"><i class="fas fa-lightbulb"></i><p>Bangla Facts<span class="new-tag">AI</span></p></div>
+        <div class="nav-card" onclick="show('story-modal')"><i class="fas fa-feather-alt"></i><p>AI Story Gen<span class="new-tag">AI</span></p></div>
     </div>
 
-    <div id="p-maker-modal" class="modal">
-        <div style="background: #000; width: 100%; max-width: 380px; padding: 30px; border-radius: 35px; border: 1px solid var(--pink-main); text-align: center;">
-            <h3 style="color: var(--pink-main); margin-bottom: 20px;">মেক পোর্টফোলিও</h3>
-            <input type="text" id="p-name" placeholder="আপনার পূর্ণ নাম" class="p-input">
-            <input type="text" id="p-title" placeholder="টাইটেল" class="p-input">
-            <input type="text" id="p-phone" placeholder="ফোন নম্বর" class="p-input">
-            <input type="text" id="p-fb" placeholder="ফেসবুক লিঙ্ক" class="p-input">
-            <input type="text" id="p-wa" placeholder="হোয়াটসঅ্যাপ" class="p-input">
-            <button class="btn-premium" onclick="createPortfolio()">জেনারেট করুন</button>
-            <button onclick="document.getElementById('p-maker-modal').style.display='none'" style="margin-top:15px; background:none; border:none; color:#555;">বন্ধ করুন</button>
+    <div class="sec-label">🤖 AI চ্যাটবট (Gemini)</div>
+    <div class="chat-wrap">
+        <div class="chat-box">
+            <div id="chat-log"><div style="text-align:center;color:#555;padding:18px 0;font-size:13px;">Gemini AI কে যেকোনো প্রশ্ন করো... 💬</div></div>
+            <div class="typing" id="typing"><span></span><span></span><span></span><span style="font-size:12px;color:#888;margin-left:5px;">AI ভাবছে...</span></div>
+            <div class="chat-row">
+                <input type="text" id="ai-inp" class="ai-inp" placeholder="কিছু জিজ্ঞেস করো..." onkeydown="if(event.key==='Enter')askAI()">
+                <button onclick="askAI()" class="btn" style="width:auto;padding:0 16px;"><i class="fas fa-paper-plane"></i></button>
+            </div>
+            <div style="text-align:right;margin-top:6px;">
+                <button onclick="clearChat()" style="background:none;border:none;color:#555;font-size:11px;cursor:pointer;">🗑️ Chat Clear করো</button>
+            </div>
         </div>
     </div>
+    <div style="height:80px;"></div>
+</div>
 
-    <div id="portfolio-modal" class="modal"><div id="p-result-area"></div></div>
+<button id="scr-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
 
-    <div id="notice-modal" class="modal">
-        <div style="background: #000; padding: 30px; border-radius: 35px; border: 1px solid var(--pink-main); text-align: center; max-width: 350px;">
-            <i class="fas fa-envelope-open-text" style="font-size: 2.5rem; color: var(--pink-main); margin-bottom: 15px;"></i>
-            <p id="notice-body" style="color: #ccc; margin-bottom: 20px;"></p>
-            <button class="btn-premium" onclick="document.getElementById('notice-modal').style.display='none'">বুঝেছি</button>
+<!-- NOTICE -->
+<div id="notice-modal" class="modal"><div class="mbox">
+    <i class="fas fa-envelope-open-text" style="font-size:2.2rem;color:var(--pink);margin-bottom:12px;"></i>
+    <h3 id="n-title">নোটিশ</h3>
+    <img id="notice-img" src="" alt="">
+    <p id="n-body" style="color:var(--text2);font-size:14px;line-height:1.6;margin-bottom:12px;"></p>
+    <a id="n-link" href="#" target="_blank" style="color:var(--pink);font-size:13px;display:none;margin-bottom:12px;"><i class="fas fa-external-link-alt"></i> বিস্তারিত দেখুন</a>
+    <button class="btn" onclick="hide('notice-modal')">বুঝেছি ✓</button>
+</div></div>
+
+<!-- PORTFOLIO MAKER -->
+<div id="p-modal" class="modal"><div class="mbox">
+    <h3>মেক পোর্টফোলিও</h3>
+    <input type="text" id="p-name" placeholder="পূর্ণ নাম" class="inp">
+    <input type="text" id="p-title" placeholder="টাইটেল / পদবি" class="inp">
+    <input type="text" id="p-phone" placeholder="ফোন নম্বর" class="inp">
+    <input type="text" id="p-fb" placeholder="ফেসবুক লিঙ্ক" class="inp">
+    <input type="text" id="p-wa" placeholder="হোয়াটসঅ্যাপ নম্বর" class="inp">
+    <button class="btn" onclick="makePort()">জেনারেট করুন</button>
+    <button class="btn-ghost" onclick="hide('p-modal')">বন্ধ করুন</button>
+</div></div>
+<div id="port-modal" class="modal"><div id="port-area"></div></div>
+
+<!-- QUIZ -->
+<div id="quiz-modal" class="modal"><div class="mbox" style="max-width:420px;">
+    <div id="quiz-body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <span style="color:var(--pink);font-weight:700;font-size:12px;" id="q-cat">📚 General</span>
+            <span style="color:var(--text2);font-size:12px;" id="q-num">প্রশ্ন ১/৫</span>
         </div>
+        <div class="q-prog"><div class="q-prog-f" id="q-prog" style="width:20%;"></div></div>
+        <p id="q-txt" style="font-size:15px;font-weight:600;margin-bottom:18px;color:var(--text);line-height:1.5;min-height:48px;"></p>
+        <div id="q-opts"></div>
+        <p id="q-fb" style="font-size:13px;margin-top:8px;min-height:18px;"></p>
     </div>
+    <div id="quiz-result" style="display:none;text-align:center;">
+        <div style="font-size:3rem;margin-bottom:8px;">🎉</div>
+        <h3 style="color:var(--text);margin-bottom:8px;">Quiz শেষ!</h3>
+        <div class="score-box" id="final-sc">৫/৫</div>
+        <p style="color:var(--text2);font-size:14px;margin:10px 0;" id="sc-msg"></p>
+        <button class="btn" onclick="openQuiz()" style="margin-bottom:8px;">আবার খেলো 🔄</button>
+        <button class="btn-ghost" onclick="hide('quiz-modal')">বন্ধ করুন</button>
+    </div>
+    <button class="btn-ghost" id="q-close" onclick="hide('quiz-modal')">বন্ধ করুন</button>
+</div></div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+<!-- LEADERBOARD -->
+<div id="lb-modal" class="modal"><div class="mbox">
+    <i class="fas fa-trophy" style="font-size:2rem;color:gold;margin-bottom:10px;"></i>
+    <h3 style="color:var(--text);">Top Players 🏆</h3>
+    <div id="lb-list" style="margin-top:14px;">লোড হচ্ছে...</div>
+    <button class="btn-ghost" onclick="hide('lb-modal')">বন্ধ করুন</button>
+</div></div>
 
-        const firebaseConfig = { apiKey: "AIzaSyC4ExRu3Oze8api5-ueDTBqZOceSa8wclo", authDomain: "ratanweab.firebaseapp.com", projectId: "ratanweab", storageBucket: "ratanweab.firebasestorage.app", messagingSenderId: "611953936063", appId: "1:611953936063:web:7e3ca24060d7478fb2a80a" };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
-        const AI_API = "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";
+<!-- IP TRACKER -->
+<div id="ip-modal" class="modal"><div class="mbox">
+    <i class="fas fa-globe" style="font-size:2rem;color:var(--pink);margin-bottom:12px;"></i>
+    <h3>IP Tracker Tool</h3>
+    <input type="text" id="ip-inp" class="inp" placeholder="IP address লিখো (খালি = তোমার IP)">
+    <button class="btn" onclick="trackIP()">Track করো 🔍</button>
+    <div id="ip-result" class="tool-result" style="display:none;"></div>
+    <button class="btn-ghost" onclick="hide('ip-modal')">বন্ধ করুন</button>
+</div></div>
 
-        let currentMsg = null;
+<!-- PASSWORD CHECKER -->
+<div id="pass-modal" class="modal"><div class="mbox">
+    <i class="fas fa-lock" style="font-size:2rem;color:var(--pink);margin-bottom:12px;"></i>
+    <h3>Password Strength Checker</h3>
+    <div style="position:relative;">
+        <input type="password" id="pass-inp" class="inp" placeholder="Password লিখো..." oninput="checkPass(this.value)" style="padding-right:46px;">
+        <button onclick="togglePassView()" style="position:absolute;right:14px;top:50%;transform:translateY(-60%);background:none;border:none;color:var(--text2);cursor:pointer;font-size:16px;" id="eye-btn"><i class="fas fa-eye"></i></button>
+    </div>
+    <div class="strength-bar"><div class="strength-fill" id="str-fill" style="width:0%;"></div></div>
+    <p id="str-label" style="font-size:14px;margin-bottom:10px;font-weight:600;"></p>
+    <div id="pass-result" class="tool-result" style="display:none;"></div>
+    <button class="btn-ghost" onclick="hide('pass-modal')">বন্ধ করুন</button>
+</div></div>
 
-        // --- TRAIL LOGIC (Mouse & Phone Combined) ---
-        const createTrail = (x, y) => {
-            const p = document.createElement('i');
-            p.className = 'fas fa-heart trail-particle';
-            p.style.left = x + 'px'; p.style.top = y + 'px';
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), 800);
-        };
+<!-- QR GENERATOR -->
+<div id="qr-modal" class="modal"><div class="mbox">
+    <i class="fas fa-qrcode" style="font-size:2rem;color:var(--pink);margin-bottom:12px;"></i>
+    <h3>QR Code Generator</h3>
+    <input type="text" id="qr-inp" class="inp" placeholder="Link বা text লিখো...">
+    <button class="btn" onclick="genQR()">QR বানাও</button>
+    <div id="qr-output"></div>
+    <button id="qr-dl" class="btn" style="display:none;margin-top:10px;" onclick="dlQR()">Download করো ⬇️</button>
+    <button class="btn-ghost" onclick="hide('qr-modal')">বন্ধ করুন</button>
+</div></div>
 
-        window.addEventListener('mousemove', (e) => createTrail(e.clientX, e.clientY));
-        
-        // Touch move trail with passive scroll compatibility
-        window.addEventListener('touchmove', (e) => {
-            const touch = e.touches[0];
-            createTrail(touch.clientX, touch.clientY);
-        }, { passive: true });
+<!-- TYPING SPEED -->
+<div id="type-modal" class="modal"><div class="mbox" style="max-width:440px;">
+    <i class="fas fa-keyboard" style="font-size:2rem;color:var(--pink);margin-bottom:12px;"></i>
+    <h3>Typing Speed Test</h3>
+    <div id="type-txt" style="background:rgba(255,77,148,.07);border:1px solid rgba(255,77,148,.2);border-radius:16px;padding:14px;font-size:14px;line-height:1.8;color:var(--text);margin-bottom:12px;min-height:70px;"></div>
+    <textarea id="type-inp" class="inp" rows="3" placeholder="উপরের text টাইপ করো..." oninput="checkTyping()" style="display:none;border-radius:18px;resize:none;"></textarea>
+    <div class="stat-row">
+        <div class="stat-box"><div class="stat-num" id="t-wpm">0</div><div class="stat-lbl">WPM</div></div>
+        <div class="stat-box"><div class="stat-num" id="t-acc">100%</div><div class="stat-lbl">Accuracy</div></div>
+        <div class="stat-box"><div class="stat-num" id="t-time">60</div><div class="stat-lbl">Seconds</div></div>
+    </div>
+    <button class="btn" id="type-btn" onclick="startTyping()">শুরু করো ▶</button>
+    <button class="btn-ghost" onclick="hide('type-modal');clearInterval(typeTimer)">বন্ধ করুন</button>
+</div></div>
 
-        window.login = () => signInWithPopup(auth, provider);
-        window.logout = () => signOut(auth).then(() => location.reload());
+<!-- CALCULATOR -->
+<div id="calc-modal" class="modal"><div class="mbox" style="max-width:360px;">
+    <i class="fas fa-calculator" style="font-size:2rem;color:var(--pink);margin-bottom:12px;"></i>
+    <h3>Calculator</h3>
+    <div class="calc-disp" id="calc-disp">0</div>
+    <div style="font-size:11px;color:var(--text2);text-align:right;margin-bottom:8px;min-height:16px;" id="calc-expr"></div>
+    <div class="calc-grid">
+        <button class="calc-btn calc-clr" onclick="calcClear()">C</button>
+        <button class="calc-btn calc-op" onclick="calcSign()">+/-</button>
+        <button class="calc-btn calc-op" onclick="calcPercent()">%</button>
+        <button class="calc-btn calc-op" onclick="calcOp('/')">÷</button>
+        <button class="calc-btn calc-num" onclick="calcNum('7')">7</button>
+        <button class="calc-btn calc-num" onclick="calcNum('8')">8</button>
+        <button class="calc-btn calc-num" onclick="calcNum('9')">9</button>
+        <button class="calc-btn calc-op" onclick="calcOp('*')">×</button>
+        <button class="calc-btn calc-num" onclick="calcNum('4')">4</button>
+        <button class="calc-btn calc-num" onclick="calcNum('5')">5</button>
+        <button class="calc-btn calc-num" onclick="calcNum('6')">6</button>
+        <button class="calc-btn calc-op" onclick="calcOp('-')">−</button>
+        <button class="calc-btn calc-num" onclick="calcNum('1')">1</button>
+        <button class="calc-btn calc-num" onclick="calcNum('2')">2</button>
+        <button class="calc-btn calc-num" onclick="calcNum('3')">3</button>
+        <button class="calc-btn calc-op" onclick="calcOp('+')">+</button>
+        <button class="calc-btn calc-num" onclick="calcNum('0')" style="grid-column:span 2;">0</button>
+        <button class="calc-btn calc-num" onclick="calcDot()">.</button>
+        <button class="calc-btn calc-eq" onclick="calcEquals()">=</button>
+    </div>
+    <button class="btn-ghost" onclick="hide('calc-modal')">বন্ধ করুন</button>
+</div></div>
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById('u-name').innerText = user.displayName;
-                document.getElementById('u-photo').src = user.photoURL.replace('s96-c', 's400-c');
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('audio-gate-modal').style.display = 'flex';
-                setBDWish(user.displayName);
-                startRain();
-            }
+<!-- STICKY NOTE -->
+<div id="note-modal" class="modal"><div class="mbox" style="max-width:440px;">
+    <i class="fas fa-sticky-note" style="font-size:2rem;color:var(--pink);margin-bottom:12px;"></i>
+    <h3>Sticky Note Pad</h3>
+    <div class="note-toolbar">
+        <button class="note-tbtn" onclick="noteSave()">💾 Save</button>
+        <button class="note-tbtn" onclick="noteClear()">🗑️ Clear</button>
+        <button class="note-tbtn" onclick="noteCopy()">📋 Copy</button>
+        <button class="note-tbtn" onclick="noteDownload()">⬇️ Download</button>
+    </div>
+    <textarea id="note-area" placeholder="এখানে যা খুশি লিখে রাখো... (auto save হয়)"></textarea>
+    <p id="note-status" style="font-size:11px;color:#888;text-align:right;margin-top:6px;"></p>
+    <button class="btn-ghost" onclick="hide('note-modal')">বন্ধ করুন</button>
+</div></div>
+
+<!-- HACKER NEWS -->
+<div id="news-modal" class="modal"><div class="mbox" style="max-width:480px;">
+    <i class="fas fa-skull-crossbones" style="font-size:2rem;color:var(--pink);margin-bottom:12px;"></i>
+    <h3>🔴 Hacker News Feed</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:14px;">Real cybersecurity & tech news — live</p>
+    <div id="news-list" style="max-height:380px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--pink) transparent;">
+        <div style="text-align:center;padding:30px;color:#888;"><i class="fas fa-spinner fa-spin" style="color:var(--pink);font-size:22px;"></i><br><br>লোড হচ্ছে...</div>
+    </div>
+    <button class="btn" style="margin-top:14px;" onclick="loadNews()">🔄 Refresh</button>
+    <button class="btn-ghost" onclick="hide('news-modal')">বন্ধ করুন</button>
+</div></div>
+
+<!-- BD TRENDING -->
+<div id="trend-modal" class="modal"><div class="mbox" style="max-width:460px;">
+    <i class="fas fa-fire" style="font-size:2rem;color:var(--pink);margin-bottom:12px;"></i>
+    <h3>🇧🇩 BD Trending Topics</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:14px;">বাংলাদেশে এখন কী নিয়ে আলোচনা হচ্ছে</p>
+    <div id="trend-list">
+        <div style="text-align:center;padding:30px;color:#888;"><i class="fas fa-spinner fa-spin" style="color:var(--pink);font-size:22px;"></i><br><br>AI বিশ্লেষণ করছে...</div>
+    </div>
+    <button class="btn" style="margin-top:14px;" onclick="loadTrending()">🔄 Refresh</button>
+    <button class="btn-ghost" onclick="hide('trend-modal')">বন্ধ করুন</button>
+</div></div>
+
+<!-- BANGLA FACTS -->
+<div id="fact-modal" class="modal"><div class="mbox" style="max-width:420px;">
+    <i class="fas fa-lightbulb" style="font-size:2rem;color:var(--pink);margin-bottom:12px;"></i>
+    <h3>💡 Random Bangla Fact</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:14px;">বাংলাদেশ ও বাংলা সম্পর্কে অজানা তথ্য</p>
+    <div class="fact-card" id="fact-card">
+        <div class="fact-text" id="fact-text" style="color:#888;">নিচের button চাপো, অজানা তথ্য জানো! 🔍</div>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin:6px 0 14px;" id="fact-category"></div>
+    <button class="btn" onclick="loadFact()">🎲 নতুন Fact দেখাও</button>
+    <button id="fact-copy-btn" class="btn" style="margin-top:8px;background:rgba(255,77,148,.15);color:var(--pink);border:1px solid var(--pink);display:none;" onclick="copyFact()">📋 Copy করো</button>
+    <button class="btn-ghost" onclick="hide('fact-modal')">বন্ধ করুন</button>
+</div></div>
+
+<!-- AI STORY -->
+<div id="story-modal" class="modal"><div class="mbox" style="max-width:440px;">
+    <i class="fas fa-feather-alt" style="font-size:2rem;color:var(--pink);margin-bottom:12px;"></i>
+    <h3>📖 AI Story Generator</h3>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">Gemini AI দিয়ে বাংলা গল্প তৈরি করো</p>
+    <input type="text" id="story-topic" class="inp" placeholder="গল্পের বিষয় লিখো...">
+    <select class="conv-select" id="story-genre">
+        <option value="রোমান্টিক">💕 রোমান্টিক</option>
+        <option value="ভৌতিক">👻 ভৌতিক</option>
+        <option value="সায়েন্স ফিকশন">🚀 সায়েন্স ফিকশন</option>
+        <option value="অ্যাডভেঞ্চার">⚔️ অ্যাডভেঞ্চার</option>
+        <option value="হাস্যরসাত্মক">😂 হাস্যরসাত্মক</option>
+    </select>
+    <button class="btn" onclick="genStory()">গল্প বানাও ✨</button>
+    <div id="story-result" class="tool-result" style="display:none;text-align:left;max-height:280px;overflow-y:auto;margin-top:12px;line-height:1.8;"></div>
+    <button id="story-copy-btn" class="btn" style="display:none;margin-top:8px;background:rgba(255,77,148,.2);color:var(--pink);border:1px solid var(--pink);" onclick="copyStory()">📋 Copy করো</button>
+    <button class="btn-ghost" onclick="hide('story-modal')">বন্ধ করুন</button>
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { getFirestore, doc, onSnapshot, setDoc, getDoc, increment, collection, getDocs, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const cfg={apiKey:"AIzaSyC4ExRu3Oze8api5-ueDTBqZOceSa8wclo",authDomain:"ratanweab.firebaseapp.com",projectId:"ratanweab",storageBucket:"ratanweab.firebasestorage.app",messagingSenderId:"611953936063",appId:"1:611953936063:web:7e3ca24060d7478fb2a80a"};
+const app=initializeApp(cfg), auth=getAuth(app), db=getFirestore(app), prov=new GoogleAuthProvider();
+const GEMINI_KEY="AIzaSyDQnEMGBDPkLXVObuug8fAoFSGdmh-HwkE";
+let curUser=null, curNotice=null, lastFactText='', lastStory='';
+
+window.show=(id)=>{document.getElementById(id).style.display='flex';};
+window.hide=(id)=>{document.getElementById(id).style.display='none';};
+
+async function gemini(prompt,max=800){
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:max}})});
+    const d=await r.json();
+    if(d.error) throw new Error(d.error.message);
+    return d.candidates?.[0]?.content?.parts?.[0]?.text||'';
+}
+
+// Trail
+const trail=(x,y)=>{const p=document.createElement('i');p.className='fas fa-heart trail';p.style.cssText=`left:${x}px;top:${y}px;`;document.body.appendChild(p);setTimeout(()=>p.remove(),800);};
+window.addEventListener('mousemove',e=>trail(e.clientX,e.clientY));
+window.addEventListener('touchmove',e=>{const t=e.touches[0];trail(t.clientX,t.clientY);},{passive:true});
+window.addEventListener('scroll',()=>{document.getElementById('scr-top').style.display=window.scrollY>300?'flex':'none';});
+
+// Theme
+window.toggleTheme=()=>{document.body.classList.toggle('light');const b=document.getElementById('t-ball');b.textContent=document.body.classList.contains('light')?'☀️':'🌙';localStorage.setItem('rp-theme',document.body.classList.contains('light')?'light':'dark');};
+if(localStorage.getItem('rp-theme')==='light'){document.body.classList.add('light');document.getElementById('t-ball').textContent='☀️';}
+
+// Auth
+window.login=()=>signInWithPopup(auth,prov);
+window.logout=()=>signOut(auth).then(()=>location.reload());
+
+onAuthStateChanged(auth,async(user)=>{
+    if(user){
+        curUser=user;
+        document.getElementById('u-name').innerText=user.displayName;
+        document.getElementById('u-photo').src=user.photoURL.replace('s96-c','s400-c');
+        document.getElementById('login-screen').style.display='none';
+        document.getElementById('gate-modal').style.display='flex';
+        setWish(user.displayName); startRain(); updateVisitors(); loadChat();
+    }
+});
+
+window.enterDash=()=>{hide('gate-modal');document.getElementById('dash').style.display='block';document.getElementById('snd').play().catch(()=>{});};
+
+async function updateVisitors(){
+    try{await setDoc(doc(db,'system','stats'),{visitors:increment(1)},{merge:true});onSnapshot(doc(db,'system','stats'),s=>{if(s.exists())document.getElementById('v-count').innerText=s.data().visitors||0;});}catch(e){}
+}
+
+function setWish(name){const h=new Date().getHours(),day=new Date().getDay();let m=h<12?"শুভ সকাল":h<17?"শুভ দুপুর":h<20?"শুভ সন্ধ্যা":"শুভ রাত্রি";document.getElementById('u-wish').innerText=`${m}, ${name}! কি খবর?${day===5?" — জুমার মুবারক! 🕌":""}`;}
+
+function startRain(){const w=document.getElementById('hdr-rain');setInterval(()=>{const h=document.createElement('i');h.className='fas fa-heart rain-h';h.style.cssText=`left:${Math.random()*100}%;font-size:${Math.random()*10+8}px;animation-duration:${Math.random()*2+2}s;`;w.appendChild(h);setTimeout(()=>h.remove(),4000);},300);}
+
+onSnapshot(doc(db,'system','updates'),s=>{if(s.exists()){curNotice=s.data();if(curNotice.hasNew)document.getElementById('alert-dot').style.display='block';if(curNotice.message){document.getElementById('ticker-txt').innerText='📢 '+curNotice.message+' • ';document.getElementById('ticker').style.display='block';}}});
+
+window.openNotice=()=>{if(!curNotice)return;document.getElementById('n-title').innerText=curNotice.title||'নোটিশ';document.getElementById('n-body').innerText=curNotice.message||'';const img=document.getElementById('notice-img');curNotice.imageUrl?(img.src=curNotice.imageUrl,img.style.display='block'):(img.style.display='none');const lnk=document.getElementById('n-link');curNotice.linkUrl?(lnk.href=curNotice.linkUrl,lnk.style.display='inline-block'):(lnk.style.display='none');show('notice-modal');document.getElementById('alert-dot').style.display='none';};
+
+// Chat
+function loadChat(){const s=localStorage.getItem('rp-chat');if(s){document.getElementById('chat-log').innerHTML=s;document.getElementById('chat-log').scrollTop=9999;}}
+window.clearChat=()=>{if(confirm('Chat history মুছে ফেলবে?')){document.getElementById('chat-log').innerHTML='<div style="text-align:center;color:#555;padding:18px 0;font-size:13px;">Gemini AI কে যেকোনো প্রশ্ন করো... 💬</div>';localStorage.removeItem('rp-chat');}};
+window.askAI=async()=>{
+    const inp=document.getElementById('ai-inp'),log=document.getElementById('chat-log'),typ=document.getElementById('typing');
+    if(!inp.value.trim())return;
+    const val=inp.value.trim();inp.value='';
+    log.innerHTML+=`<div style="text-align:right;color:var(--pink);margin-bottom:8px;"><b>তুমি:</b> ${val}</div>`;
+    typ.style.display='block';log.scrollTop=9999;
+    try{
+        const reply=await gemini(`তুমি একটি বাংলা AI assistant। সংক্ষিপ্ত ও সহজ বাংলায় উত্তর দাও। প্রশ্ন: ${val}`);
+        typ.style.display='none';
+        log.innerHTML+=`<div style="margin-bottom:10px;color:var(--text);"><b style="color:#aaa;">Gemini:</b> ${reply||'উত্তর পাওয়া যায়নি।'}</div>`;
+    }catch(e){typ.style.display='none';log.innerHTML+=`<div style="color:red;margin-bottom:8px;">⚠️ Error হয়েছে!</div>`;}
+    log.scrollTop=9999;localStorage.setItem('rp-chat',log.innerHTML);
+};
+
+// Quiz
+let qSet=[],qIdx=0,qScore=0,qAnswered=false;
+window.openQuiz=async()=>{
+    qIdx=0;qScore=0;qAnswered=false;
+    document.getElementById('quiz-body').style.display='block';document.getElementById('q-close').style.display='block';document.getElementById('quiz-result').style.display='none';
+    show('quiz-modal');document.getElementById('q-txt').innerText='AI প্রশ্ন তৈরি করছে...';document.getElementById('q-opts').innerHTML='';
+    try{
+        const raw=await gemini(`তুমি একটি quiz generator। নিচের format এ ঠিক ৫টা MCQ প্রশ্ন তৈরি করো। Topics: Technology, Hacking/Cybersecurity, Bangladesh, General Knowledge, Science থেকে মিক্স করো। শুধু JSON array return করো:\n[{"cat":"💻 Tech","q":"প্রশ্ন","opts":["A","B","C","D"],"ans":0},...]`);
+        qSet=JSON.parse(raw.replace(/```json|```/g,'').trim());showQ();
+    }catch(e){qSet=[{cat:"💻 Tech",q:"HTML এর full form কী?",opts:["HyperText Markup Language","High Tech Modern Language","HyperTransfer Markup Logic","Home Text Markup Language"],ans:0},{cat:"🔐 Cyber",q:"Phishing attack কীভাবে কাজ করে?",opts:["Virus দিয়ে","নকল website দিয়ে তথ্য চুরি","Password crack করে","Network jam করে"],ans:1},{cat:"🇧🇩 BD",q:"বাংলাদেশের মুক্তিযুদ্ধ কত সালে?",opts:["১৯৬৯","১৯৭০","১৯৭১","১৯৭২"],ans:2},{cat:"🔬 Science",q:"পানির রাসায়নিক সংকেত কী?",opts:["CO2","H2O","NaCl","O2"],ans:1},{cat:"💻 Tech",q:"CSS মানে কী?",opts:["Cascading Style Sheets","Computer Style System","Creative Sheet Software","Custom Style Script"],ans:0}];showQ();}
+};
+function showQ(){if(qIdx>=qSet.length){showResult();return;}qAnswered=false;const q=qSet[qIdx];document.getElementById('q-cat').innerText=q.cat;document.getElementById('q-num').innerText=`প্রশ্ন ${qIdx+1}/${qSet.length}`;document.getElementById('q-prog').style.width=`${((qIdx+1)/qSet.length)*100}%`;document.getElementById('q-txt').innerText=q.q;document.getElementById('q-fb').innerText='';const opts=document.getElementById('q-opts');opts.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='q-opt';b.innerText=o;b.onclick=()=>checkQ(i,b,q);opts.appendChild(b);});}
+function checkQ(i,btn,q){if(qAnswered)return;qAnswered=true;document.querySelectorAll('.q-opt').forEach(b=>b.style.pointerEvents='none');if(i===q.ans){btn.classList.add('ok');document.getElementById('q-fb').innerHTML='<span style="color:#00c864;">✓ সঠিক উত্তর!</span>';qScore++;}else{btn.classList.add('no');document.querySelectorAll('.q-opt')[q.ans].classList.add('ok');document.getElementById('q-fb').innerHTML='<span style="color:#ff3232;">✗ ভুল হয়েছে</span>';}setTimeout(()=>{qIdx++;showQ();},1300);}
+function showResult(){document.getElementById('quiz-body').style.display='none';document.getElementById('q-close').style.display='none';document.getElementById('quiz-result').style.display='block';document.getElementById('final-sc').innerText=`${qScore}/${qSet.length}`;const msgs=['আরো practice করো 😊','চেষ্টা ভালো! 💪','ভালো করেছ! 👍','দারুণ! 🌟','পারফেক্ট! 🏆'];document.getElementById('sc-msg').innerText=msgs[qScore]||msgs[0];saveScore(qScore);}
+async function saveScore(s){if(!curUser)return;try{const ref=doc(db,'leaderboard',curUser.uid);const ex=await getDoc(ref);const old=ex.exists()?(ex.data().score||0):0;if(s>old||!ex.exists())await setDoc(ref,{name:curUser.displayName,score:s,photo:curUser.photoURL},{merge:true});}catch(e){}}
+
+window.loadLB=async()=>{document.getElementById('lb-list').innerHTML='<div style="color:#888;font-size:13px;padding:14px;">লোড হচ্ছে...</div>';try{const q=query(collection(db,'leaderboard'),orderBy('score','desc'),limit(10));const snap=await getDocs(q);if(snap.empty){document.getElementById('lb-list').innerHTML='<p style="color:#888;font-size:13px;">এখনো কেউ quiz দেয়নি!</p>';return;}const medals=['🥇','🥈','🥉'];let html='';let i=0;snap.forEach(d=>{const dat=d.data();html+=`<div class="lb-row"><span style="font-size:18px;width:28px;">${medals[i]||(i+1)+'.'}</span><span class="lb-nm">${dat.name}</span><span class="lb-sc">${dat.score} pts</span></div>`;i++;});document.getElementById('lb-list').innerHTML=html;}catch(e){document.getElementById('lb-list').innerHTML='<p style="color:red;font-size:13px;">সমস্যা হয়েছে</p>';}};
+
+// IP Tracker
+window.trackIP=async()=>{const ip=document.getElementById('ip-inp').value.trim();const res=document.getElementById('ip-result');res.style.display='block';res.innerHTML='<i class="fas fa-spinner fa-spin" style="color:var(--pink);"></i> ট্র্যাক করছি...';try{const r=await fetch(ip?`https://ipapi.co/${ip}/json/`:'https://ipapi.co/json/');const d=await r.json();if(d.error){res.innerHTML='<span style="color:red;">❌ Invalid IP</span>';return;}res.innerHTML=`<div>🌍 দেশ: ${d.country_name} ${d.country_code}</div><div>🏙️ শহর: ${d.city||'N/A'}, ${d.region||'N/A'}</div><div>📍 IP: ${d.ip}</div><div>🌐 ISP: ${d.org||'N/A'}</div><div>🕐 Timezone: ${d.timezone||'N/A'}</div>`;}catch(e){res.innerHTML='<span style="color:red;">❌ Error হয়েছে</span>';}};
+
+// Password
+window.checkPass=(val)=>{const fill=document.getElementById('str-fill'),label=document.getElementById('str-label'),res=document.getElementById('pass-result');if(!val){fill.style.width='0%';label.innerText='';res.style.display='none';return;}let score=0;const c={length:val.length>=8,upper:/[A-Z]/.test(val),lower:/[a-z]/.test(val),number:/[0-9]/.test(val),special:/[!@#$%^&*(),.?":{}|<>]/.test(val),long:val.length>=12};Object.values(c).forEach(v=>v&&score++);const lv=[{t:'খুব দুর্বল 😱',c:'#ff3232',w:'16%'},{t:'দুর্বল 😟',c:'#ff6b35',w:'32%'},{t:'মোটামুটি 😐',c:'#ffa500',w:'50%'},{t:'ভালো 😊',c:'#7ec8e3',w:'70%'},{t:'শক্তিশালী 💪',c:'#00c864',w:'88%'},{t:'অত্যন্ত শক্তিশালী 🔒',c:'#00ff88',w:'100%'}][Math.min(score,5)];fill.style.width=lv.w;fill.style.background=lv.c;label.innerText=lv.t;label.style.color=lv.c;const ct=score<=1?'তাৎক্ষণিক':score<=2?'কয়েক মিনিট':score<=3?'কয়েক ঘণ্টা':score<=4?'কয়েক দিন':score<=5?'কয়েক বছর':'কয়েক শতাব্দী';res.style.display='block';res.innerHTML=`<div>📏 ${val.length} chars ${c.length?'✅':'❌'}</div><div>🔠 বড় হাতের ${c.upper?'✅':'❌'}</div><div>🔡 ছোট হাতের ${c.lower?'✅':'❌'}</div><div>🔢 সংখ্যা ${c.number?'✅':'❌'}</div><div>⚡ বিশেষ চিহ্ন ${c.special?'✅':'❌'}</div><div style="margin-top:8px;border-top:1px solid rgba(255,77,148,.2);padding-top:8px;">⏱️ Crack হতে: <b style="color:var(--pink);">${ct}</b></div>`;};
+window.togglePassView=()=>{const inp=document.getElementById('pass-inp'),btn=document.getElementById('eye-btn');if(inp.type==='password'){inp.type='text';btn.innerHTML='<i class="fas fa-eye-slash"></i>';}else{inp.type='password';btn.innerHTML='<i class="fas fa-eye"></i>';}};
+
+// QR
+let qrCode=null;
+window.genQR=()=>{const val=document.getElementById('qr-inp').value.trim();if(!val){alert('কিছু লিখো!');return;}const out=document.getElementById('qr-output');out.innerHTML='';try{qrCode=new QRCode(out,{text:val,width:200,height:200,colorDark:'#ff4d94',colorLight:'#000000',correctLevel:QRCode.CorrectLevel.H});document.getElementById('qr-dl').style.display='block';}catch(e){out.innerHTML='<span style="color:red;">Error</span>';}};
+window.dlQR=()=>{const c=document.querySelector('#qr-output canvas');if(!c)return;const a=document.createElement('a');a.download='qr-code.png';a.href=c.toDataURL();a.click();};
+
+// Typing
+const typingTexts=["The quick brown fox jumps over the lazy dog near the river bank.","Technology is the backbone of modern civilization and digital age.","Practice makes perfect when learning new programming languages daily.","Cybersecurity protects computers networks and data from digital attacks.","Bangladesh is a beautiful country with rich culture and heritage."];
+let typeTimer=null,typeStart=null,typeSeconds=60,typingActive=false;
+window.startTyping=()=>{const txt=typingTexts[Math.floor(Math.random()*typingTexts.length)];document.getElementById('type-txt').innerText=txt;document.getElementById('type-inp').value='';document.getElementById('type-inp').style.display='block';document.getElementById('type-inp').disabled=false;document.getElementById('type-inp').focus();document.getElementById('t-wpm').innerText='0';document.getElementById('t-acc').innerText='100%';document.getElementById('t-time').innerText='60';document.getElementById('type-btn').innerText='চলছে... ⏱️';document.getElementById('type-btn').disabled=true;typeSeconds=60;typingActive=true;typeStart=Date.now();clearInterval(typeTimer);typeTimer=setInterval(()=>{typeSeconds--;document.getElementById('t-time').innerText=typeSeconds;if(typeSeconds<=0){clearInterval(typeTimer);typingActive=false;document.getElementById('type-inp').disabled=true;document.getElementById('type-btn').innerText='আবার শুরু করো ▶';document.getElementById('type-btn').disabled=false;}},1000);};
+window.checkTyping=()=>{if(!typingActive)return;const orig=document.getElementById('type-txt').innerText,typed=document.getElementById('type-inp').value,elapsed=(Date.now()-typeStart)/60000;const words=typed.trim().split(/\s+/).filter(w=>w.length>0).length;const wpm=elapsed>0?Math.round(words/elapsed):0;let cor=0;for(let i=0;i<typed.length;i++)if(typed[i]===orig[i])cor++;const acc=typed.length>0?Math.round((cor/typed.length)*100):100;document.getElementById('t-wpm').innerText=wpm;document.getElementById('t-acc').innerText=acc+'%';if(typed===orig){clearInterval(typeTimer);typingActive=false;document.getElementById('type-inp').disabled=true;document.getElementById('type-btn').innerText='আবার শুরু করো ▶';document.getElementById('type-btn').disabled=false;}};
+
+// Portfolio
+window.makePort=()=>{const name=document.getElementById('p-name').value,title=document.getElementById('p-title').value;if(!name||!title){alert('নাম ও টাইটেল দিন');return;}const phone=document.getElementById('p-phone').value,fb=document.getElementById('p-fb').value,wa=document.getElementById('p-wa').value;document.getElementById('port-area').innerHTML=`<div class="port-card"><div style="font-size:3rem;margin-bottom:10px;">👤</div><h3 style="color:var(--pink);font-size:20px;">${name}</h3><p style="color:var(--text2);margin:5px 0 14px;">${title}</p>${phone?`<p style="font-size:14px;margin:5px 0;"><i class="fas fa-phone" style="color:var(--pink);margin-right:7px;"></i>${phone}</p>`:''} ${fb?`<p style="font-size:14px;margin:5px 0;"><a href="${fb}" target="_blank" style="color:#1877f2;text-decoration:none;"><i class="fab fa-facebook"></i> Facebook</a></p>`:''} ${wa?`<p style="font-size:14px;margin:5px 0;"><a href="https://wa.me/${wa}" target="_blank" style="color:#25d366;text-decoration:none;"><i class="fab fa-whatsapp"></i> WhatsApp</a></p>`:''}<button class="btn" style="margin-top:16px;" onclick="hide('port-modal')">বন্ধ করুন</button></div>`;hide('p-modal');show('port-modal');};
+
+// Calculator
+let calcCurrent='0',calcPrev='',calcOperator='',calcNewNum=true;
+function calcUpdate(){document.getElementById('calc-disp').innerText=calcCurrent;}
+window.calcNum=n=>{if(calcNewNum){calcCurrent=n;calcNewNum=false;}else calcCurrent=calcCurrent==='0'?n:calcCurrent+n;calcUpdate();};
+window.calcDot=()=>{if(calcNewNum){calcCurrent='0.';calcNewNum=false;}else if(!calcCurrent.includes('.'))calcCurrent+='.';calcUpdate();};
+window.calcOp=op=>{if(calcPrev&&!calcNewNum)calcEquals();calcPrev=calcCurrent;calcOperator=op;calcNewNum=true;document.getElementById('calc-expr').innerText=`${calcPrev} ${op}`;};
+window.calcEquals=()=>{if(!calcOperator||calcNewNum)return;const a=parseFloat(calcPrev),b=parseFloat(calcCurrent);let r=calcOperator==='+'?a+b:calcOperator==='-'?a-b:calcOperator==='*'?a*b:b!==0?a/b:'Error';calcCurrent=String(parseFloat(Number(r).toFixed(10)));calcOperator='';calcPrev='';calcNewNum=true;document.getElementById('calc-expr').innerText='';calcUpdate();};
+window.calcClear=()=>{calcCurrent='0';calcPrev='';calcOperator='';calcNewNum=true;document.getElementById('calc-expr').innerText='';calcUpdate();};
+window.calcSign=()=>{calcCurrent=String(parseFloat(calcCurrent)*-1);calcUpdate();};
+window.calcPercent=()=>{calcCurrent=String(parseFloat(calcCurrent)/100);calcUpdate();};
+
+// Sticky Note
+window.loadNote=()=>{const s=localStorage.getItem('rp-note')||'';document.getElementById('note-area').value=s;document.getElementById('note-status').innerText=s?`Last saved • ${s.length} chars`:'';};
+window.noteSave=()=>{const v=document.getElementById('note-area').value;localStorage.setItem('rp-note',v);document.getElementById('note-status').innerText=`✅ Saved • ${v.length} chars`;};
+window.noteClear=()=>{if(confirm('Note মুছবে?')){document.getElementById('note-area').value='';localStorage.removeItem('rp-note');document.getElementById('note-status').innerText='';}};
+window.noteCopy=()=>{navigator.clipboard.writeText(document.getElementById('note-area').value).then(()=>{document.getElementById('note-status').innerText='📋 Copied!';});};
+window.noteDownload=()=>{const v=document.getElementById('note-area').value;const a=document.createElement('a');a.download='note.txt';a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(v);a.click();};
+document.getElementById('note-area').addEventListener('input',()=>{const v=document.getElementById('note-area').value;localStorage.setItem('rp-note',v);document.getElementById('note-status').innerText=`Auto saved • ${v.length} chars`;});
+
+// ── 1. HACKER NEWS (Real API) ──
+window.loadNews=async()=>{
+    const list=document.getElementById('news-list');
+    list.innerHTML='<div style="text-align:center;padding:30px;color:#888;"><i class="fas fa-spinner fa-spin" style="color:var(--pink);font-size:22px;"></i><br><br>লোড হচ্ছে...</div>';
+    try{
+        const topRes=await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+        const ids=await topRes.json();
+        const stories=await Promise.all(ids.slice(0,15).map(id=>fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r=>r.json())));
+        const tags=['🔐 Security','💻 Tech','🤖 AI','⚡ Hacking','🌐 Web','🔥 Viral'];
+        let html='';
+        stories.filter(s=>s&&s.title).forEach((s,i)=>{
+            const timeAgo=s.time?Math.floor((Date.now()/1000-s.time)/3600)+'h ago':'now';
+            html+=`<div class="news-card" onclick="window.open('${s.url||'https://news.ycombinator.com/item?id='+s.id}','_blank')">
+                <div class="news-title">${s.title}</div>
+                <div class="news-meta"><span class="news-tag">${tags[i%tags.length]}</span><span>⬆️ ${s.score||0}</span><span>💬 ${s.descendants||0}</span><span>⏱️ ${timeAgo}</span></div>
+            </div>`;
         });
+        list.innerHTML=html||'<p style="color:#888;text-align:center;padding:20px;">কোনো news পাওয়া যায়নি</p>';
+    }catch(e){list.innerHTML='<div style="color:red;text-align:center;padding:20px;">❌ Internet check করো</div>';}
+};
 
-        window.enterDashboard = () => {
-            document.getElementById('audio-gate-modal').style.display = 'none';
-            document.getElementById('dashboard-ui').style.display = 'block';
-            document.getElementById('snd-open').play().catch(e => console.log("Audio play failed"));
-        };
-
-        function setBDWish(name) {
-            const hour = new Date().getHours();
-            let msg = (hour < 12) ? "শুভ সকাল" : (hour < 17) ? "শুভ দুপুর" : "শুভ সন্ধ্যা";
-            document.getElementById('u-wish').innerText = `${msg}, ${name}! কি খবর?`;
-        }
-
-        function startRain() {
-            const wrap = document.getElementById('header-rain');
-            setInterval(() => {
-                const h = document.createElement('i');
-                h.className = 'fas fa-heart header-heart';
-                h.style.left = Math.random() * 100 + '%';
-                h.style.fontSize = (Math.random() * 10 + 8) + 'px';
-                h.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                wrap.appendChild(h);
-                setTimeout(() => h.remove(), 4000);
-            }, 300);
-        }
-
-        window.askAI = async () => {
-            const inp = document.getElementById('ai-msg');
-            const log = document.getElementById('chat-content');
-            if(!inp.value) return;
-            const val = inp.value;
-            log.innerHTML += `<div style="text-align:right; color:var(--pink-main); margin-bottom:5px;"><b>You:</b> ${val}</div>`;
-            inp.value = "চিন্তা করছি...";
-            try {
-                const r = await fetch("https://api.openai.com/v1/chat/completions", {
-                    method:"POST",
-                    headers:{"Content-Type":"application/json", "Authorization":`Bearer ${AI_API}`},
-                    body: JSON.stringify({model:"gpt-4o-mini", messages:[{role:"user", content:val}]})
-                });
-                const d = await r.json();
-                log.innerHTML += `<div style="margin-bottom:10px;"><b>AI:</b> ${d.choices[0].message.content}</div>`;
-            } catch(e){ log.innerHTML += `<div style="color:red;">Error!</div>`; }
-            inp.value = "";
-            log.scrollTop = log.scrollHeight;
-        };
-
-        onSnapshot(doc(db, "system", "updates"), (s) => {
-            if(s.exists()){
-                currentMsg = s.data();
-                if(currentMsg.hasNew) document.getElementById('alert-dot').style.display='block';
-            }
+// ── 2. BD TRENDING (AI) ──
+window.loadTrending=async()=>{
+    const tl=document.getElementById('trend-list');
+    tl.innerHTML='<div style="text-align:center;padding:30px;color:#888;"><i class="fas fa-spinner fa-spin" style="color:var(--pink);font-size:22px;"></i><br><br>AI বিশ্লেষণ করছে...</div>';
+    try{
+        const raw=await gemini(`বাংলাদেশে এখন কোন ১০টি বিষয় নিয়ে সবচেয়ে বেশি আলোচনা হচ্ছে? রাজনীতি, খেলাধুলা, বিনোদন, প্রযুক্তি, অর্থনীতি মিলিয়ে দাও। শুধু JSON array:\n[{"topic":"বিষয়","category":"ক্যাটাগরি","discussion":"এক লাইনে কারণ"},...]`,500);
+        const items=JSON.parse(raw.replace(/```json|```/g,'').trim());
+        const icons={'রাজনীতি':'🏛️','খেলাধুলা':'⚽','বিনোদন':'🎬','প্রযুক্তি':'💻','অর্থনীতি':'💰','শিক্ষা':'📚','স্বাস্থ্য':'🏥','আন্তর্জাতিক':'🌍'};
+        let html='';
+        items.slice(0,10).forEach((item,i)=>{
+            const icon=icons[item.category]||'🔥';
+            html+=`<div class="trend-item"><div class="trend-num">${i+1}</div><div class="trend-info"><div class="trend-topic">${icon} ${item.topic}</div><div class="trend-count">${item.discussion} • ${Math.floor(Math.random()*90+10)}K আলোচনা</div></div><div style="font-size:18px;">${i<3?'🔥':'📈'}</div></div>`;
         });
+        tl.innerHTML=html;
+    }catch(e){
+        tl.innerHTML=['বিপিএল ২০২৫ ⚽','ডলারের দাম 💰','নতুন বাজেট 🏛️','AI ও চাকরি 💻','HSC পরীক্ষা 📚'].map((t,i)=>`<div class="trend-item"><div class="trend-num">${i+1}</div><div class="trend-info"><div class="trend-topic">${t}</div><div class="trend-count">${Math.floor(Math.random()*90+10)}K আলোচনা</div></div><div style="font-size:18px;">🔥</div></div>`).join('');
+    }
+};
 
-        window.openNotice = () => {
-            if(currentMsg){
-                document.getElementById('notice-body').innerText = currentMsg.message;
-                document.getElementById('notice-modal').style.display = 'flex';
-                document.getElementById('alert-dot').style.display = 'none';
-            }
-        };
+// ── 3. BANGLA FACTS (AI) ──
+window.loadFact=async()=>{
+    const factEl=document.getElementById('fact-text'),catEl=document.getElementById('fact-category'),copyBtn=document.getElementById('fact-copy-btn');
+    factEl.innerHTML='<i class="fas fa-spinner fa-spin" style="color:var(--pink);"></i> খুঁজছি...';catEl.innerText='';copyBtn.style.display='none';
+    try{
+        const cats=['ইতিহাস','ভূগোল','সংস্কৃতি','বিজ্ঞান','খাদ্য','ভাষা','মুক্তিযুদ্ধ','প্রকৃতি','বিখ্যাত ব্যক্তিত্ব','রেকর্ড ও অর্জন'];
+        const cat=cats[Math.floor(Math.random()*cats.length)];
+        const fact=await gemini(`বাংলাদেশ বা বাংলা সংস্কৃতি সম্পর্কে "${cat}" বিষয়ক একটি অজানা ও আকর্ষণীয় তথ্য বলো। ২-৩ বাক্যে বলো। শুধু তথ্যটুকু বলো।`,200);
+        lastFactText=fact.trim();
+        factEl.innerText=lastFactText;catEl.innerText=`📂 বিভাগ: ${cat}`;copyBtn.style.display='block';
+        document.getElementById('fact-card').style.background='linear-gradient(135deg,rgba(255,77,148,.15),rgba(124,58,237,.1))';
+    }catch(e){
+        const fb=['বাংলাদেশে প্রতিবছর প্রায় ১০ লক্ষ টন আম উৎপাদিত হয়, যা বিশ্বে সপ্তম।','সুন্দরবন পৃথিবীর বৃহত্তম ম্যানগ্রোভ বন যেখানে প্রায় ৩৫০টি রয়েল বেঙ্গল টাইগার বাস করে।','২১শে ফেব্রুয়ারি আন্তর্জাতিক মাতৃভাষা দিবস UNESCO দ্বারা স্বীকৃত।','বাংলাদেশ বিশ্বের দ্বিতীয় বৃহত্তম তৈরি পোশাক রপ্তানিকারক দেশ।'];
+        lastFactText=fb[Math.floor(Math.random()*fb.length)];factEl.innerText=lastFactText;catEl.innerText='📂 বিভাগ: সাধারণ জ্ঞান';copyBtn.style.display='block';
+    }
+};
+window.copyFact=()=>{navigator.clipboard.writeText(lastFactText).then(()=>alert('Copied! ✅'));};
 
-        window.createPortfolio = () => {
-            const name = document.getElementById('p-name').value;
-            const title = document.getElementById('p-title').value;
-            if(!name || !title) return alert("দয়া করে নাম ও টাইটেল দিন");
-            document.getElementById('p-result-area').innerHTML = `
-                <div class="result-card">
-                    <h3 style="color:var(--pink-main)">${name}</h3>
-                    <p>${title}</p>
-                    <button class="btn-premium" style="margin-top:15px" onclick="document.getElementById('portfolio-modal').style.display='none'">বন্ধ করুন</button>
-                </div>`;
-            document.getElementById('p-maker-modal').style.display = 'none';
-            document.getElementById('portfolio-modal').style.display = 'flex';
-        }
-    </script>
+// AI Story
+window.genStory=async()=>{
+    const topic=document.getElementById('story-topic').value.trim()||'একটি রহস্যময় যাত্রা',genre=document.getElementById('story-genre').value;
+    const res=document.getElementById('story-result'),copyBtn=document.getElementById('story-copy-btn');
+    res.style.display='block';copyBtn.style.display='none';
+    res.innerHTML='<i class="fas fa-spinner fa-spin" style="color:var(--pink);"></i> গল্প লিখছি...';
+    try{
+        const story=await gemini(`তুমি একজন বাংলা সাহিত্যিক। "${topic}" বিষয়ে একটি সুন্দর ${genre} ছোটগল্প লিখো। ৮-১২ লাইনের হবে, আকর্ষণীয় শুরু ও সুন্দর শেষ থাকবে।`,600);
+        lastStory=story;res.innerHTML=story.replace(/\n/g,'<br>');copyBtn.style.display='block';
+    }catch(e){res.innerHTML='<span style="color:red;">❌ Error হয়েছে</span>';}
+};
+window.copyStory=()=>{navigator.clipboard.writeText(lastStory).then(()=>alert('Copied! ✅'));};
+</script>
 </body>
 </html>
