@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>নম্বর ডিটেইলস</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Hind Siliguri', 'Segoe UI', sans-serif;
+      background: #0d0d1a;
+      min-height: 100vh;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    .hearts-bg {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .heart {
+      position: absolute; color: #e91e8c;
+      opacity: 0.15; animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(110vh) scale(0.8); opacity: 0.1; }
+      50%  { opacity: 0.25; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+    .topbar {
+      position: relative; z-index: 10;
+      display: flex; align-items: center;
+      padding: 14px 24px; gap: 12px;
+    }
+    .back-btn {
+      background: rgba(233,30,140,0.15);
+      border: 1px solid rgba(233,30,140,0.3);
+      color: #e91e8c; border-radius: 10px;
+      padding: 8px 16px; font-size: 14px; cursor: pointer;
+      font-family: inherit; display: flex; align-items: center;
+      gap: 6px; transition: background 0.2s; text-decoration: none;
+    }
+    .back-btn:hover { background: rgba(233,30,140,0.28); }
+    .topbar-title { font-size: 18px; font-weight: 700; color: #e91e8c; }
+    .hero {
+      position: relative; z-index: 5;
+      background: linear-gradient(135deg, #1a0a2e 0%, #2d0a1f 50%, #1a0a2e 100%);
+      border-bottom: 1px solid rgba(233,30,140,0.2);
+      padding: 32px 20px 28px; text-align: center;
+    }
+    .hero-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, #e91e8c, #9c27b0);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px; font-size: 28px;
+    }
+    .hero h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.5); }
+    .main {
+      position: relative; z-index: 5;
+      max-width: 520px; margin: 28px auto;
+      padding: 0 16px 40px;
+    }
+    .search-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(233,30,140,0.25);
+      border-radius: 18px; padding: 24px; margin-bottom: 20px;
+    }
+    .input-label {
+      font-size: 13px; color: rgba(255,255,255,0.55);
+      margin-bottom: 10px; display: block; font-weight: 500;
+    }
+    .input-row { display: flex; gap: 10px; }
+    .phone-input {
+      flex: 1; height: 48px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(233,30,140,0.3);
+      border-radius: 12px; color: #fff; font-size: 16px;
+      font-family: inherit; padding: 0 16px; outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .phone-input::placeholder { color: rgba(255,255,255,0.3); }
+    .phone-input:focus { border-color: #e91e8c; background: rgba(233,30,140,0.08); }
+    .search-btn {
+      height: 48px; padding: 0 22px;
+      background: linear-gradient(135deg, #e91e8c, #c2185b);
+      border: none; border-radius: 12px; color: #fff;
+      font-size: 15px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: opacity 0.2s, transform 0.1s;
+      white-space: nowrap; display: flex; align-items: center; gap: 6px;
+    }
+    .search-btn:hover { opacity: 0.88; }
+    .search-btn:active { transform: scale(0.96); }
+    .search-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .loading-wrap {
+      text-align: center; padding: 28px 0;
+      color: rgba(255,255,255,0.5); font-size: 15px;
+    }
+    .spinner {
+      display: inline-block; width: 28px; height: 28px;
+      border: 3px solid rgba(233,30,140,0.2);
+      border-top-color: #e91e8c; border-radius: 50%;
+      animation: spin 0.7s linear infinite; margin-bottom: 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .result-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(233,30,140,0.3);
+      border-radius: 18px; overflow: hidden;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 12px rgba(233,30,140,0.15); }
+      50%       { box-shadow: 0 0 28px rgba(233,30,140,0.35); }
+    }
+    .result-header {
+      background: linear-gradient(135deg, rgba(233,30,140,0.2), rgba(156,39,176,0.15));
+      padding: 20px 22px; display: flex; align-items: center;
+      gap: 16px; border-bottom: 1px solid rgba(233,30,140,0.2);
+    }
+    .result-avatar {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: linear-gradient(135deg, #e91e8c, #9c27b0);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 700; color: #fff;
+      flex-shrink: 0; border: 2px solid rgba(233,30,140,0.5);
+    }
+    .result-name { font-size: 20px; font-weight: 700; color: #fff; }
+    .result-number { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 3px; }
+    .found-badge {
+      margin-left: auto;
+      background: rgba(46,213,115,0.15);
+      border: 1px solid rgba(46,213,115,0.35);
+      color: #2ed573; font-size: 12px; padding: 4px 12px;
+      border-radius: 20px; font-weight: 600; white-space: nowrap;
+    }
+    .result-body { padding: 18px 22px; }
+    .info-row {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-key { color: rgba(255,255,255,0.45); }
+    .info-val { color: #fff; font-weight: 500; }
+    .error-card {
+      background: rgba(231,76,60,0.1);
+      border: 1px solid rgba(231,76,60,0.3);
+      border-radius: 14px; padding: 18px 20px;
+      text-align: center; color: #ff6b6b; font-size: 15px;
+    }
+    .error-icon { font-size: 28px; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsContainer"></div>
+
+<div class="topbar">
+  <a href="javascript:history.back()" class="back-btn">&#8592; ফিরে যাও</a>
+  <span class="topbar-title">&#128222; নম্বর ডিটেইলস</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">&#128269;</div>
+  <h2>নম্বর দিয়ে নাম বের করো</h2>
+  <p>যেকোনো বাংলাদেশি নম্বর লিখে Search করো</p>
+</div>
+
+<div class="main">
+  <div class="search-card">
+    <span class="input-label">&#128241; ফোন নম্বর লিখো</span>
+    <div class="input-row">
+      <input class="phone-input" type="text" id="phoneInput" placeholder="01XXXXXXXXX" maxlength="20"/>
+      <button class="search-btn" id="searchBtn" onclick="doLookup()">&#128269; খুঁজুন</button>
+    </div>
+  </div>
+  <div id="output"></div>
+</div>
+
+<script>
+  const API_KEY = 'pk_live_e2c95734ad987494bd12a10bc32122f8198d1101';
+
+  const container = document.getElementById('heartsContainer');
+  for (let i = 0; i < 18; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.innerHTML = '&#10084;';
+    h.style.left = Math.random() * 100 + '%';
+    h.style.animationDuration = (6 + Math.random() * 10) + 's';
+    h.style.animationDelay = (Math.random() * 8) + 's';
+    h.style.fontSize = (8 + Math.random() * 10) + 'px';
+    container.appendChild(h);
+  }
+
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function getInitials(name) {
+    if (!name) return '?';
+    return name.trim().split(/\s+/).map(w => w[0].toUpperCase()).slice(0,2).join('');
+  }
+
+  async function doLookup() {
+    const number = document.getElementById('phoneInput').value.trim();
+    const output = document.getElementById('output');
+    const btn    = document.getElementById('searchBtn');
+
+    if (!number) {
+      output.innerHTML = `<div class="error-card"><div class="error-icon">&#9888;</div>নম্বর দাও ভাই!</div>`;
+      return;
+    }
+
+    output.innerHTML = `<div class="loading-wrap"><div class="spinner"></div><br>খোঁজা হচ্ছে...</div>`;
+    btn.disabled = true;
+
+    try {
+      const url  = `https://api.lookupnow.top/api/v1/query.php?key=${encodeURIComponent(API_KEY)}&number=${encodeURIComponent(number)}`;
+      const res  = await fetch(url);
+      const json = await res.json();
+
+      if (json.status === 'success' && json.data) {
+        const d        = json.data;
+        const name     = d.name || d.full_name || d.owner || 'পাওয়া যায়নি';
+        const operator = d.operator || d.carrier || '-';
+        const division = d.division || d.region || '-';
+        const type     = d.type || d.line_type || '-';
+        const initials = getInitials(name);
+
+        const rows = [
+          ['&#128100; নাম', name],
+          ['&#128241; নম্বর', number],
+          ['&#128225; অপারেটর', operator],
+          ['&#127760; বিভাগ', division],
+          ['&#128196; ধরন', type],
+        ];
+
+        output.innerHTML = `
+          <div class="result-card">
+            <div class="result-header">
+              <div class="result-avatar">${esc(initials)}</div>
+              <div>
+                <div class="result-name">${esc(name)}</div>
+                <div class="result-number">${esc(number)}</div>
+              </div>
+              <span class="found-badge">&#10003; পাওয়া গেছে</span>
+            </div>
+            <div class="result-body">
+              ${rows.map(([k,v]) => `
+                <div class="info-row">
+                  <span class="info-key">${k}</span>
+                  <span class="info-val">${esc(v)}</span>
+                </div>`).join('')}
+            </div>
+          </div>`;
+      } else {
+        const msg = json.message || json.error || 'কোনো তথ্য পাওয়া যায়নি';
+        output.innerHTML = `<div class="error-card"><div class="error-icon">&#128581;</div>${esc(msg)}</div>`;
+      }
+    } catch(e) {
+      output.innerHTML = `<div class="error-card"><div class="error-icon">&#9888;</div>API connect হচ্ছে না।<br><small style="opacity:0.6">CORS issue — PHP hosting লাগবে</small></div>`;
+    }
+    btn.disabled = false;
+  }
+
+  document.getElementById('phoneInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLookup();
+  });
+</script>
+</body>
+</html>
