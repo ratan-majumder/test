@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADMIN PANEL — RATAN MAJUMDER</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+:root{
+  --neon:#00ff41;--danger:#ff003c;--gold:#ffea00;--bg:#050505;
+  --cyan:#00e5ff;--purple:#9c27b0;--card-bg:rgba(255,255,255,0.02);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#fff;font-family:'Rajdhani',sans-serif;min-height:100vh;user-select:none;overflow-x:hidden;}
+
+/* SCANLINE OVERLAY */
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,65,0.015) 2px,rgba(0,255,65,0.015) 4px);pointer-events:none;z-index:9999;}
+
+/* MATRIX RAIN BG */
+#matrixCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.07;}
+
+/* LOGIN SCREEN */
+#loginScreen{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.lock-icon{font-size:70px;margin-bottom:20px;animation:pulseGold 2s infinite;}
+@keyframes pulseGold{0%,100%{filter:drop-shadow(0 0 10px var(--gold))}50%{filter:drop-shadow(0 0 30px var(--gold)) drop-shadow(0 0 60px var(--gold))}}
+.admin-title{font-size:22px;font-weight:900;letter-spacing:6px;color:var(--gold);text-transform:uppercase;font-family:'Orbitron',monospace;margin-bottom:5px;text-align:center;}
+.admin-sub{font-size:10px;color:#555;letter-spacing:3px;margin-bottom:40px;font-family:'Share Tech Mono',monospace;}
+.login-box{width:100%;max-width:360px;background:rgba(255,234,0,0.03);border:1px solid rgba(255,234,0,0.2);border-radius:20px;padding:30px;backdrop-filter:blur(20px);}
+.inp-label{font-size:10px;color:#888;letter-spacing:2px;display:block;margin-bottom:6px;font-family:'Share Tech Mono',monospace;}
+.inp{width:100%;padding:13px 15px;background:rgba(255,255,255,0.04);border:1px solid #333;border-radius:10px;color:#fff;font-size:15px;outline:none;margin-bottom:18px;font-family:'Rajdhani',sans-serif;}
+.inp:focus{border-color:var(--gold);box-shadow:0 0 10px rgba(255,234,0,0.15);}
+.btn-gold{width:100%;padding:14px;background:linear-gradient(45deg,var(--gold),#cc9900);border:none;border-radius:12px;color:#000;font-weight:900;font-size:14px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;font-family:'Orbitron',monospace;}
+.err{color:var(--danger);font-size:12px;text-align:center;margin-top:10px;min-height:18px;font-family:'Share Tech Mono',monospace;}
+
+/* DASHBOARD */
+#dashboard{display:none;position:relative;z-index:10;padding:15px;}
+.dash-header{text-align:center;padding:20px 10px 10px;}
+.dash-title{font-size:24px;font-weight:900;letter-spacing:5px;color:var(--gold);animation:glitch 2s infinite;font-family:'Orbitron',monospace;}
+@keyframes glitch{0%{transform:skew(0deg)}20%{transform:skew(-2deg);color:var(--neon)}40%{transform:skew(2deg)}100%{transform:skew(0deg);color:var(--gold)}}
+.dash-sub{font-size:10px;color:#555;letter-spacing:3px;margin-top:4px;font-family:'Share Tech Mono',monospace;}
+
+/* TABS */
+.tab-bar{display:flex;gap:6px;max-width:440px;margin:0 auto 18px;background:rgba(255,255,255,0.02);border:1px solid #1a1a1a;border-radius:14px;padding:5px;}
+.tab-btn{flex:1;padding:10px 5px;background:transparent;border:none;color:#555;font-size:11px;cursor:pointer;border-radius:10px;letter-spacing:1px;font-family:'Share Tech Mono',monospace;transition:all .2s;}
+.tab-btn.active{background:rgba(255,234,0,0.1);color:var(--gold);border:1px solid rgba(255,234,0,0.3);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+.card{max-width:440px;margin:0 auto 20px;background:var(--card-bg);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:22px;backdrop-filter:blur(10px);}
+.card-title{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:18px;border-bottom:1px solid #1a1a1a;padding-bottom:10px;font-family:'Share Tech Mono',monospace;}
+
+/* ROLE SELECTOR */
+.role-row{display:flex;gap:8px;margin-bottom:14px;}
+.role-opt{flex:1;}
+.role-opt input{display:none;}
+.role-opt label{display:block;padding:11px 8px;border:1px solid #2a2a2a;border-radius:8px;text-align:center;font-size:11px;cursor:pointer;color:#666;transition:all .2s;font-family:'Share Tech Mono',monospace;}
+.role-opt input:checked+label{border-color:var(--gold);color:var(--gold);background:rgba(255,234,0,0.06);}
+
+/* DURATION — 1 to 30 days */
+.dur-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;}
+.d-opt{text-align:center;}
+.d-opt input{display:none;}
+.d-opt label{display:block;padding:8px 4px;border:1px solid #222;border-radius:7px;font-size:10px;cursor:pointer;color:#555;transition:all .2s;font-family:'Share Tech Mono',monospace;}
+.d-opt input:checked+label{border-color:var(--neon);color:var(--neon);background:rgba(0,255,65,0.06);}
+
+.btn-create{width:100%;padding:13px;background:linear-gradient(45deg,var(--neon),#008f11);border:none;border-radius:10px;color:#000;font-weight:900;font-size:13px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;font-family:'Orbitron',monospace;}
+.success-msg{color:var(--neon);font-size:12px;text-align:center;margin-top:8px;min-height:18px;font-family:'Share Tech Mono',monospace;}
+
+/* USER LIST */
+.u-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:rgba(255,255,255,0.02);border:1px solid #1a1a1a;border-radius:12px;margin-bottom:8px;}
+.u-left .u-name{color:var(--neon);font-weight:700;font-size:13px;margin-bottom:2px;font-family:'Orbitron',monospace;}
+.u-left .u-pass{color:#888;font-size:11px;margin-bottom:2px;font-family:'Share Tech Mono',monospace;}
+.u-left .u-time{font-size:10px;font-family:'Share Tech Mono',monospace;}
+.u-left .u-role-badge{font-size:9px;color:var(--cyan);letter-spacing:1px;margin-bottom:2px;}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:1px;margin-right:4px;}
+.b-active{background:rgba(0,255,65,0.1);color:var(--neon);border:1px solid var(--neon);}
+.b-expired{background:rgba(255,0,60,0.1);color:var(--danger);border:1px solid var(--danger);}
+.b-sub{background:rgba(0,229,255,0.1);color:var(--cyan);border:1px solid var(--cyan);}
+.del-btn{background:var(--danger);border:none;color:#fff;border-radius:7px;padding:6px 10px;cursor:pointer;font-size:10px;font-weight:700;letter-spacing:1px;font-family:'Share Tech Mono',monospace;}
+.empty{text-align:center;color:#333;font-size:12px;padding:25px;font-family:'Share Tech Mono',monospace;}
+
+.logout-btn{display:block;max-width:440px;margin:0 auto 30px;padding:11px;background:transparent;border:1px solid #222;border-radius:10px;color:#444;font-size:12px;cursor:pointer;letter-spacing:1px;width:100%;font-family:'Share Tech Mono',monospace;}
+.logout-btn:hover{border-color:var(--danger);color:var(--danger);}
+
+.stats-row{display:flex;gap:10px;max-width:440px;margin:0 auto 15px;}
+.stat-box{flex:1;background:rgba(255,255,255,0.02);border:1px solid #1a1a1a;border-radius:12px;padding:12px;text-align:center;}
+.stat-num{font-size:26px;font-weight:900;color:var(--gold);font-family:'Orbitron',monospace;}
+.stat-label{font-size:9px;color:#555;letter-spacing:1px;margin-top:2px;font-family:'Share Tech Mono',monospace;}
+
+/* SETTINGS */
+.set-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.set-label{font-size:11px;color:#888;letter-spacing:1px;flex:1;font-family:'Share Tech Mono',monospace;}
+.inp-sm{flex:2;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid #333;border-radius:8px;color:#fff;font-size:13px;outline:none;font-family:'Rajdhani',sans-serif;}
+.inp-sm:focus{border-color:var(--cyan);box-shadow:0 0 8px rgba(0,229,255,0.15);}
+.btn-save{padding:10px 18px;background:linear-gradient(45deg,var(--cyan),#007acc);border:none;border-radius:8px;color:#000;font-weight:900;font-size:11px;letter-spacing:1px;cursor:pointer;font-family:'Orbitron',monospace;}
+.settings-note{font-size:10px;color:#555;font-family:'Share Tech Mono',monospace;margin-top:6px;}
+
+/* SUB-ADMIN */
+.sa-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(0,229,255,0.03);border:1px solid rgba(0,229,255,0.15);border-radius:10px;margin-bottom:8px;}
+.sa-name{color:var(--cyan);font-weight:700;font-size:12px;font-family:'Orbitron',monospace;}
+.sa-pass{color:#666;font-size:10px;font-family:'Share Tech Mono',monospace;}
+</style>
+</head>
+<body>
+<canvas id="matrixCanvas"></canvas>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="lock-icon">🛡️</div>
+  <div class="admin-title">RATAN MAJUMDER</div>
+  <div class="admin-sub">ADMIN CONTROL PANEL</div>
+  <div class="login-box">
+    <label class="inp-label">ADMIN PASSWORD</label>
+    <input class="inp" type="password" id="aPass" placeholder="Master password দিন" onkeydown="if(event.key==='Enter')doAdminLogin()">
+    <button class="btn-gold" onclick="doAdminLogin()">🔓 MASTER LOGIN</button>
+    <div class="err" id="aErr"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="dash-header">
+    <div class="dash-title">⚙️ MASTER ADMIN</div>
+    <div class="dash-sub">RATAN MAJUMDER — CONTROL CENTER</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num" id="statTotal">0</div><div class="stat-label">TOTAL</div></div>
+    <div class="stat-box"><div class="stat-num" id="statActive" style="color:var(--neon)">0</div><div class="stat-label">ACTIVE</div></div>
+    <div class="stat-box"><div class="stat-num" id="statExpired" style="color:var(--danger)">0</div><div class="stat-label">EXPIRED</div></div>
+    <div class="stat-box"><div class="stat-num" id="statSub" style="color:var(--cyan)">0</div><div class="stat-label">SUB-ADMIN</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('tabUsers',this)">👥 USERS</button>
+    <button class="tab-btn" onclick="switchTab('tabSubAdmin',this)">🔰 SUB-ADMIN</button>
+    <button class="tab-btn" onclick="switchTab('tabSettings',this)">⚙️ SETTINGS</button>
+  </div>
+
+  <!-- TAB: USERS -->
+  <div id="tabUsers" class="tab-content active">
+    <div class="card">
+      <div class="card-title">➕ নতুন USER তৈরি</div>
+      <label class="inp-label">USERNAME</label>
+      <input class="inp" type="text" id="nUser" placeholder="Username" autocomplete="off">
+      <label class="inp-label">PASSWORD</label>
+      <input class="inp" type="text" id="nPass" placeholder="Password" autocomplete="off">
+      <label class="inp-label" style="margin-bottom:8px;">মেয়াদ (DAYS)</label>
+      <div class="dur-grid" id="durGrid"></div>
+      <div class="err" id="cErr"></div>
+      <button class="btn-create" onclick="createUser()">✅ USER তৈরি করুন</button>
+      <div class="success-msg" id="cOk"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">👥 USER LIST</div>
+      <div id="userList"><div class="empty">কোনো User নেই</div></div>
+    </div>
+  </div>
+
+  <!-- TAB: SUB-ADMIN -->
+  <div id="tabSubAdmin" class="tab-content">
+    <div class="card">
+      <div class="card-title">🔰 SUB-ADMIN তৈরি</div>
+      <div class="settings-note" style="margin-bottom:12px;color:#888;">Sub-admin শুধু User create করতে পারবে (1-30 দিন)। Settings বা Sub-admin manage করতে পারবে না।</div>
+      <label class="inp-label">SUB-ADMIN USERNAME</label>
+      <input class="inp" type="text" id="saUser" placeholder="Sub-admin username" autocomplete="off">
+      <label class="inp-label">SUB-ADMIN PASSWORD</label>
+      <input class="inp" type="text" id="saPass" placeholder="Sub-admin password" autocomplete="off">
+      <div class="err" id="saErr"></div>
+      <button class="btn-create" style="background:linear-gradient(45deg,var(--cyan),#007acc);" onclick="createSubAdmin()">✅ SUB-ADMIN তৈরি করুন</button>
+      <div class="success-msg" id="saOk"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔰 SUB-ADMIN LIST</div>
+      <div id="subAdminList"><div class="empty">কোনো Sub-admin নেই</div></div>
+    </div>
+  </div>
+
+  <!-- TAB: SETTINGS -->
+  <div id="tabSettings" class="tab-content">
+    <div class="card">
+      <div class="card-title">🌐 WEBSITE SETTINGS (index.html কন্ট্রোল)</div>
+      <div class="set-row">
+        <div class="set-label">SITE TITLE / NAME</div>
+        <input class="inp-sm" id="setTitle" placeholder="RATAN MAJUMDER">
+      </div>
+      <div class="set-row">
+        <div class="set-label">TELEGRAM GROUP LINK</div>
+        <input class="inp-sm" id="setTgGroup" placeholder="https://t.me/...">
+      </div>
+      <div class="set-row">
+        <div class="set-label">REFER LINK</div>
+        <input class="inp-sm" id="setRefLink" placeholder="https://...">
+      </div>
+      <div class="set-row">
+        <div class="set-label">REFER BUTTON TEXT</div>
+        <input class="inp-sm" id="setRefTxt" placeholder="Account খুলুন">
+      </div>
+      <div class="set-row">
+        <div class="set-label">ADMIN TELEGRAM</div>
+        <input class="inp-sm" id="setAdminTg" placeholder="@username">
+      </div>
+      <button class="btn-save" onclick="saveSettings()" style="width:100%;margin-top:6px;">💾 SAVE SETTINGS</button>
+      <div class="success-msg" id="setOk"></div>
+      <div class="settings-note">* Settings save করলে index.html এ automatically apply হবে (same device/browser)।</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔑 ADMIN PASSWORD পরিবর্তন</div>
+      <label class="inp-label">নতুন ADMIN PASSWORD</label>
+      <input class="inp" type="text" id="newAdminPass" placeholder="নতুন password">
+      <button class="btn-save" onclick="changeAdminPass()" style="width:100%;">🔄 PASSWORD পরিবর্তন করুন</button>
+      <div class="success-msg" id="passOk"></div>
+    </div>
+  </div>
+
+  <button class="logout-btn" onclick="adminLogout()">🚪 Logout</button>
+</div>
+
+<!-- SUB-ADMIN PANEL -->
+<div id="subDashboard" style="display:none;position:relative;z-index:10;padding:15px;">
+  <div class="dash-header">
+    <div class="dash-title" style="font-size:18px;">🔰 SUB-ADMIN</div>
+    <div class="dash-sub" id="subAdminName">---</div>
+  </div>
+  <div class="card">
+    <div class="card-title">➕ নতুন USER তৈরি</div>
+    <label class="inp-label">USERNAME</label>
+    <input class="inp" type="text" id="snUser" placeholder="Username" autocomplete="off">
+    <label class="inp-label">PASSWORD</label>
+    <input class="inp" type="text" id="snPass" placeholder="Password" autocomplete="off">
+    <label class="inp-label" style="margin-bottom:8px;">মেয়াদ (DAYS)</label>
+    <div class="dur-grid" id="subDurGrid"></div>
+    <div class="err" id="scErr"></div>
+    <button class="btn-create" onclick="subCreateUser()">✅ USER তৈরি করুন</button>
+    <div class="success-msg" id="scOk"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">👥 USER LIST</div>
+    <div id="subUserList"><div class="empty">কোনো User নেই</div></div>
+  </div>
+  <button class="logout-btn" onclick="subLogout()">🚪 Logout</button>
+</div>
+
+<script>
+// ─── MATRIX RAIN ───
+const canvas=document.getElementById('matrixCanvas');
+const ctx=canvas.getContext('2d');
+let cols,drops=[];
+function initMatrix(){
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  cols=Math.floor(canvas.width/14);drops=Array(cols).fill(1);
+}
+function drawMatrix(){
+  ctx.fillStyle='rgba(5,5,5,0.06)';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#00ff41';ctx.font='12px Share Tech Mono';
+  drops.forEach((y,i)=>{
+    const ch=String.fromCharCode(0x30A0+Math.random()*96);
+    ctx.fillText(ch,i*14,y*14);
+    if(y*14>canvas.height&&Math.random()>.975)drops[i]=0;
+    drops[i]++;
+  });
+}
+initMatrix();setInterval(drawMatrix,50);
+window.addEventListener('resize',initMatrix);
+
+// ─── CONSTANTS ───
+const STORE_KEY="ah_users_v2";
+const SA_KEY="ah_subadmins_v1";
+const SETTINGS_KEY="ah_settings_v1";
+const ADMIN_PASS_KEY="ah_admin_pass";
+const DEFAULT_PASS="Trader_Pram_2025";
+
+function getAdminPass(){return localStorage.getItem(ADMIN_PASS_KEY)||DEFAULT_PASS;}
+function getUsers(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return{};}}
+function saveUsers(u){localStorage.setItem(STORE_KEY,JSON.stringify(u));}
+function getSubAdmins(){try{return JSON.parse(localStorage.getItem(SA_KEY))||{};}catch(e){return{};}}
+function saveSubAdmins(s){localStorage.setItem(SA_KEY,JSON.stringify(s));}
+function getSettings(){try{return JSON.parse(localStorage.getItem(SETTINGS_KEY))||{};}catch(e){return{};}}
+function saveSettingsData(s){localStorage.setItem(SETTINGS_KEY,JSON.stringify(s));}
+function isExp(u){return Date.now()>u.expiry;}
+
+// Build duration grids
+function buildDurGrid(gridId,radioName){
+  const grid=document.getElementById(gridId);
+  if(!grid)return;
+  const labels={1:'১ দিন',2:'২ দিন',3:'৩ দিন',5:'৫ দিন',7:'৭ দিন',10:'১০ দিন',14:'১৪ দিন',15:'১৫ দিন',20:'২০ দিন',30:'৩০ দিন'};
+  let html='';
+  Object.entries(labels).forEach(([v,lbl],i)=>{
+    html+=`<div class="d-opt"><input type="radio" name="${radioName}" id="${radioName}_${v}" value="${v}"${i===0?' checked':''}><label for="${radioName}_${v}">${lbl}</label></div>`;
+  });
+  grid.innerHTML=html;
+}
+buildDurGrid('durGrid','dur');
+buildDurGrid('subDurGrid','sdur');
+
+// ─── ADMIN LOGIN ───
+function doAdminLogin(){
+  const p=document.getElementById('aPass').value.trim();
+  const e=document.getElementById('aErr');
+  if(p===getAdminPass()){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    loadSettings();renderAll();
+  } else {
+    // check sub-admin
+    const sas=getSubAdmins();
+    const saKey=Object.keys(sas).find(k=>sas[k].password===p);
+    if(saKey){
+      document.getElementById('loginScreen').style.display='none';
+      document.getElementById('subDashboard').style.display='block';
+      document.getElementById('subAdminName').textContent=`🔰 ${saKey}`;
+      renderSubUserList();return;
+    }
+    e.textContent='❌ Password ভুল!';setTimeout(()=>e.textContent='',2000);
+  }
+}
+
+function adminLogout(){
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('aPass').value='';
+}
+function subLogout(){
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('subDashboard').style.display='none';
+  document.getElementById('aPass').value='';
+}
+
+// ─── TABS ───
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── CREATE USER (ADMIN) ───
+function createUser(){
+  const u=document.getElementById('nUser').value.trim();
+  const p=document.getElementById('nPass').value.trim();
+  const checked=document.querySelector('input[name="dur"]:checked');
+  const dur=checked?parseInt(checked.value):1;
+  const ce=document.getElementById('cErr'),ok=document.getElementById('cOk');
+  ce.textContent='';ok.textContent='';
+  if(!u||!p){ce.textContent='⚠️ Username ও Password দিন';return;}
+  const users=getUsers();
+  const expiry=Date.now()+dur*86400000;
+  users[u]={password:p,expiry,duration:dur,created:Date.now(),type:'user'};
+  saveUsers(users);
+  document.getElementById('nUser').value='';document.getElementById('nPass').value='';
+  ok.textContent=`✅ "${u}" তৈরি! মেয়াদ: ${dur} দিন`;setTimeout(()=>ok.textContent='',3000);
+  renderAll();
+}
+
+// ─── CREATE USER (SUB-ADMIN) ───
+function subCreateUser(){
+  const u=document.getElementById('snUser').value.trim();
+  const p=document.getElementById('snPass').value.trim();
+  const checked=document.querySelector('input[name="sdur"]:checked');
+  const dur=checked?parseInt(checked.value):1;
+  const ce=document.getElementById('scErr'),ok=document.getElementById('scOk');
+  ce.textContent='';ok.textContent='';
+  if(!u||!p){ce.textContent='⚠️ Username ও Password দিন';return;}
+  const users=getUsers();
+  const expiry=Date.now()+dur*86400000;
+  users[u]={password:p,expiry,duration:dur,created:Date.now(),type:'user'};
+  saveUsers(users);
+  document.getElementById('snUser').value='';document.getElementById('snPass').value='';
+  ok.textContent=`✅ "${u}" তৈরি! মেয়াদ: ${dur} দিন`;setTimeout(()=>ok.textContent='',3000);
+  renderSubUserList();
+}
+
+// ─── CREATE SUB-ADMIN ───
+function createSubAdmin(){
+  const u=document.getElementById('saUser').value.trim();
+  const p=document.getElementById('saPass').value.trim();
+  const e=document.getElementById('saErr'),ok=document.getElementById('saOk');
+  e.textContent='';ok.textContent='';
+  if(!u||!p){e.textContent='⚠️ Username ও Password দিন';return;}
+  const sas=getSubAdmins();
+  sas[u]={password:p,created:Date.now()};
+  saveSubAdmins(sas);
+  document.getElementById('saUser').value='';document.getElementById('saPass').value='';
+  ok.textContent=`✅ Sub-admin "${u}" তৈরি!`;setTimeout(()=>ok.textContent='',3000);
+  renderAll();
+}
+
+function deleteSubAdmin(u){
+  if(!confirm(`"${u}" Sub-admin delete করবেন?`))return;
+  const sas=getSubAdmins();delete sas[u];saveSubAdmins(sas);renderAll();
+}
+
+// ─── DELETE USER ───
+function deleteUser(u){
+  if(!confirm(`"${u}" delete করবেন?`))return;
+  const users=getUsers();delete users[u];saveUsers(users);renderAll();
+}
+
+// ─── SETTINGS ───
+function loadSettings(){
+  const s=getSettings();
+  document.getElementById('setTitle').value=s.title||'RATAN MAJUMDER';
+  document.getElementById('setTgGroup').value=s.tgGroup||'https://t.me/+AwKPRGkaz1c1NTE1';
+  document.getElementById('setRefLink').value=s.refLink||'https://22bdwin24.com/register?inviteCode=REK7REN&from=web';
+  document.getElementById('setRefTxt').value=s.refTxt||'Account খুলুন (Refer Link)';
+  document.getElementById('setAdminTg').value=s.adminTg||'@Trader_Pram';
+}
+function saveSettings(){
+  const s={
+    title:document.getElementById('setTitle').value.trim(),
+    tgGroup:document.getElementById('setTgGroup').value.trim(),
+    refLink:document.getElementById('setRefLink').value.trim(),
+    refTxt:document.getElementById('setRefTxt').value.trim(),
+    adminTg:document.getElementById('setAdminTg').value.trim(),
+  };
+  saveSettingsData(s);
+  document.getElementById('setOk').textContent='✅ Settings save হয়েছে!';
+  setTimeout(()=>document.getElementById('setOk').textContent='',3000);
+}
+function changeAdminPass(){
+  const np=document.getElementById('newAdminPass').value.trim();
+  if(!np){return;}
+  localStorage.setItem(ADMIN_PASS_KEY,np);
+  document.getElementById('newAdminPass').value='';
+  document.getElementById('passOk').textContent='✅ Password পরিবর্তন হয়েছে!';
+  setTimeout(()=>document.getElementById('passOk').textContent='',3000);
+}
+
+// ─── RENDER ───
+function renderAll(){
+  const users=getUsers();const keys=Object.keys(users);
+  const sas=getSubAdmins();const saKeys=Object.keys(sas);
+  const active=keys.filter(k=>!isExp(users[k])).length;
+  document.getElementById('statTotal').textContent=keys.length;
+  document.getElementById('statActive').textContent=active;
+  document.getElementById('statExpired').textContent=keys.length-active;
+  document.getElementById('statSub').textContent=saKeys.length;
+
+  const container=document.getElementById('userList');
+  if(!keys.length){container.innerHTML='<div class="empty">কোনো User নেই।</div>';} else {
+    keys.sort((a,b)=>{const ea=isExp(users[a]),eb=isExp(users[b]);if(ea&&!eb)return 1;if(!ea&&eb)return -1;return users[b].created-users[a].created;});
+    container.innerHTML=keys.map(u=>{
+      const usr=users[u];const exp=isExp(usr);
+      const left=Math.max(0,usr.expiry-Date.now());
+      const d=Math.floor(left/86400000);const h=Math.floor((left%86400000)/3600000);
+      const timeStr=exp?'⏰ মেয়াদ শেষ':`⏳ ${d}d ${h}h বাকি`;
+      const badge=exp?'<span class="badge b-expired">EXPIRED</span>':'<span class="badge b-active">ACTIVE</span>';
+      return `<div class="u-item"><div class="u-left"><div class="u-name">👤 ${u}</div><div class="u-pass">🔑 ${usr.password}</div><div class="u-time">${badge}${timeStr}</div></div><button class="del-btn" onclick="deleteUser('${u}')">DELETE</button></div>`;
+    }).join('');
+  }
+
+  const saContainer=document.getElementById('subAdminList');
+  if(!saKeys.length){saContainer.innerHTML='<div class="empty">কোনো Sub-admin নেই।</div>';} else {
+    saContainer.innerHTML=saKeys.map(u=>{
+      const sa=sas[u];
+      return `<div class="sa-item"><div><div class="sa-name">🔰 ${u}</div><div class="sa-pass">🔑 ${sa.password}</div></div><button class="del-btn" onclick="deleteSubAdmin('${u}')">DELETE</button></div>`;
+    }).join('');
+  }
+}
+
+function renderSubUserList(){
+  const users=getUsers();const keys=Object.keys(users);
+  const container=document.getElementById('subUserList');
+  if(!keys.length){container.innerHTML='<div class="empty">কোনো User নেই।</div>';return;}
+  keys.sort((a,b)=>{const ea=isExp(users[a]),eb=isExp(users[b]);if(ea&&!eb)return 1;if(!ea&&eb)return -1;return users[b].created-users[a].created;});
+  container.innerHTML=keys.map(u=>{
+    const usr=users[u];const exp=isExp(usr);
+    const left=Math.max(0,usr.expiry-Date.now());
+    const d=Math.floor(left/86400000);const h=Math.floor((left%86400000)/3600000);
+    const timeStr=exp?'⏰ মেয়াদ শেষ':`⏳ ${d}d ${h}h বাকি`;
+    const badge=exp?'<span class="badge b-expired">EXPIRED</span>':'<span class="badge b-active">ACTIVE</span>';
+    return `<div class="u-item"><div class="u-left"><div class="u-name">👤 ${u}</div><div class="u-pass">🔑 ${usr.password}</div><div class="u-time">${badge}${timeStr}</div></div></div>`;
+  }).join('');
+}
+
+setInterval(()=>{
+  if(document.getElementById('dashboard').style.display==='block')renderAll();
+  if(document.getElementById('subDashboard').style.display==='block')renderSubUserList();
+},30000);
+</script>
+</body>
+</html>

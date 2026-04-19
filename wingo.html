@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RATAN MAJUMDER</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+:root{
+  --neon:#00ff41;--danger:#ff003c;--gold:#ffea00;--bg:#020408;
+  --cyan:#00e5ff;--purple:#b45cff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{perspective:1000px;}
+body{
+  background:var(--bg);color:#fff;
+  font-family:'Rajdhani',sans-serif;
+  user-select:none;overflow-x:hidden;
+  min-height:100vh;
+}
+body::after{
+  content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,65,0.012) 3px,rgba(0,255,65,0.012) 4px);
+  pointer-events:none;z-index:9998;
+}
+
+/* ── CANVAS BACKGROUND ── */
+#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;position:relative;z-index:10;}
+.page.active{display:block;}
+
+/* ── FLOATING PARTICLES ── */
+.particle{position:fixed;pointer-events:none;z-index:1;font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,255,65,0.4);animation:floatUp linear infinite;}
+@keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:.5}100%{transform:translateY(-10vh) rotate(360deg);opacity:0}}
+
+/* ── HEADER ── */
+.hdr{text-align:center;padding:32px 10px 14px;position:relative;}
+.hdr::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--neon),transparent);}
+.hdr-name{
+  font-size:28px;font-weight:900;letter-spacing:4px;
+  font-family:'Orbitron',monospace;text-transform:uppercase;
+  background:linear-gradient(135deg,#fff 0%,var(--gold) 40%,var(--neon) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:nameGlitch 3s infinite;
+  text-shadow:none;
+  filter:drop-shadow(0 0 15px rgba(0,255,65,0.4));
+}
+@keyframes nameGlitch{
+  0%,90%,100%{transform:skew(0deg);letter-spacing:4px;}
+  91%{transform:skew(-4deg);letter-spacing:6px;filter:drop-shadow(3px 0 0 var(--danger)) drop-shadow(-3px 0 0 var(--neon));}
+  93%{transform:skew(4deg);letter-spacing:2px;}
+  95%{transform:skew(0deg);letter-spacing:4px;}
+}
+.hdr-sub{color:var(--gold);font-size:9px;letter-spacing:5px;margin-top:6px;font-family:'Share Tech Mono',monospace;opacity:.7;}
+
+/* ── 3D CARD ── */
+.card-3d{
+  max-width:400px;margin:0 auto 18px;
+  background:linear-gradient(135deg,rgba(0,255,65,0.04),rgba(0,0,0,0.6),rgba(255,234,0,0.03));
+  border:1px solid rgba(0,255,65,0.2);border-radius:22px;padding:24px;
+  backdrop-filter:blur(20px);
+  transform:rotateX(2deg) rotateY(1deg);
+  transition:transform .3s ease,box-shadow .3s ease;
+  box-shadow:0 10px 40px rgba(0,0,0,0.8),0 0 30px rgba(0,255,65,0.05),inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.card-3d:hover{
+  transform:rotateX(0deg) rotateY(0deg) translateY(-3px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.9),0 0 40px rgba(0,255,65,0.1);
+}
+
+/* ── JOIN PAGE ── */
+.hero-wrap{text-align:center;padding:10px 20px 20px;max-width:400px;margin:0 auto;}
+.avatar-ring{
+  width:100px;height:100px;border-radius:50%;margin:0 auto 16px;
+  background:linear-gradient(135deg,#0a0a0a,#111500);
+  border:2px solid transparent;
+  background-clip:padding-box;
+  position:relative;display:flex;align-items:center;justify-content:center;
+  font-size:52px;
+}
+.avatar-ring::before{
+  content:'';position:absolute;inset:-2px;border-radius:50%;
+  background:conic-gradient(var(--neon),var(--gold),var(--cyan),var(--neon));
+  z-index:-1;animation:spinRing 3s linear infinite;
+}
+.avatar-ring::after{
+  content:'';position:absolute;inset:2px;border-radius:50%;
+  background:#0a0a0a;z-index:-1;
+}
+@keyframes spinRing{to{transform:rotate(360deg);}}
+.hero-title{font-size:22px;font-weight:900;letter-spacing:2px;color:var(--gold);margin-bottom:6px;font-family:'Orbitron',monospace;}
+.hero-desc{font-size:12px;color:#777;line-height:1.8;margin-bottom:20px;}
+.step-wrap{text-align:left;margin-bottom:20px;}
+.step{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;font-size:13px;color:#aaa;position:relative;}
+.step::after{content:'';position:absolute;left:10px;top:26px;width:1px;height:calc(100% - 4px);background:linear-gradient(to bottom,rgba(0,255,65,0.3),transparent);}
+.step:last-child::after{display:none;}
+.step-num{
+  background:linear-gradient(135deg,var(--neon),#005a0f);
+  color:#000;border-radius:50%;width:22px;height:22px;min-width:22px;
+  font-size:10px;font-weight:900;line-height:22px;text-align:center;
+  font-family:'Orbitron',monospace;
+}
+
+/* ── BUTTONS ── */
+.btn-tg{
+  display:block;width:100%;padding:15px;
+  background:linear-gradient(45deg,#0088cc,#005fa3);
+  border:none;border-radius:14px;color:#fff;font-weight:700;font-size:14px;letter-spacing:2px;
+  cursor:pointer;text-decoration:none;text-align:center;margin-bottom:8px;
+  font-family:'Orbitron',monospace;position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+  box-shadow:0 4px 20px rgba(0,136,204,0.3);
+}
+.btn-tg:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,136,204,0.5);}
+.btn-tg::after{content:'';position:absolute;top:-50%;left:-60%;width:40%;height:200%;background:rgba(255,255,255,0.15);transform:skewX(-25deg);animation:shimmer 3s infinite;}
+@keyframes shimmer{0%{left:-60%}100%{left:160%}}
+
+.btn-ref{
+  display:block;padding:14px;
+  background:linear-gradient(45deg,#ff6600,#cc2200);
+  border-radius:12px;color:#fff;font-weight:900;font-size:13px;
+  text-decoration:none;letter-spacing:1px;text-align:center;
+  font-family:'Orbitron',monospace;position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+  box-shadow:0 4px 20px rgba(255,100,0,0.3);
+}
+.btn-ref:hover{transform:translateY(-2px);}
+.btn-ref::after{content:'';position:absolute;top:-50%;left:-60%;width:40%;height:200%;background:rgba(255,255,255,0.15);transform:skewX(-25deg);animation:shimmer 3s infinite 1s;}
+
+.btn-fb{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:13px;
+  background:linear-gradient(45deg,#1877f2,#0d5fce);
+  border:none;border-radius:12px;color:#fff;font-weight:700;font-size:13px;letter-spacing:1px;
+  cursor:pointer;text-decoration:none;text-align:center;
+  font-family:'Rajdhani',sans-serif;
+  transition:transform .2s,box-shadow .2s;
+  box-shadow:0 4px 20px rgba(24,119,242,0.3);
+}
+.btn-fb:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(24,119,242,0.5);}
+.fb-icon{width:20px;height:20px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#1877f2;font-weight:900;font-size:13px;flex-shrink:0;}
+
+.btn-skip{
+  width:100%;padding:12px;background:transparent;
+  border:1px solid rgba(0,255,65,0.2);border-radius:10px;
+  color:#555;font-size:12px;cursor:pointer;letter-spacing:1px;
+  margin-top:6px;transition:all .2s;font-family:'Share Tech Mono',monospace;
+}
+.btn-skip:hover{border-color:var(--neon);color:var(--neon);background:rgba(0,255,65,0.04);}
+
+.ref-box{
+  background:rgba(255,234,0,0.03);border:1px dashed rgba(255,234,0,0.3);
+  border-radius:16px;padding:16px 18px;margin-bottom:12px;text-align:center;
+}
+.ref-title{font-size:10px;color:var(--gold);letter-spacing:2px;margin-bottom:10px;font-family:'Share Tech Mono',monospace;}
+
+.divider{max-width:400px;margin:0 auto 12px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,65,0.2),transparent);}
+
+/* FOOTER */
+.footer{text-align:center;padding:20px 15px 30px;}
+.footer-dev{font-size:10px;color:#2a2a2a;font-family:'Share Tech Mono',monospace;margin-bottom:10px;}
+.footer-dev span{color:#444;}
+.footer-contact{font-size:11px;color:#333;font-family:'Share Tech Mono',monospace;}
+.footer-contact a{color:rgba(0,255,65,0.5);text-decoration:none;}
+
+/* ── HACK SPLASH ── */
+#hackSplash{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:9990;
+  background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.hack-title{
+  font-family:'Share Tech Mono',monospace;font-size:clamp(18px,5vw,32px);
+  color:var(--neon);letter-spacing:3px;text-align:center;margin-bottom:20px;
+  text-shadow:0 0 20px var(--neon),0 0 40px var(--neon);
+}
+.hack-line{font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(0,255,65,0.6);margin-bottom:4px;text-align:left;width:min(90%,400px);}
+.hack-bar-wrap{width:min(90%,400px);height:4px;background:#111;border-radius:4px;overflow:hidden;margin:20px 0 10px;}
+.hack-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--neon),var(--cyan));border-radius:4px;transition:width .1s linear;}
+.hack-pct{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--neon);}
+.hack-status{font-family:'Orbitron',monospace;font-size:11px;color:var(--gold);letter-spacing:3px;margin-top:14px;opacity:0;transition:opacity .5s;}
+
+/* ── LOGIN PAGE ── */
+.login-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#0a0a00,#001400);border:2px solid var(--gold);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:38px;position:relative;}
+.login-avatar::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(255,234,0,0.2);animation:scanPulse 2s infinite;}
+@keyframes scanPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.05);opacity:1}}
+.login-title{font-size:16px;font-weight:700;color:var(--gold);letter-spacing:3px;font-family:'Orbitron',monospace;}
+.login-sub{font-size:11px;color:#444;letter-spacing:1px;font-family:'Share Tech Mono',monospace;margin-top:4px;}
+.inp-label{font-size:10px;color:#666;letter-spacing:2px;display:block;margin-bottom:6px;font-family:'Share Tech Mono',monospace;}
+.inp{
+  width:100%;padding:13px 15px;
+  background:rgba(0,255,65,0.03);
+  border:1px solid rgba(0,255,65,0.15);
+  border-radius:10px;color:#fff;font-size:14px;outline:none;margin-bottom:14px;
+  font-family:'Rajdhani',sans-serif;transition:border-color .2s,box-shadow .2s;
+}
+.inp:focus{border-color:var(--neon);box-shadow:0 0 12px rgba(0,255,65,0.2);}
+.btn-login{
+  width:100%;padding:14px;
+  background:linear-gradient(45deg,var(--neon),#006f11);
+  border:none;border-radius:12px;color:#000;font-weight:900;font-size:14px;letter-spacing:3px;
+  cursor:pointer;text-transform:uppercase;font-family:'Orbitron',monospace;
+  box-shadow:0 4px 20px rgba(0,255,65,0.3);transition:transform .2s,box-shadow .2s;
+}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,255,65,0.5);}
+.err{color:var(--danger);font-size:12px;text-align:center;min-height:18px;margin-bottom:6px;font-family:'Share Tech Mono',monospace;}
+.contact-hint{font-size:11px;color:#333;text-align:center;margin-top:10px;font-family:'Share Tech Mono',monospace;}
+.contact-hint a{color:rgba(0,255,65,0.5);text-decoration:none;}
+
+/* ── APP PAGE ── */
+.session-bar-wrap{max-width:400px;margin:0 auto 6px;padding:0 5px;}
+.session-info{display:flex;justify-content:space-between;font-size:11px;color:#444;margin-bottom:5px;font-family:'Share Tech Mono',monospace;}
+.session-info span{color:var(--gold);}
+.timer-bar{background:#0a0a0a;border-radius:4px;height:3px;overflow:hidden;margin-bottom:14px;max-width:400px;margin-left:auto;margin-right:auto;border:1px solid #111;}
+.timer-fill{height:100%;background:linear-gradient(90deg,var(--neon),var(--cyan));transition:width 1s linear;}
+.pred-val{
+  font-size:60px;font-weight:900;margin:12px 0;
+  font-family:'Orbitron',monospace;
+  filter:drop-shadow(0 0 20px var(--neon)) drop-shadow(0 0 40px rgba(0,255,65,0.3));
+  animation:predPulse 2s infinite;
+}
+@keyframes predPulse{0%,100%{filter:drop-shadow(0 0 20px var(--neon))}50%{filter:drop-shadow(0 0 40px var(--neon)) drop-shadow(0 0 80px rgba(0,255,65,0.4));}}
+.period-txt{color:#444;font-size:12px;font-family:'Share Tech Mono',monospace;letter-spacing:2px;}
+.opp-box{
+  color:var(--gold);font-size:13px;font-weight:700;
+  border:1px dashed rgba(255,234,0,0.3);padding:10px;border-radius:8px;margin-top:10px;
+  font-family:'Share Tech Mono',monospace;
+  background:rgba(255,234,0,0.03);
+}
+table{width:100%;margin-top:18px;border-collapse:collapse;font-size:11px;}
+th{color:#333;border-bottom:1px solid #111;padding:8px;letter-spacing:1px;font-family:'Share Tech Mono',monospace;}
+td{padding:10px;border-bottom:1px solid #0a0a0a;text-align:center;font-family:'Share Tech Mono',monospace;}
+.win{color:var(--neon);font-weight:700;}
+.loss{color:var(--danger);font-weight:700;}
+.logout-btn{
+  display:block;max-width:400px;margin:0 auto 30px;padding:10px;
+  background:transparent;border:1px solid #1a1a1a;border-radius:10px;
+  color:#2a2a2a;font-size:11px;cursor:pointer;letter-spacing:1px;
+  width:calc(100% - 30px);font-family:'Share Tech Mono',monospace;transition:all .2s;
+}
+.logout-btn:hover{border-color:var(--danger);color:var(--danger);}
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+<!-- ════ BACKGROUND CANVAS ════ -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- ════ HACK SPLASH ════ -->
+<div id="hackSplash">
+  <div class="hack-title">◈ SYSTEM INITIALIZING ◈</div>
+  <div id="hackLines" style="width:min(90%,400px);"></div>
+  <div class="hack-bar-wrap"><div class="hack-bar" id="hackBar"></div></div>
+  <div class="hack-pct" id="hackPct">0%</div>
+  <div class="hack-status" id="hackStatus">ACCESS GRANTED</div>
+</div>
+
+<!-- ════ PAGE 1: JOIN ════ -->
+<div id="joinPage" class="page">
+  <div class="hdr">
+    <div class="hdr-name" id="siteName">RATAN MAJUMDER</div>
+    <div class="hdr-sub">GLOBAL EDITION V15</div>
+  </div>
+
+  <div class="hero-wrap">
+    <div class="avatar-ring">🎯</div>
+    <div class="hero-title">UNLOCK ACCESS</div>
+    <div class="hero-desc">এই ওয়েব ব্যবহার করতে নিচের ধাপগুলো অনুসরণ করুন।<br><strong style="color:var(--gold)">সম্পূর্ণ ফ্রি!</strong></div>
+
+    <div class="step-wrap">
+      <div class="step"><div class="step-num">১</div><div>টেলিগ্রাম চ্যানেলে <strong style="color:var(--neon)">Join</strong> করুন</div></div>
+      <div class="step"><div class="step-num">২</div><div>আমার Refer Link দিয়ে <strong style="color:var(--gold)">Account</strong> খুলুন</div></div>
+      <div class="step"><div class="step-num">৩</div><div>Admin এর কাছ থেকে <strong style="color:var(--danger)">Password</strong> নিন</div></div>
+    </div>
+
+    <a id="tgGroupBtn" href="#" target="_blank" class="btn-tg">
+      📢 টেলিগ্রাম চ্যানেলে Join করুন
+    </a>
+    <button class="btn-skip" onclick="goLogin()">✅ Join করা হয়েছে — পরের ধাপ</button>
+
+    <div style="height:16px;"></div>
+    <div class="ref-box">
+      <div class="ref-title">🎯 রেফার লিংক দিয়ে Account খুলুন</div>
+      <a id="refLinkBtn" href="#" target="_blank" class="btn-ref" id="refBtn">Account খুলুন (Refer Link)</a>
+      <div style="font-size:10px;color:#444;margin-top:8px;font-family:'Share Tech Mono',monospace;">Account থাকলে এই ধাপ Skip করুন</div>
+    </div>
+
+    <button class="btn-skip" onclick="goLogin()">⏭️ সব হয়ে গেছে — Login করুন</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <div style="max-width:400px;margin:0 auto;padding:0 15px 10px;">
+    <a href="https://www.facebook.com/profile.php?id=61552305287329" target="_blank" class="btn-fb">
+      <div class="fb-icon">f</div>
+      Developer-এর Facebook এ যোগাযোগ করুন
+    </a>
+  </div>
+
+  <div class="footer">
+    <div class="footer-dev">DEVELOPED BY <span>RATAN MAJUMDER</span></div>
+    <div class="footer-dev" style="margin-bottom:6px;font-size:9px;color:#1a1a1a;">HACK OPEN — NICE DEVELOPER</div>
+    <div class="footer-contact">যোগাযোগ: <a id="adminTgLink" href="https://t.me/Trader_Pram" target="_blank">@Trader_Pram</a></div>
+    <div style="margin-top:10px;">
+      <a href="https://www.facebook.com/profile.php?id=61552305287329" target="_blank" style="font-size:10px;color:#1877f2;font-family:'Share Tech Mono',monospace;text-decoration:none;">🌐 Website বানাতে যোগাযোগ করুন</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PAGE 2: LOGIN ════ -->
+<div id="loginPage" class="page">
+  <div class="hdr">
+    <div class="hdr-name" id="siteNameLogin">RATAN MAJUMDER</div>
+    <div class="hdr-sub">USER LOGIN</div>
+  </div>
+  <div class="card-3d" style="margin-top:10px;">
+    <div style="text-align:center;margin-bottom:20px;">
+      <div class="login-avatar">🔐</div>
+      <div class="login-title" id="adminTgTitle">@TRADER_PRAM</div>
+      <div class="login-sub">Admin এর দেওয়া credentials দিন</div>
+    </div>
+    <label class="inp-label">USERNAME</label>
+    <input class="inp" type="text" id="lUser" placeholder="Username দিন" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()">
+    <label class="inp-label">PASSWORD</label>
+    <input class="inp" type="password" id="lPass" placeholder="Password দিন" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="err" id="lErr"></div>
+    <button class="btn-login" onclick="doLogin()">🚀 LOGIN</button>
+    <div class="contact-hint">Password নেই? <a id="adminTgHint" href="https://t.me/Trader_Pram" target="_blank">@Trader_Pram</a></div>
+  </div>
+
+  <div style="max-width:400px;margin:12px auto 0;padding:0 15px;">
+    <a href="https://www.facebook.com/profile.php?id=61552305287329" target="_blank" class="btn-fb">
+      <div class="fb-icon">f</div>
+      Developer Facebook
+    </a>
+  </div>
+
+  <div class="footer">
+    <div class="footer-dev">DEVELOPED BY <span>RATAN MAJUMDER</span></div>
+    <div style="margin-top:8px;"><a href="https://www.facebook.com/profile.php?id=61552305287329" target="_blank" style="font-size:10px;color:#1877f2;font-family:'Share Tech Mono',monospace;text-decoration:none;">🌐 Website বানাতে যোগাযোগ করুন</a></div>
+  </div>
+</div>
+
+<!-- ════ PAGE 3: APP ════ -->
+<div id="appPage" class="page">
+  <div class="hdr">
+    <div class="hdr-name" id="siteNameApp">RATAN MAJUMDER</div>
+    <div class="hdr-sub">GLOBAL EDITION V15</div>
+  </div>
+
+  <div class="session-bar-wrap">
+    <div class="session-info"><span id="sUser">---</span><span id="sTimer">---</span></div>
+  </div>
+  <div class="timer-bar"><div class="timer-fill" id="tFill" style="width:100%"></div></div>
+
+  <div class="card-3d" style="text-align:center;">
+    <div class="period-txt" id="pID">PERIOD: ---</div>
+    <div class="pred-val" id="pRes">WAIT...</div>
+    <div class="opp-box" id="pOpps">SYNCING...</div>
+    <table>
+      <thead><tr><th>PRD</th><th>PRED</th><th>NUM</th><th>STATUS</th></tr></thead>
+      <tbody id="logs"></tbody>
+    </table>
+  </div>
+
+  <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
+  <div class="footer">
+    <div class="footer-dev">DEVELOPED BY <span>RATAN MAJUMDER</span></div>
+    <div style="margin-top:6px;"><a href="https://www.facebook.com/profile.php?id=61552305287329" target="_blank" style="font-size:10px;color:#1877f2;font-family:'Share Tech Mono',monospace;text-decoration:none;">🌐 Website বানাতে যোগাযোগ করুন</a></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════
+// BACKGROUND — CIRCUIT / PARTICLE 3D
+// ═══════════════════════════════════
+const bgCanvas=document.getElementById('bgCanvas');
+const bgCtx=bgCanvas.getContext('2d');
+let W,H,nodes=[];
+function resizeBg(){W=bgCanvas.width=window.innerWidth;H=bgCanvas.height=window.innerHeight;initNodes();}
+function initNodes(){
+  nodes=Array.from({length:60},()=>({
+    x:Math.random()*W,y:Math.random()*H,
+    vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,
+    r:Math.random()*2+1,
+    color:Math.random()>.7?'rgba(0,229,255,':'rgba(0,255,65,',
+  }));
+}
+function drawBg(){
+  bgCtx.clearRect(0,0,W,H);
+  bgCtx.fillStyle='rgba(2,4,8,0.92)';bgCtx.fillRect(0,0,W,H);
+  nodes.forEach((n,i)=>{
+    n.x+=n.vx;n.y+=n.vy;
+    if(n.x<0||n.x>W)n.vx*=-1;
+    if(n.y<0||n.y>H)n.vy*=-1;
+    nodes.forEach((m,j)=>{
+      if(j<=i)return;
+      const d=Math.hypot(n.x-m.x,n.y-m.y);
+      if(d<120){
+        bgCtx.beginPath();
+        bgCtx.strokeStyle=`rgba(0,255,65,${(1-d/120)*.15})`;
+        bgCtx.lineWidth=.5;bgCtx.moveTo(n.x,n.y);bgCtx.lineTo(m.x,m.y);bgCtx.stroke();
+      }
+    });
+    bgCtx.beginPath();
+    bgCtx.fillStyle=n.color+'0.5)';
+    bgCtx.arc(n.x,n.y,n.r,0,Math.PI*2);bgCtx.fill();
+  });
+  requestAnimationFrame(drawBg);
+}
+window.addEventListener('resize',resizeBg);
+resizeBg();drawBg();
+
+// ════ FLOATING CODE PARTICLES ════
+const codeChars=['01','10','00','11','/>','{}','[]','//','&&','||','!=','==','++','--','<>'];
+function spawnParticle(){
+  const p=document.createElement('div');
+  p.className='particle';
+  p.textContent=codeChars[Math.floor(Math.random()*codeChars.length)];
+  p.style.left=Math.random()*100+'vw';
+  p.style.animationDuration=(8+Math.random()*12)+'s';
+  p.style.animationDelay=Math.random()*5+'s';
+  p.style.fontSize=(9+Math.random()*6)+'px';
+  p.style.opacity=Math.random()*.5+.1;
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),(20000));
+}
+setInterval(spawnParticle,600);
+
+// ════ HACK SPLASH ANIMATION ════
+const hackLines=[
+  '> Initializing secure connection...',
+  '> Loading encrypted modules...',
+  '> Verifying system integrity...',
+  '> Bypassing firewall [■■■■■■■■]...',
+  '> Decrypting user database...',
+  '> Establishing neural link...',
+  '> SYSTEM READY',
+];
+let hlIdx=0,pct=0;
+const hackBar=document.getElementById('hackBar');
+const hackPct=document.getElementById('hackPct');
+const hackStatus=document.getElementById('hackStatus');
+const hackLinesDiv=document.getElementById('hackLines');
+
+function addHackLine(){
+  if(hlIdx<hackLines.length){
+    const d=document.createElement('div');
+    d.className='hack-line';d.textContent=hackLines[hlIdx++];
+    hackLinesDiv.appendChild(d);
+    if(hackLinesDiv.children.length>5)hackLinesDiv.removeChild(hackLinesDiv.firstChild);
+  }
+}
+const hackInterval=setInterval(()=>{
+  pct+=Math.random()*8+3;if(pct>100)pct=100;
+  hackBar.style.width=pct+'%';
+  hackPct.textContent=Math.floor(pct)+'%';
+  if(Math.random()>.4)addHackLine();
+  if(pct>=100){
+    clearInterval(hackInterval);
+    hackStatus.style.opacity='1';
+    setTimeout(()=>{
+      document.getElementById('hackSplash').style.transition='opacity .8s ease';
+      document.getElementById('hackSplash').style.opacity='0';
+      setTimeout(()=>{document.getElementById('hackSplash').style.display='none';applySettings();checkAutoLogin();},800);
+    },900);
+  }
+},120);
+
+// ════ SETTINGS ════
+const SETTINGS_KEY='ah_settings_v1';
+function getSettings(){try{return JSON.parse(localStorage.getItem(SETTINGS_KEY))||{};}catch(e){return{};}}
+function applySettings(){
+  const s=getSettings();
+  const title=s.title||'RATAN MAJUMDER';
+  ['siteName','siteNameLogin','siteNameApp'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=title;});
+  document.title=title;
+  if(s.tgGroup){document.getElementById('tgGroupBtn').href=s.tgGroup;}
+  if(s.refLink){document.getElementById('refLinkBtn').href=s.refLink;}
+  if(s.refTxt){document.getElementById('refLinkBtn').textContent=s.refTxt;}
+  if(s.adminTg){
+    const tg=s.adminTg;
+    const handle=tg.startsWith('@')?tg.substring(1):tg;
+    const url='https://t.me/'+handle;
+    ['adminTgLink','adminTgHint'].forEach(id=>{const el=document.getElementById(id);if(el){el.href=url;el.textContent=s.adminTg;}});
+    const t2=document.getElementById('adminTgTitle');if(t2)t2.textContent=s.adminTg.toUpperCase();
+  }
+}
+
+// ════ AUTH ════
+const STORE_KEY='ah_users_v2';
+function getUsers(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return{};}}
+function isExp(u){return Date.now()>u.expiry;}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function goLogin(){showPage('loginPage');}
+
+function doLogin(){
+  const u=document.getElementById('lUser').value.trim();
+  const p=document.getElementById('lPass').value.trim();
+  const e=document.getElementById('lErr');e.textContent='';
+  if(!u||!p){e.textContent='⚠️ Username ও Password দিন';return;}
+  const users=getUsers();
+  if(!users[u]){e.textContent='❌ User পাওয়া যায়নি।';return;}
+  if(users[u].password!==p){e.textContent='❌ Password ভুল!';return;}
+  if(isExp(users[u])){e.textContent='⏰ মেয়াদ শেষ।';return;}
+  sessionStorage.setItem('ah_u',u);
+  startApp(u,users[u].expiry);
+}
+
+function doLogout(){
+  sessionStorage.removeItem('ah_u');
+  clearInterval(window._app);clearInterval(window._timer);
+  window.lastId=null;document.getElementById('logs').innerHTML='';
+  showPage('loginPage');
+  document.getElementById('lUser').value='';document.getElementById('lPass').value='';document.getElementById('lErr').textContent='';
+}
+
+// ════ TIMER ════
+function startTimer(expiry){
+  const total=expiry-Date.now();
+  function tick(){
+    const left=Math.max(0,expiry-Date.now());
+    if(left===0){clearInterval(window._timer);clearInterval(window._app);alert('⏰ Session শেষ।');doLogout();return;}
+    const h=Math.floor(left/3600000);const m=Math.floor((left%3600000)/60000);const s=Math.floor((left%60000)/1000);
+    document.getElementById('sTimer').textContent=`⏳ ${h}h ${m}m ${s}s`;
+    document.getElementById('tFill').style.width=Math.max(0,(left/total)*100)+'%';
+  }
+  tick();window._timer=setInterval(tick,1000);
+}
+
+// ════ APP ════
+const BIG=[5,6,7,8,9],SMALL=[0,1,2,3,4];
+let curOpp=[];
+function startApp(username,expiry){
+  showPage('appPage');
+  document.getElementById('sUser').textContent='👤 '+username;
+  startTimer(expiry);
+  window.lastId=null;document.getElementById('logs').innerHTML='';
+  document.getElementById('pRes').textContent='WAIT...';
+  document.getElementById('pOpps').textContent='SYNCING...';
+  document.getElementById('pID').textContent='PERIOD: ---';
+  clearInterval(window._app);
+  window._app=setInterval(async()=>{
+    try{
+      const res=await fetch('https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json');
+      const json=await res.json();
+      const latest=json.data.list[0];
+      const trend=json.data.list.slice(0,3).map(x=>parseInt(x.number)>=5?"BIG":"SMALL");
+      const nextPred=trend.filter(x=>x==="BIG").length>1?"BIG":"SMALL";
+      if(window.lastId!==latest.issueNumber){
+        const actualSize=parseInt(latest.number)>=5?"BIG":"SMALL";
+        let check=window.savedPred||nextPred;
+        const same=check==="BIG"?BIG:SMALL;const opp=check==="BIG"?SMALL:BIG;
+        const n1=same[Math.floor(Math.random()*same.length)];const n2=opp[Math.floor(Math.random()*opp.length)];
+        curOpp=[n1,n2];
+        if(window.lastId){
+          const win=(check===actualSize)||window.savedOpp.includes(parseInt(latest.number));
+          const row=`<tr><td>${latest.issueNumber.slice(-3)}</td><td>${check}</td><td>${latest.number}</td><td class="${win?'win':'loss'}">${win?'WIN ✅':'LOSS ❌'}</td></tr>`;
+          document.getElementById('logs').innerHTML=row+document.getElementById('logs').innerHTML;
+        }
+        window.lastId=latest.issueNumber;window.savedPred=nextPred;window.savedOpp=curOpp;
+      }
+      document.getElementById('pID').innerText='PERIOD: '+(BigInt(latest.issueNumber)+1n).toString();
+      document.getElementById('pRes').innerText=nextPred;
+      document.getElementById('pOpps').innerText='NUMBERS: '+curOpp.join(', ');
+    }catch(e){}
+  },3000);
+}
+
+function checkAutoLogin(){
+  const saved=sessionStorage.getItem('ah_u');
+  if(saved){const users=getUsers();if(users[saved]&&!isExp(users[saved])){startApp(saved,users[saved].expiry);return;} else{sessionStorage.removeItem('ah_u');}}
+  showPage('joinPage');
+}
+</script>
+</body>
+</html>
